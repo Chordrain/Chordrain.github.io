@@ -16,6 +16,16 @@
     user-select: none;
 }
 
+.bg-grad-blue {
+    background: radial-gradient(ellipse at bottom left, #6190E8, #A7BFE8);
+    color: #fff;
+}
+
+.bg-grad-green {
+    background: radial-gradient(ellipse at bottom left, #4DA2CB, #67B26F);
+    color: #fff;
+}
+
 html {
     font-family: "iA Writer Quattro S", sans-serif;
     line-height: 1.15;
@@ -4947,6 +4957,7 @@ input[type="button"].btn-block {
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
+    border-bottom: #f7f7f7 solid 2px;
 }
 
 .navbar > .container,
