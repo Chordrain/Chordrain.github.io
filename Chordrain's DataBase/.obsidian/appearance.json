@@ -1,0 +1,17 @@
+{
+  "accentColor": "",
+  "interfaceFontFamily": "Inter,微软雅黑,Times New Roman,Cambria,Bahnschrift",
+  "textFontFamily": "iA Writer Quattro S,微软雅黑,Bahnschrift,Inter",
+  "monospaceFontFamily": "JetBrains Mono NL",
+  "baseFontSize": 15,
+  "translucency": false,
+  "enabledCssSnippets": [
+    "图片居中",
+    "properties美化",
+    "codeblock",
+    "minimal"
+  ],
+  "theme": "moonstone",
+  "cssTheme": "Minimal",
+  "nativeMenus": false
+}

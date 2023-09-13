@@ -1,0 +1,22 @@
+{
+  "alwaysUpdateLinks": true,
+  "showInlineTitle": false,
+  "showLineNumber": false,
+  "attachmentFolderPath": "S. Static/Images",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "B. Processing",
+  "pdfExportSettings": {
+    "includeName": false,
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "strictLineBreaks": true,
+  "showFrontmatter": true,
+  "userIgnoreFilters": [
+    "S. Static/"
+  ],
+  "useMarkdownLinks": false,
+  "newLinkFormat": "relative"
+}

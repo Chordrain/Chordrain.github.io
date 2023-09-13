@@ -1,0 +1,4 @@
+/* 去掉codeblock中缩进的竖线 */
+.cm-indent::before {
+    content: none !important;
+}

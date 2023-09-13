@@ -1,0 +1,15 @@
+/* 控制tags的字体大小 */
+.multi-select-pill-content span { 
+    font-size: .72rem;
+}
+
+/* 控制metadata的文本字体大小 */
+.metadata-input-longtext, .metadata-property-key-input, .metadata-input {
+    font-size: .8rem !important;
+}
+
+.metadata-container {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    font-family: 'JetBrains Mono', 'iA Writer Quattro S Regular';
+}
