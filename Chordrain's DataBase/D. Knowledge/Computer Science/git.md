@@ -25,17 +25,29 @@ Commit 命令提交更改到本地仓库，并提供相关的提交说明。
 
 ## 04 origin
 
-要想把本地库的文件上传到远程库，就必须声明是哪个远程库，通过设置 git 的 origin 来绑定远程库。
+要想把本地库的文件上传到远程库，就必须声明是哪个远程库，通过设置 git 的 origin 来绑定远程库。绑定方法为：
 
-* `git remote set-url origin 远程库url`
+* `git remote add origin 远程库地址`
+
+如果要更改 origin 请使用命令：
+
+* `git remote set-url origin 远程库地址`
+
+查看当前 origin：
+
+* `git remote -v`
 
 ## 05 push
 
 通过 push 可以将已经上传到本地仓库的文件保存到远程仓库：
 
-* `git push 文件目录名称 --force` 是否要添加 `--force` 选项要看情况，有时候会因为 github 怕你上传的文件会覆盖远程库中原有的 readme 等文件而报错，要想忽视这些报错继续上传则要加上该选项。
+* `git push origin branch --force` 是否要添加 `--force` 选项要看情况，有时候会因为 github 怕你上传的文件会覆盖远程库中原有的 readme 等文件而报错，要想忽视这些报错继续上传则要加上该选项。
 
-## 06 clone
+## 06 报错
+
+`git branch -m master main`
+
+## 07 clone
 
 Clone 与上传本地仓库到远程仓库无关，它的作用是将其他人的仓库下载到我们自己的电脑上，使用方法是：
 
