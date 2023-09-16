@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "A. Category/Knowledge.md",
+                "file": "B. Processing/01 Intro to Compilers.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": false
@@ -70,7 +70,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 290.5110321044922
+    "width": 267.5
   },
   "right": {
     "id": "a7efb5bbd81b22b8",
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "A. Category/Knowledge.md",
+                "file": "B. Processing/01 Intro to Compilers.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "A. Category/Knowledge.md",
+                "file": "B. Processing/01 Intro to Compilers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -121,25 +121,17 @@
             }
           },
           {
-            "id": "9ebbc298446b558a",
-            "type": "leaf",
-            "state": {
-              "type": "advanced-tables-toolbar",
-              "state": {}
-            }
-          },
-          {
             "id": "84fc770183fc4513",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "A. Category/Knowledge.md"
+                "file": "B. Processing/01 Intro to Compilers.md"
               }
             }
           },
           {
-            "id": "bd9382134e6decb3",
+            "id": "dd7d9e74090f72ab",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -153,8 +145,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 276.5,
-    "collapsed": true
+    "width": 315.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -170,12 +161,17 @@
   },
   "active": "7e26f250a735505d",
   "lastOpenFiles": [
+    "B. Processing/函数与极限.md",
+    "S. Static/Images/函数与极限-01.png",
+    "B. Processing/01 Intro to Compilers.md",
+    "B. Processing/Transformer in PyTorch.md",
+    "D. Knowledge/Computer Science/Transformer.md",
+    "B. Processing/BGNN.md",
+    "B. Processing/有界性.md",
+    "A. Category/Knowledge.md",
     "D. Knowledge/Computer Science/git.md",
-    "B. Processing/高等数学：函数与极限.md",
     "E. Unsorted/Pstart.md",
     "B. Processing/02 Lexical Analysis.md",
-    "B. Processing/01 Intro to Compilers.md",
-    "B. Processing/BGNN.md",
     "B. Processing/A Deep Time Journey.md",
     "F. Journal/Diary/2023-09-10.md",
     "F. Journal/Diary/2023-09-07.md",
@@ -188,14 +184,9 @@
     "F. Journal/Diary/2023-09-02.md",
     "F. Journal/Diary/2023-09-01.md",
     "E. Unsorted/Google.md",
-    "A. Category/Knowledge.md",
     "A. Category/Reading.md",
     "A. Category/Major.md",
     "B. Processing/CNN.md",
-    "B. Processing/GNN.md",
-    "B. Processing/LSTM.md",
-    "B. Processing/PyTorch.md",
-    "B. Processing/Tensorboard in PyTorch.md",
     "S. Static/Images/Transformer-in-PyTorch-02.png",
     "S. Static/Images/Tensorboard-in-PyTorch-01.png",
     "S. Static/Images/Transformer-in-PyTorch-01.png",
@@ -207,7 +198,6 @@
     "S. Static/Images/Transformer-08.png",
     "S. Static/Images/Pasted image 20230902154900.png",
     "S. Static/Images/Transformer-07.png",
-    "S. Static/Images/Transformer-06.png",
     "F. Journal/Diary",
     "D. Knowledge/Math",
     "S. Static/Images/China's-defeated-youth-04.png.crdownload",

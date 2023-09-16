@@ -2,7 +2,7 @@
 
 # Transformer in PyTorch
 
-在学习本节内容之前，请确保你对 [Transformer](../D.%20Knowledge/ComputerTransformer.md) 的架构以及 PyTorch 的基本使用有足够的了解。本节内容主要以代码实现为主，不会深入原理。
+在学习本节内容之前，请确保你对 [Transformer](../D.%20Knowledge/Computer%20Science/Transformer.md) 的架构以及 PyTorch 的基本使用有足够的了解。本节内容主要以代码实现为主，不会深入原理。
 
 Transformer 的架构如下：
 

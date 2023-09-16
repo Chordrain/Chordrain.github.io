@@ -9,9 +9,9 @@
     "图片居中",
     "properties美化",
     "codeblock",
-    "minimal"
+    "粗体美化"
   ],
-  "theme": "moonstone",
-  "cssTheme": "Minimal",
-  "nativeMenus": false
+  "theme": "obsidian",
+  "cssTheme": "",
+  "nativeMenus": true
 }
