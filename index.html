@@ -122,112 +122,15 @@
 		
             
 		
+            
+		
+            
+		
+            
+		
         
         <!-- render other articles -->
         
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2025-04-08 </div>
-			<div class="article-title"><a href="/2025/04/08/%E5%88%9D%E8%AF%86Transformer/" >初识Transformer</a></div>
-		</h3>
-	
-
-
-			  
-<div class="entry">
-
-  <div class="row">
-	
-	
-		<h2 id="01-Seq2seq"><a href="#01-Seq2seq" class="headerlink" title="01 Seq2seq"></a>01 Seq2seq</h2><p>Transformer 是一个 sequence-to-sequence model，我们一般简写作 seq2seq。seq2seq 的意思是指，输入是一个 sequence，输出也是一个 sequence，并且两个 sequence 的长度不一定，这里的长度不一定的意思是指：1. 输入的长度不一定；2. 输出的长度由机器自己决定；3. 输入和输出的长度并不存在必然关系。</p>
-<p>比较典型的 seq2seq 的例子有语音识别、文字翻译、语音翻译等，还有例如 text-to-speech (文字转语音) 的 model 也是一种 seq2seq，甚至是聊天机器人 chatbot，也是 seq2seq。</p>
-<p>其实，seq2seq 在 NLP 方面的应用是很广泛的，很多你认为可能跟 seq2seq 无关的任务也可以转换成 seq2seq。NLP 的本质其实是 question answering (QA)，而只要能想象成 QA，就基本上都能用 seq2seq 解决。</p>
-<p>Seq2seq 还可以用于解决 multi-label classification，multi-label 是将一个东西分到多个类别里的任务，并且一个东西可能属于不止一个类别，而 seq2seq 的输出长度是机器自己决定的，也就是机器觉得有几个输出就几个输出，也就是机器觉得这个东西属于哪几个类别那就是哪几个类别，所以 seq2seq 也可以硬解 multi-label classification。</p>
-<p>除此以外，就连图像识别问题也可以用 seq2seq，但是这里就不展开了。至少至此，我们已经知道了 seq2seq 是一个强大的 model，那么它究竟是怎么做到的，接下来我们就要开始研究了。</p>
-<h2 id="02-Mechanism"><a href="#02-Mechanism" class="headerlink" title="02 Mechanism"></a>02 Mechanism</h2><p>Seq2seq 主要由两大部分组成 —— encoder 和 decoder。</p>
-<p><img src="/img/Transformer-01.png" alt=""></p>
-<p>Encoder 负责接收和处理数据，然后将处理过的数据交给 decoder，decoder 则根据数据决定输出结果。接下来，我们就来具体来看看 encoder 和 decoder 的结构。</p>
-<h3 id="2-1-Encoder"><a href="#2-1-Encoder" class="headerlink" title="2.1 Encoder"></a>2.1 Encoder</h3><p>简单来说，encoder 要做的事情就是将接收的一排向量，转换成另一排向量，这一个过程可以用很多种方法来完成，例如 RNN 和 CNN，而 transformer 采用的是 [[Self-attention|self-attention]]，大名鼎鼎的注意力机制也就是从 transformer 中诞生的。</p>
-<p>Encoder 内部其实是一个一个 block (块)，每个 block 都接收一排向量，输出一排向量，而且每个 block 的工作也大致都是相同的，其实都是对 input 做 self-attention，然后将 output1 丢进一个全连接网络，得到 output2，这个就是一个 block 的输出。所以 encoder 的结构大致如下：</p>
-<p><img src="/img/Transformer-02.png" alt=""></p>
-<p>实际上，transformer 中的 self-attention 是比我们之前讲的 self-attention 更复杂的。在 transformer 中，self-attention 的 output 还要再加上最开始的 input，才算得到最终的 output，这种架构被称为 <strong>residual connection (残差连接)</strong>，这个技术旨在解决深度神经网络训练过程中的梯度消失和梯度爆炸等问题。然后，还要对得到的 residule 做 layer normalization，方法是：求 residule 整个序列的均值 $m$ 和标准差 $\sigma$，然后做标准化：</p>
-<script type="math/tex; mode=display">
-x_i^\prime=\frac{x_i-m}{\sigma}</script><p>这样得到的序列才是全连接网络的输入，但是还没完，全连接网络的输出仍要再进行一次 residule connection，即将输入和输出相加，然后同样要对 residule 进行 layer normalization，这样才能得到 block 的输出。</p>
-<p>现在我们来看一下 <em>Attention is all you need</em> 这篇论文中所画的 encoder 的结构：</p>
-<p><img src="/img/Transformer-03.png" alt=""></p>
-<p>首先，input 进行 embedding 之后，作为输入进行 multi-head attention，考虑到有些时候序列可能是有序的，所以图中还画出了 positional encoding 的环节，这项技术在 self-attention 的笔记中有提到。Attention 之后，得到的输出要先于最初的输入进行相加 (add)，然后进行 layer normalization，这就是上图中淡黄色框的含义。再网上要进行 feed forward，其实就是把上一步得到的结果喂给全连接网络，然后对得到的结果再进行一次 Add &amp; Norm。这就是上图的含义。</p>
-<h3 id="2-2-Decoder"><a href="#2-2-Decoder" class="headerlink" title="2.2 Decoder"></a>2.2 Decoder</h3><p>Decoder 的架构其实分为两种 —— autoregressive (AT) 和 non-autoregressive (NAT)，接下来要将的 autoprogressive 是比较常见的架构，我们将以语音辨识为例进行讲解。</p>
-<h4 id="2-2-1-Autoprogressive"><a href="#2-2-1-Autoprogressive" class="headerlink" title="2.2.1 Autoprogressive"></a>2.2.1 Autoprogressive</h4><h5 id="decoder-的工作流程"><a href="#decoder-的工作流程" class="headerlink" title="decoder 的工作流程"></a>decoder 的工作流程</h5><p>假设我们在处理语音辨识的问题，现在，语音已经通过 encoder 转换成了一个序列，decoder 要接收这个序列，然后输出对应的文字。我们暂且不提 decoder 是如何接收 encoder 的输出的，我们假设 decoder 能接收到 encoder 的输出，然后来解释一下 decoder 的工作流程。</p>
-<p>首先，我们得给 decoder 一个特殊的 token，我们称之为 BOS (begin of sentence)，接下来简称 BEGIN。当 decoder 接收到这个 token 时，它就开始输出，它的输出应该是一个 one-hot vector，也就是一个独热编码的向量，其大小等同于词汇的大小，以中文为例，可能就是所有中文字的数量。当然你可能会说这有点太大了，那实际上，我们可能只取常见的几千个中文字，生僻字我们不去管。</p>
-<p>这个 vector 中的数字就是每个对应位置上的中文字的可能性，它们的总和是 1，由对 decoder 的输出做 softmax 之后得到，最终 decoder 生成汉字就是取其中可能性最大的那个。</p>
-<p>总而言之，我们现在得到了第一个汉字，假设这个汉字是“机”，那么下一步，我们要把这个 decoder 生成的汉字加入到 decoder 的输入中，也就是说，现在的 decoder 的输入不只有 BEGIN 了，还有了“机”，于是重复上面的步骤，得到第二个输出“器”，周而复始……最终得到完整的输出“机器学习”。在这个过程中，decoder 当然也有读入 encoder 的输出，但是这一部分我们先不讲。总结上面的过程，我们可以说，其实 decoder 就是将自己前一刻的输出当作输入，进一步得到下一时刻的输出。这里就诞生了一个问题：要是 decoder 自己预测的内容出错了怎么办？会不会造成 error propagation，也就是一步错步步错？当然是有可能的，但是这个问题我们之后再谈，我们先暂且当作没这回事。</p>
-<h5 id="decoder-和-encoder-的结构对比"><a href="#decoder-和-encoder-的结构对比" class="headerlink" title="decoder 和 encoder 的结构对比"></a>decoder 和 encoder 的结构对比</h5><p>现在我们来看看论文中画的 decoder 的结构，decoder 看上去很复杂，但如果我们将其与 encoder 的结构进行对比，似乎能发现一些相似之处。</p>
-<p><img src="/img/Transformer-04.png" alt=""></p>
-<p>你可能会发现，如果我们把 decoder 中间那一块盖起来，encoder 的结构好像就跟 decoder 差不了多少了，无非是 decoder 的输出最后还要经过一个线性层，再经过 softmax 激活，来输出可能性罢了。唯一的不同可能就是 decoder 中，一开始的 attention 是 masked multi-head attention，那这个 masked 是什么意思？</p>
-<h5 id="masked-self-attention"><a href="#masked-self-attention" class="headerlink" title="masked self-attention"></a>masked self-attention</h5><p>在我们原来所讲的 self-attention 中，输出的 $b_1$ 是考虑了 $a_1\sim a_n$ 所有的资讯之后得到的 $a_1$ 的资讯，$b_2\sim b_n$ 皆是如此；而在 masked self-attention 中，输出不再能考虑后面的资讯，意思是，$b_1$ 只是考虑了 $a_1$ 后，$a_1$ 的资讯；$b_2$ 是考虑了 $a_1, a_2$ 之后，$a_2$ 的资讯；$b_3$ 是考虑了 $a_1, a_2, a_3$ 之后，$a_3$ 的资讯……只有 $b_n$ 是考虑了整个输入后，输出的资讯。这就是 masked self-attention。</p>
-<p>至于为什么要用 masked，其实原因很简单。我们之前也解释了，decoder 会拿自己的输出作为输入，输出是从左到右依次产生的，输入肯定也只能从左到右依次输入，所以就出现了这样只能读左边，而不能读右边的 masked self-attention 机制。</p>
-<h5 id="何时终止输出"><a href="#何时终止输出" class="headerlink" title="何时终止输出"></a>何时终止输出</h5><p>之前说过，transformer 的输出长度是机器自己决定的，也就是由 decoder 决定的，但到目前为止，我们都还没有讨论过，decoder 到底是如何决定输出长度的，它是怎么知道什么时候该停止输出的。就像前面举的例子，在 decoder 输出完“机器学习”之后，万一它又把 BEGIN+“机器学习”作为输入，输出了个“惯”字怎么办？</p>
-<p>对这一点的处理是很巧妙的，要解决这个问题，我们还得再准备一个特殊的 token，叫作 END。就像 BEGIN 是开始的标志，END 就是终止的标志，并且，END 存储在 encoder 的输出 one-hot vector 里，也就是说，one-hot vector 的长度是 vocabulary 的长度再加上 END。如果根据 encoder 的计算，发现输出的 one-hot vector 中，END 的概率是最高的，那就意味着输出该结束了。通过这种方式，encoder 就能自行决定何时终止输出。</p>
-<h4 id="2-2-2-Non-autoregressive"><a href="#2-2-2-Non-autoregressive" class="headerlink" title="2.2.2 Non-autoregressive"></a>2.2.2 Non-autoregressive</h4><p>接下来我们简短地介绍一下另一种 decoder 的架构 —— non-autoregressive，简称 NAT。</p>
-<h5 id="AT-vs-NAT"><a href="#AT-vs-NAT" class="headerlink" title="AT vs NAT"></a>AT vs NAT</h5><p>AT 的运作方式是，先将开始标志 BEGIN 作为输入传入，得到一个输出，随后将自己的输出作为输入再传进来，再得到下一个输出，然后再将下一个输出继续传进来，得到下下个输出，循环往复，直到输出 END；而 NAT 则不一样，它一开始就接收多个 BEGIN，于是得到多个输出，也就是一个完整的句子，然后就结束了。</p>
-<h5 id="何时终止输出-1"><a href="#何时终止输出-1" class="headerlink" title="何时终止输出"></a>何时终止输出</h5><p>那么问题就来了，既然我们一开始都不知道输出的长度，那我们要怎么知道该给 decoder 多少个 BEGIN？</p>
-<p>解决这个问题的方法有很多，一种方法就是准备一个 classifier，将 encoder 的输出先丢给 classifier，由 classifier 决定输出的长度，于是就丢对应长度的 BEGIN。</p>
-<p>另一种可能的处理方法是，不管输出的长度，直接丢给 decoder 尽可能大的 BEGIN 数目，然后看看 decoder 的输出中，哪里出现了 END 标志，我们只取 END 前面的内容，END 后面的输出就不管了。</p>
-<h5 id="NAT-的优势"><a href="#NAT-的优势" class="headerlink" title="NAT 的优势"></a>NAT 的优势</h5><p>NAT 的优势在于，它的运算是平行的，而不像 AT 那样，要预测下一个输出，就必须等前一个输出完成，所以 NAT 的速度应该是比 AT 要快的；另外，它的输出长度是可控的，这就允许我们人为地去控制输出。</p>
-<p>NAT 是一个热门的研究话题，它的性能比 AT 要好，也比 AT 的可控性高，但一个严重的问题是，NAT 的准确率是远不及 AT 的。NAT 要想赶上 AT 的准确率，往往需要很多的秘诀才能做到，而 AT 可能只要随便跑跑就能达到比较高的准确率。所以，如何让 NAT 赶上 AT 的准确率，是目前一个大热门。不过这里就不细讲了，毕竟这是一个大坑，有兴趣的话可以自己去了解。</p>
-<h3 id="2-3-Encoder-Decoder"><a href="#2-3-Encoder-Decoder" class="headerlink" title="2.3 Encoder-Decoder"></a>2.3 Encoder-Decoder</h3><p>接下来，我们就要来看看之前说先暂且遮起来的那一块了。</p>
-<p><img src="/img/Transformer-05.png" alt=""></p>
-<h5 id="cross-attention"><a href="#cross-attention" class="headerlink" title="cross attention"></a>cross attention</h5><p>图中被框起来的那一部分叫作 cross attention，它是连接 encoder 和 decoder 的桥梁。你可以看到，从 encoder 引出了两个箭头连接到了 multi-head attention，除此以外还有一个箭头是从 decoder 的上一层引出的，那这个模组到底是怎么运作的？我们继续以语音辨识的例子进行阐述。</p>
-<p>首先，encoder 读进一个向量 $a^1,a^2,a^3$，并且输出一个等长的向量 $b^1, b^2, b^3$，用同样的方法，得到对应的 $k^1,k^2,k^3$ 和 $v^1,v^2,v^3$；同时，decoder 读进一个 BEGIN，进行 masked self-attention，由于是 attention，所以输出也肯定是一个和 BEGIN 等长的向量，接下来，将这个输出乘上一个矩阵，进行 transform，得到 $q$；然后用 $q$ 与 $k^1, k^2, k^3$ 去分别计算，得到 $\alpha^1,\alpha^2,\alpha^3$，然后再分别乘上 $v^1,v^2,v^3$，将加权的结果加起来，得到 $v$，这个 $v$ 就是接下来的全连接网络的输入。在这个过程中，$\alpha, k, v$ 都来自 encoder，而 $q$ 来自 decoder，所以这个过程就叫做 <strong>cross attention</strong>。</p>
-<p><img src="/img/Transformer-06.png" alt=""></p>
-<p>如果说现在 decoder 已经产生了一个输出“机”，那么接下来的操作也是一样的，将“机”作为输入传进去，进行 masked self-attention，然后得到 $q^\prime$，去做相同的运算得到 $v^\prime$，再丢进全连接网络得到下一个输出，如此往复……</p>
-<h3 id="2-4-Conclusion"><a href="#2-4-Conclusion" class="headerlink" title="2.4 Conclusion"></a>2.4 Conclusion</h3><p>Transformer 的工作流程已经讲完了，为了深入理解这些过程，而不是仅仅停留于表面的数学运算，我们还得从实例中剖析这个过程。Ecoder 所做的工作其实是对 input 进行提炼，方法就是 self-attention；而 decoder 则是将 encoder 提炼后的数据，以及一个开始标志 BEGIN 作为输入，开始生成结果，并且每得到一个 output，就将这个结果加入到自己的 input 中，做 masked self-attention，以此不断得到新的 output，直到 decoder 输出 END 为止。</p>
-<p>下面我们以机器翻译为例，假设我们需要机器翻译“我喜欢你”这句话，那么 transfomer 做的第一件事是，将这句话输入到 encoder 当中，通过 self-attention 获取语义编码，这里以 $c$ 标识，这里的 $c$ 是一个向量，其中包括了 $c_1,c_2,…$ 等等，每一个汉字就对应一个 $c$。</p>
-<script type="math/tex; mode=display">
-c=\operatorname{Encoder}(\text{"我喜欢你"})</script><p>然后，decoder 将该语义编码与一个 token，也就是上面说的 BEGIN 作为输入，得到第一个单词的输出：</p>
-<script type="math/tex; mode=display">
-\text{I}=\operatorname{Decoder}(c_1,BEGIN)</script><p>然后将这个单词作为输入，再进行一次输出：</p>
-<script type="math/tex; mode=display">
-\operatorname{love}=\operatorname{Decoder}(c_2,BEGIN,I)</script><p>重复上面的过程，直到输出 END：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-&\text{you} = \operatorname{Decoder}(c_3,BEGIN,I,love)\\\\
-&\text{END}=\operatorname{Decoder}(c_4,BEGIN,I,love,you)
-\end{aligned}</script><p>于是最后得到的翻译结果：$\text{I love you.}$</p>
-<h2 id="03-Training"><a href="#03-Training" class="headerlink" title="03 Training"></a>03 Training</h2><p>现在我们已经把 transformer 的内部运作方式给讲完了，下一步，就是讲讲 transformer 的训练。</p>
-<p>我们知道，机器学习的目标就是不断降低 loss。而 seq2seq 这件事，似乎就是在做分类，最后的输出是从所有汉字中选择一个最可能的，所以衡量 seq2seq 的 loss，可以使用和 classifier 类似的方法。在 transformer 中，我们继续以语音辨识为例，decoder 输出的每一个汉字都与正确答案之间有一个 cross entropy，模型优化的目标就是，使所有输出与正确答案之间的 cross entropy 的总和最小。</p>
-<h3 id="3-1-Copy-mechanism"><a href="#3-1-Copy-mechanism" class="headerlink" title="3.1 Copy mechanism"></a>3.1 Copy mechanism</h3><p>有些时候，输出的序列会和输入的序列有重合的部分，例如下面这个 chatbot 的例子：</p>
-<p><img src="/img/Transformer-07.png" alt=""></p>
-<p>再比如说文献摘要，让机器来给一篇文献写摘要，摘要中肯定会有与正文内容相同的部分。</p>
-<pre class="mermaid">%%{init: {"flowchart": {"htmlLabels": false}} }%%
-flowchart LR
-    input["document"]
-    model("model")
-    output["summary"]
-    input --> model --> output</pre>
-
-<p>我们当然是希望机器能够从输入的内容中，直接把这些重合的部分提取出来，而不是自己合成，那这就需要借助 copy mechanism，让机器能够直接从输入中把部分内容 copy 过来。这样的模型当然是存在的，最早的具有复制能力的模型是 copy network，后来还有论文 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1603.06393">Incorporating Copy Mechanism in Sequence-to-Sequence Learning</a> 也做过这个，如果感兴趣可以自己去了解。</p>
-<h3 id="3-2-Guided-attention"><a href="#3-2-Guided-attention" class="headerlink" title="3.2 Guided attention"></a>3.2 Guided attention</h3><p>机器观察输入，对输入做 attention 的顺序是不固定的，这是机器自己学习的结果，自己学习就会导致问题。例如在 TTS (Text to Speech) 的任务中，有些时候，机器居然会漏字。如果是一般的 chatbot 或者 summarization 问题，那么漏一两个字可能也没什么关系，但在 TTS 中，漏字是非常严重的问题。这个时候，我们可以用 guided attention 来教给机器一个固定的顺序来处理输入。</p>
-<p>例如说，在 TTS 中，读入一段文字之后，机器应该从左到右依次做 attention，这样才是正确解决问题的方法。但如果机器颠三倒四，先看后面，再看前面，最后看中间，那显然有些事情就做错了，需要我们人工纠正。</p>
-<p><img src="/img/Transformer-08.png" alt=""></p>
-<p>所以 guided attention 就是要求机器的 attention 遵循一个固定的法则，这个法则肯定是我们事先就知道了这个问题的处理方式才得出的，guided attention 也一般只适用于那些有固定解法的问题。</p>
-<p>一些关于 guided attention 的关键词汇：<u>monotonic attention</u>、<u>location-aware attention</u>。如果感兴趣可以自行搜索。</p>
-<h3 id="3-3-Beam-search"><a href="#3-3-Beam-search" class="headerlink" title="3.3 Beam search"></a>3.3 Beam search</h3><p>继续以语音辨识为例，假设现在的 vocabulary 中只有 A 和 B 两个字，那么我们可以构建出一棵树，每次 decoder 都只面对 A 和 B 两种选择。那么根据原则，在每一个节点处，decoder 会选择分数最高的那个，一直到叶子节点。这种搜索方法叫作 greedy decoding，因为它每次都挑分数最高的。</p>
-<p>但是有时候，选择当前分数最高的，未必能选出一条总分数最高的 path，如下图所示：</p>
-<p><img src="/img/Transformer-09.png" alt=""></p>
-<p>虽然一开始 B 的分数比 A 低，但是我们可以看到，之后路径上的节点的分数明显比 A 之后路径上节点分数要高，所以总体而言，一开始选分数较低的那个，反而能得到一条更好的 path。但是我们要怎么做才能选出这条 path 呢？一种方法是 dfs，即全部走一遍，但显然这种方法不显示，毕竟中文里的汉字有几千个，不可能用 dfs 来搜索。</p>
-<p>那么还有一种方法就是 beam search，它可以找出一条相对好的，但也不是很精准的 path。那么这个算法到底有没有用呢？有趣的是，它有时候有效，有时候就没什么作用。那什么时候有用呢？根据研究，当一个问题有一个比较明确的解时，beam search 就会比较有用；但当一个问题需要发挥机器自己的想象力来完成的时候，beam search 就比较没用。如果感兴趣，可以自行了解。</p>
-
-	
-	</div>
-  <a type="button" href="/2025/04/08/%E5%88%9D%E8%AF%86Transformer/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
            
 			  
 	
@@ -452,6 +355,689 @@ flowchart LR
 
            
 		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2023-12-18 </div>
+			<div class="article-title"><a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/" >隐马尔可夫模型</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<p>隐马尔可夫模型 HMM（Hidden Markov Model）是一种统计模型，用来描述一个隐含未知量的马尔可夫过程（马尔可夫过程是一类随机过程，它的原始模型是马尔科夫链），它是结构最简单的动态贝叶斯网，是一种著名的有向图模型，主要用于时序数据建模，在语音识别、自然语言处理等领域有广泛应用，是一种<strong>生成式模型</strong>。</p>
+<h2 id="01-马尔可夫模型"><a href="#01-马尔可夫模型" class="headerlink" title="01 马尔可夫模型"></a>01 马尔可夫模型</h2><p>在学习隐马尔可夫模型之前，我们先来了解一下它的前生——马尔可夫模型 MM（Markov Model）。</p>
+<p>我们用一个例子进行引入：天气的变化应该具有某种联系。晴天、多云和暴雨这三种天气之间的转换应该存在某种规律，下图中的箭头表示两种天气之间转换的概率：</p>
+<p><img src="/img/隐马尔可夫模型-01.png" alt=""></p>
+<p>于是我们能得到一个<strong>状态转移概率矩阵</strong>：</p>
+<p><img src="/img/隐马尔可夫模型-02.png" alt=""></p>
+<p>根据该矩阵，我们就能在知道今天天气的情况下，预测明天的天气。显然，这种预测是建立在==未来所处的状态仅与当前状态有关==的假设上的，即第二天的天气只取决于前一天的天气。这种假设就是<strong>马尔可夫假设</strong>，符合这种假设描述的随机过程，就被称为<strong>马尔可夫过程</strong>，其具有<strong>马尔可夫性</strong>，即<strong>无后效性</strong>。</p>
+<p>令 $q<em>t$ 表示在时刻 $t$ 系统所处的状态，令 $S_i$ 表示某一具体状态，则 $q_t=S_i$ 表示在某一时刻 $t$，系统处于状态 $S_i$，令 $P(q</em>{t+1}=S<em>i|q</em>{t}=S_j)$ 表示在前一时刻 $t$ 系统处于状态 $S_j$ 的情况下，下一时刻 $t+1$ 系统处于状态 $S_i$ 的概率。基于<strong>马尔可夫假设</strong>，则在马尔可夫模型中存在下列关系：</p>
+<script type="math/tex; mode=display">
+P(q_{t+1}=S_i|q_{t}=S_{j},q_{t-1}=S_{k},...)=P(q_{t+1}=S_i|q_{t}=S_j)</script><p>除了状态转移概率矩阵（用 $A$ 表示）之外，我们还需要知道所有状态的<strong>初始状态概率向量</strong> $\Pi$，设系统中一共有 $N$ 种状态，则 $\Pi$ 的长度为 $N$，$\Pi$ 中的每一个元素代表系统的初始状态为某一状态的概率，且有 $\sum_{i=1}^N\Pi_i=1$。</p>
+<p>假设我们想计算一下今天 $t=1$ 的天气状况，则我们可以得到：</p>
+<script type="math/tex; mode=display">
+P(q_1=S_{\text{sun}})=P(q_1=S_{\text{sun}}|q_0=\sum_{i=1}^{3}S_i)=\sum_{i=1}^{3}\Pi_{S_i}\times A_{S_i\rightarrow S_{\text{sun}}}</script><p>用文字形式表示就是：</p>
+<p><img src="/img/隐马尔可夫模型-03.png" alt=""></p>
+<h2 id="02-隐马尔可夫模型"><a href="#02-隐马尔可夫模型" class="headerlink" title="02 隐马尔可夫模型"></a>02 隐马尔可夫模型</h2><h3 id="2-1-概念"><a href="#2-1-概念" class="headerlink" title="2.1 概念"></a>2.1 概念</h3><p>而隐马尔可夫模型就比马尔可夫模型要复杂多了。我们还是用上面这个例子进行引入，但是这次我们漂流到了一个岛上，这里没有天气预报，只有一片海藻，海藻具有干燥、较干、较湿和湿润四种状态。现在我们没有直接的天气信息了，但是天气状况跟海藻的状态还是有一定联系的，虽然看不见天气状况，但其决定了海藻的状态，所以我们还是能从海藻的状态推知天气的状态。</p>
+<p>在这个例子里，海藻是能看到的，那它就是<strong>观测状态</strong>；天气信息是看不到的，那它就是<strong>隐藏状态</strong>。其中，隐藏状态天气时是决定性因素，观测状态是被决定因素，由隐藏状态到观测状态，这就是<strong>隐马尔可夫模型</strong>。</p>
+<p><img src="/img/隐马尔可夫模型-04.png" alt=""></p>
+<p>如上图所示，观测状态（海藻的状态）有 4 个，而隐藏状态（天气）只有 3 个，说明观测状态与隐藏状态的数量并不是一一对应的，可以根据需要定义。我们可以画出更加抽象的隐马尔可夫模型的示意图：</p>
+<p><img src="/img/隐马尔可夫模型-05.png" alt=""></p>
+<p>图中，$Z_i$ 表示隐藏状态，$X_i$ 表示观测状态，隐藏状态决定了观测状态，所以箭头由 $Z$ 指向 $X$。并且，隐藏状态之间还可以相互转换，所以 $Z_i$ 和 $Z_j$ 之间也有箭头。根据马尔可夫假设，下一时刻的状态只取决于当前时刻的状态，所以，对于观测状态和隐藏状态来讲，都存在如下关系：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&P=(Z_t|Z_{t-1},X_{t-1},Z_{t-2},X_{t-2},...,Z_1,X_1)=P(Z_t|Z_{t-1})\\
+&P=(X_t|Z_{t},X_{t},Z_{t-1},X_{t-1},...,Z_1,X_1)=P(X_t|Z_t)\\
+\end{aligned}</script><h3 id="2-2-组成"><a href="#2-2-组成" class="headerlink" title="2.2 组成"></a>2.2 组成</h3><p>马尔可夫模型有两个组成部分——初始状态概率向量 $\Pi$ 和 状态转移概率矩阵 $A$。</p>
+<p>而隐马尔可夫模型有则有三个组成部分：</p>
+<ol>
+<li>初始状态概率向量 $\Pi$</li>
+<li>状态转移概率矩阵 $A$</li>
+<li>观测状态概率矩阵 $B$</li>
+</ol>
+<p>其中，$\Pi$ 是针对隐藏状态来说的，因为隐藏状态决定了观测状态；$A$ 矩阵是针对隐藏状态来说的，因为隐马尔可夫模型中进行状态转移的是隐藏状态；而 $B$ 是由隐藏状态到观测状态转移的概率矩阵，在上例中，矩阵 $B$ 可表示如下：</p>
+<p><img src="/img/隐马尔可夫模型-06.png" alt=""></p>
+<p>也就是说，由 $Z_i\rightarrow Z_j$ 的转换看矩阵 $A$，由 $Z_i\rightarrow X_i$ 的转换看矩阵 $B$。</p>
+<p>因此，隐马尔可夫模型 $\lambda$ 可以用三元符号表示：</p>
+<script type="math/tex; mode=display">
+\lambda(A,B,\Pi)</script><h3 id="2-3-求解目标"><a href="#2-3-求解目标" class="headerlink" title="2.3 求解目标"></a>2.3 求解目标</h3><p>HMM 的求解目标有三个：</p>
+<ol>
+<li>给定模型 $\lambda(A,B,\Pi)$ 及观测序列 $O=\{o_1,o_2,…,o_t\}$，计算该观测序列出现的概率 $P(O|\lambda)$；</li>
+<li>给定观测序列 $O=\{o_1,o_2,…,o_t\}$，求解参数 $(A,B,\Pi)$ 使得 $P(O|\lambda)$ 最大；</li>
+<li>已知模型 $\lambda(A,B,\Pi)$ 和观测序列 $O=\{o_1,o_2,…,o_t\}$，求状态序列，使得 $P(I|O,\lambda)$ 最大。</li>
+</ol>
+<h2 id="03-暴力求解法"><a href="#03-暴力求解法" class="headerlink" title="03 暴力求解法"></a>03 暴力求解法</h2><p>我们要求的是在给定模型下观测序列出现的概率，那如果我们能把所有的隐藏序列都列出来，也就可以知道联合概率分布 $P(O,I|\lambda)$ 了（其中，$I$ 为 $O$ 对应的隐藏状态序列），再根据 $P(O|\lambda)=\sum_{I}P(O,I|\lambda)$，我们就能求得观测序列出现的概率。</p>
+<p>根据联合概率分布的公式：$P(X=x,Y=y)=P(X=x)P(Y=y|X=x)$，可得 $P(O,I|\lambda)$ 的求解方法：</p>
+<script type="math/tex; mode=display">
+P(O,I|\lambda)=P(I|\lambda)P(O|I,\lambda)</script><p>其中，$P(I|\lambda)$ 是在给定模型下，一个隐藏序列出现的概率，即 $P(I|\lambda)=P(i_1,i_2,…,i_n|\lambda)=P(i_1|\lambda)P(i_2|\lambda)…P(i_n|\lambda)$。那么怎么求 $P(i_n|\lambda)$？别忘了状态转移概率矩阵 $A$ 的存在，$A$ 所记录的不就是隐藏状态之间转换的概率吗？所以可得：</p>
+<script type="math/tex; mode=display">
+P(I|\lambda)=\pi_{i_1}a_{i_1i_2}a_{i_2i_3}...a_{i_{t-1}i_t}</script><p>接下来要求的就是 $P(O|I,\lambda)$，它的含义是：在给定模型下，当隐藏序列为 $I$ 时，观测序列为 $O$ 的概率。求解 $P(O|I,\lambda)$ 的方法和求解 $P(I|\lambda)$ 的方法是一样的，还记得观测状态概率矩阵 $B$ 吗？$B$ 记录的正是从隐藏序列到观测序列转换的概率，所以 $P(O|I,\lambda)$ 的计算方法如下：</p>
+<script type="math/tex; mode=display">
+P(O|I,\lambda)=b_{i_1o_1}b_{i_2o_2}...b_{i_to_t}</script><p>于是，我们只需要将上面两个式子乘在一起，就能得到 $P(O,I|\lambda)$ 了：</p>
+<script type="math/tex; mode=display">
+P(O,I|\lambda)=\pi_{i_1}a_{i_1i_2}b_{i_1o_1}a_{i_2i_3}b_{i_2o_2}...a_{i_{t-1}i_t}b_{i_to_t}</script><p>则观测序列 $O$ 出现的概率为：</p>
+<script type="math/tex; mode=display">
+P(O|\lambda)=\sum_{I}P(O,I|\lambda)=\sum_{i_1,i_2,...,i_T}\pi_{i_1}a_{i_1i_2}b_{i_1o_1}a_{i_2i_3}b_{i_2o_2}...a_{i_{t-1}i_T}b_{i_to_T}</script><p>解释一下上面的公式：我们要求的是在给定模型下，某一观测序列出现的概率。暴力求解的方法找出所有可能的隐藏序列，将由这些隐藏序列得到该观测序列的概率全部加起来，最终得到该观测序列的概率。假设隐藏状态数有 $N$ 个，我们需要遍历每一个隐藏序列，序列的长度为观测状态数 $T$，所以可能的隐藏序列有 $N^T$ 种，而对于每一个序列，都要遍历其 $T$ 个 $a_i$ 和 $b_i$，加起来就是 $2T$，计算时间复杂度时省去系数，则该算法的<strong>时间复杂度将达到 $O(TN^T)$</strong>。</p>
+<h2 id="04-前向算法"><a href="#04-前向算法" class="headerlink" title="04 前向算法"></a>04 前向算法</h2><h3 id="4-1-算法解析"><a href="#4-1-算法解析" class="headerlink" title="4.1 算法解析"></a>4.1 算法解析</h3><p>暴力求解法告诉我们隐马尔可夫模型的问题看上去是可解，但高昂的时间开销却是不可承受的。对此，有人提出了前向算法，该算法利用<strong>动态规划</strong>的思想来求解该问题，降低了时间复杂度。</p>
+<p>给定 $t$ 时刻的隐藏状态为 $q_i$（注意，这里的 $i$ 是指一种<u>具体</u>的隐藏状态，例如晴天、雨天等，是固定好的），观测序列为 $o_1,o_2,…o_n$ 的概率叫做<strong>前向概率</strong>，定义为：</p>
+<script type="math/tex; mode=display">
+\alpha_t(i)=P(o_1,o_2,...,o_t,S_t=q_i|\lambda)</script><p>换句话来讲，前向概率就是在给定某一观测序列的情况下，某一时刻的状态刚刚好为 $q_i$ 的概率。</p>
+<p>则，当 $t=T$ 时，$\alpha_T(i)=P(o_1,o_2,…,o_T,S_T=q_i|\lambda)$ 表示最后一个时刻，隐藏状态为状态 $q_i$ 并且得到观察序列为 $o_1,o_2,…,o_T$ 的概率。现在我们回来思考一下我们要解决的最原始的问题是什么，应该是 $P(O|\lambda)=P(o_1,o_2,…o_T|\lambda)$，而 $\alpha_T(i)$ 和它相比，末尾多了个 $S_T=q_i$，也就是说 $\alpha_T(i)$ 还要求最终的隐藏状态必须为 $q_i$，貌似和原本的问题相比有点画蛇添足，但仔细想想，如果我们能把所有最终可能的隐藏状态都拿过来，求 $\alpha_T(1)+\alpha_T(2)+···+\alpha_T(n)$，那不就大功告成了？所以现在的问题就变成了如何求解 $T$ 时刻的前向概率，这是一个动态规划的问题。</p>
+<p>在第一个时刻：$\alpha_{1}(i)=P(o_1,S_1=q_i|\lambda)$ 表示第一时刻的隐藏状态为 $q_i$，观测序列为 $o_1$ 的概率，其结果为（这里的 $b_i(o_1)$ 就表示由隐藏状态 $q_i$ 转换为观测状态 $o_1$ 的概率，是矩阵 $B$ 的元素）：</p>
+<script type="math/tex; mode=display">
+\alpha_{1}(i)=\pi_ib_{i}(o_1)</script><p>在第 $t$ 时刻，隐藏状态变成了 $q<em>j$（这里的 $q_j$ 不是具体状态，是任意状态都可以），$t+1$ 时刻隐藏状态变成了为 $q_i$，此时，隐藏状态由 $q_j$ 变成 $q_i$ 的概率可由矩阵 $A$ 得到，值为 $a</em>{ji}$，而 $q<em>j$ 可以是任何一种状态，我们都得考虑进去，所以我们得遍历一遍所有隐藏状态，然后相加，即 $\sum</em>{j}\alpha_t(j)$，所以有：</p>
+<script type="math/tex; mode=display">
+\alpha_{t+1}(i)=[\sum_{j}\alpha_t(j)a_{ij}]b_{i}(o_{t+1})</script><p>如果这个式子看上去还是太麻烦，我们可以拆开来看：$\alpha<em>t(j)$ 表示的是前一时刻隐藏状态为 $q_j$ 的概率，$a</em>{ij}$ 表示由隐藏状态 $q<em>j$ 转换为 $q_i$ 的概率，相乘就是前一时刻的隐藏状态恰好为 $q_j$，并且由 $q_j$ 能转换到 $q_i$ 的概率，由于得考虑全部 $q_j$ 的情况，所以得遍历求和；后面的 $b</em>{i}(o<em>{t+1})$ 则是由隐藏状态 $q_i$ 转换到观测状态 $o</em>{t+1}$ 的概率，将它与前一部分相乘，就得到了前一时刻的隐藏状态恰好为 $q<em>j$，并且由 $q_j$ 能转换到 $q_i$，又由 $q_i$ 得到 $o</em>{t+1}$ 的概率。</p>
+<p>则最终结果就是：</p>
+<script type="math/tex; mode=display">
+P(O|\lambda)=\sum_i\alpha_i(T)</script><p>计算一下前向算法的时间复杂度：一共要计算 $T$ 次 $\alpha$，每次计算 $\alpha$ 的时间复杂度为 $N^2$ （原因很简单，自己想），所以前向算法的<strong>时间复杂度为 $O(TN^2)$</strong>。显然，前向算法将暴力算法的时间复杂度从指数级降到了线性级别，极大提升了执行效率。</p>
+<h3 id="4-2-公式推导"><a href="#4-2-公式推导" class="headerlink" title="4.2 公式推导"></a>4.2 公式推导</h3><p>由上述过程，我们可以得到前向算法的递推式：</p>
+<ol>
+<li>初值：</li>
+</ol>
+<script type="math/tex; mode=display">
+\alpha_1(i)=\pi_ib_i(o_1)，i=1,2,...,N</script><ol>
+<li>递推：</li>
+</ol>
+<script type="math/tex; mode=display">
+\alpha_{t+1}(i)=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})，i=1,2,...,N</script><ol>
+<li>终止：</li>
+</ol>
+<script type="math/tex; mode=display">
+P(O|\lambda)=\sum_{i=1}^N\alpha_T(i)</script><p>接下来，我们对每一个公式进行推导。</p>
+<p>首先，我们要求解的目标是 $P(O|\lambda)=\sum_{I}P(I,O|\lambda)$，而 $\alpha_T(i)=P(O,S_T=q_i|\lambda)$，所以对于终止公式有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+P(O|\lambda)&=\sum_{I}P(I,O|\lambda)\\
+&=\sum_{i=1}^NP(o_1,o_2,...,o_T,S_T=q_i|\lambda)\\
+&=\sum_{i=1}^N\alpha_T(i)
+\end{aligned}</script><p>对于递推公式则有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\alpha_{t+1}(i)&=P(o_1,o_2,...,o_{t+1},S_{t+1}=q_i|\lambda)\\
+&=P(S_{t+1}=q_i|\lambda)P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&=[\sum_{j=1}^NP(S_{t+1}=q_i,S_t=q_j|\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&=[\sum_{j=1}^NP(S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&=[\sum_{j=1}^NP(o_1,...,o_t,S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})
+\end{aligned}</script><p>对于初值有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\alpha_1(i)&=P(o_1,S_1=q_i|\lambda)\\
+&=P(S_1=q_i|\lambda)P(o_1|S_1=q_i,\lambda)\\
+&=\pi_1b_i(o_1)
+\end{aligned}</script><h2 id="05-后向算法"><a href="#05-后向算法" class="headerlink" title="05 后向算法"></a>05 后向算法</h2><p>后向算法比前向算法稍微复杂一点，这一节着重讲解后向算法初值、递推和终止公式的推导。</p>
+<p>给定隐马尔可夫模型，定义在时刻 $t$ 状态为 $q<em>i$ 的条件下，从 $t+1$ 到 $T$ 的部分观测序列为 $o</em>{t+1},o<em>{t+2},…,o</em>{T}$ 的概率称为<strong>后向概率</strong>，记作：</p>
+<script type="math/tex; mode=display">
+\beta_t(i)=P(o_{t+1},o_{t+2},...,o_T|S_t=q_i,\lambda)</script><p>观察后向概率的公式和定义，我们可以用另一种方法描述后向概率：当前时刻为 $T$，也就是终止时刻，前 $T-t$ 个时刻的观测序列为 $o<em>{t+1},o</em>{t+2},…,o_{T}$，且 $t$ 时刻隐藏状态恰好为 $q_i$ 的概率。可以发现，后向概率是以终止时刻为起点，倒退回去考虑的，与前向概率正好相反，所以递推的起点是 $\beta_T(i)=P(\emptyset|S_T=q_i,\lambda)$，可以发现，当 $t=T$ 时，已不存在后续观测序列，所以我们规定 $\beta_T(i)=1$。</p>
+<p>我们要求解的是 $P(O|\lambda)=P(o_1,o_2,…o_T|\lambda)$，后向算法递推的终点是序列的起始点，也就是 $t=1$，而 $\beta_1(i)=P(o_2,o_3,…,o_T|S_t=q_i,\lambda)$，这之间又要怎么转换？这就是后向算法比前向算法复杂的点，它并不像前向算法那样容易推导。首先，我们使用全概率公式和条件概率公式对 $P(O|\lambda)$ 进行变换：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+P(O|\lambda)&=\sum_{i=1}^{N}P(o_1,o_2,...,o_T,S_1=q_i|\lambda)\\
+&=\sum_{i=1}^{N}P(o_1,o_2,...,o_T|S_1=q_i,\lambda)P(S_1=q_i|\lambda)\\
+&=\sum_{i=1}^{N}P(o_1|o_2,...,o_T,S_1=q_i,\lambda)P(o_2,...,o_T|S_1=q_i,\lambda)\pi_i\\
+&=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i
+\end{aligned}</script><p>经过上面的推导，我们就能发现 $P(O|\lambda)$ 和 $\beta<em>1(i)$ 的联系。下一个要解决的就是 $\beta_t(i)$ 的推导了，首先令 $\beta</em>{t+1}(j)=P(o<em>{t+2},o</em>{t+3},…o<em>T|S</em>{t+1}=q_j,\lambda)$，其推导过程如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\beta_t(i)&=P(o_{t+1},o_{t+2},...,o_T|S_t=q_i,\lambda)\\
+&=\sum_{j=1}^{N}P(o_{t+1},o_{t+2},...,o_T,S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_t=q_i,S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&=\sum_{j=1}^{N}P(o_{t+1}|o_{t+2},...,o_T,S_{t+1}=q_j,\lambda)P(o_{t+2},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}
+\end{aligned}</script><p>至此，我们就得到后向算法中的初值、递推和终止公式：</p>
+<ol>
+<li>初值：</li>
+</ol>
+<script type="math/tex; mode=display">
+\beta_T(i)=1</script><ol>
+<li>递推：</li>
+</ol>
+<script type="math/tex; mode=display">
+\beta_t(i)=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}</script><ol>
+<li>终止：</li>
+</ol>
+<script type="math/tex; mode=display">
+P(O|\lambda)=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i</script><h2 id="06-Baum-Welch-算法"><a href="#06-Baum-Welch-算法" class="headerlink" title="06 Baum-Welch 算法"></a>06 Baum-Welch 算法</h2><p>讨论完了如何求解 $P(O|\lambda)$，下一步我们就要考虑最难的一个问题——如何求解 HMM 的参数，即 $A$，$B$，$\Pi$。</p>
+<p>如果是不加任何限制地考虑这个问题，那其实是很简单的。根据<strong>大数定理</strong>：在试验次数足够多的情况下，频数就等于概率。要想得到 $A$ 和 $B$，只需要对数据进行统计，计算每种状态出现的频数就行了，于是就有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\hat{a}_{ij}=\frac{A_{ij}}{\sum_{j=1}^{N}A_{ij}}&,i=1,2,...,N,j=1,2,...,N\\
+&\hat{b}_{j}(k)=\frac{B_{jk}}{\sum_{k=1}^{M}B_{jk}}&,j=1,2,...,N,k=1,2,...,M\\
+\end{aligned}</script><p>解释一下取值范围：$A$ 是状态转移概率矩阵，这是隐藏状态和隐藏状态之间转移的概率，所以 $i$ 和 $j$ 的最大值都是隐藏状态的数量 $N$；而 $B$ 是生成观测状态概率矩阵，这是隐藏状态到观测状态之间转移的概率，令 $j$ 代表隐藏状态，其最大值就是隐藏状态的数量 $N$，$k$ 代表观测状态，其最大值就是观测状态的数量 $M$，我们之前讲到过，HMM 中的隐藏状态和观测状态数量不一定要相同，所以 $N$ 不一定等于 $M$。</p>
+<p>至于 $\Pi$ 也很简单，根据往期数据计算就行了。所以如果只是像这样单纯地求解 HMM 的参数，只要有数据，那就几乎是没有难度的。但我们来考虑一下求解目标中的第二个：给定观测序列 $O=\{o_1,o_2,…,o_t\}$，求解参数 $(A,B,\Pi)$ 使得 $P(O|\lambda)$ 最大。这要怎么做？</p>
+<p>之前的讨论是在所有数据均有的情况下进行的，也就是隐藏状态序列 $I$ 和观测状态序列 $O$ 均已知的情况下，但现在只有观测序列 $O$，要我们求最优的参数 $(A,B,\Pi)$，使 $P(O|\lambda)$ 最大。也就是说 $I$ 被隐藏了，这相当于是一个含隐变量的参数估计问题，需要 EM 算法来解决。</p>
+<p>EM 算法应用到 HMM 中时通常被称为 Baum-Welch 算法，Baum-Welch 算法是 EM 算法的一个特例。</p>
+
+	
+	</div>
+  <a type="button" href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2023-12-11 </div>
+			<div class="article-title"><a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" >支持向量机</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<p><strong>支持向量机（support vector machines, SVM）</strong>是一种二分类模型，它的基本模型是定义在特征空间上的<strong>间隔最大的线性分类器</strong>，间隔最大使它有别于感知机；SVM还包括<strong>核技巧</strong>，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。</p>
+<h2 id="01-线性模型"><a href="#01-线性模型" class="headerlink" title="01 线性模型"></a>01 线性模型</h2><h3 id="1-1-算法思路"><a href="#1-1-算法思路" class="headerlink" title="1.1 算法思路"></a>1.1 算法思路</h3><p>假设训练样本在空间中的分布如下左图分布，圆圈和星星分别代表两类不同类别的数据，那么我们能找出一条直线，将两者分割开，我们就称这样的训练样本集为一个<strong>线性可分（Linear Separable）样本集</strong>，这样的模型就被称为<strong>线性模型</strong>；同理，倘若我们找不到这样一条直线，将两者完全分离开，如下右图所示，则称这样的训练样本集为一个<strong>线性不可分（Non-Linear Separable）样本集</strong>，这样的模型就被称为<strong>非线性模型</strong>。</p>
+<p><img src="/img/支持向量机-01.png" alt=""></p>
+<p><strong>支持向量机</strong>算法的思路大致是这样的：首先讨论如何在线性可分的训练样本集上找一条直线将样本分开，然后想办法将这样的方法推广到线性不可分的训练样本集上。所以，我们首先讨论第一部分：如何找到一条直线将线性可分训练样本集分开。</p>
+<p>对于一个训练样本集，可以证明：<u>只要存在一条直线可以将样本集分开，就肯定存在无数条直线能将该样本集分开</u>（如下图所示）。既然如此，支持向量机提出的第一个问题就是：哪条直线是最好的？</p>
+<p><img src="/img/支持向量机-02.png" alt=""></p>
+<p>通过直觉来判断，我们也可以感受出上图中的红色直线应该是最好的，问题是为什么？要解答这个问题，我们就必须定义一种性能指标（Performace Measure），来评估每一条直线的好坏。</p>
+<p>为了给出这个性能指标，支持向量机做的事情是，将上面的红线向左右两边平行移动，直到这条线碰到一个或几个样本点为止（如下图中两条虚线所示）：</p>
+<p><img src="/img/支持向量机-03.png" alt=""></p>
+<p>然后，支持向量机给出了这个性能指标的定义，就是上图中两条虚线的距离（Gap），用 $d$ 表示。而性能最好的那条线，就是能使 $d$ 最大的那条线。但是这样还不完善，要知道，能使 $d$ 最大的线也不唯一，将上图中的实线左右移动，作一条平行线，只要平行线不越过两条虚线所界定的范围，$d$ 就是不变的，所以还得给出另一个限制条件：直线必须位于两根平行线的正中间，也就是使上图中的实线与左右两根平行虚线的距离分别为 $\frac d2$。</p>
+<p><img src="/img/支持向量机-04.png" alt=""></p>
+<h3 id="1-2-数学描述"><a href="#1-2-数学描述" class="headerlink" title="1.2 数学描述"></a>1.2 数学描述</h3><p>既然性能指标已经确定了，下一个问题就是如何描述这个优化过程了。在描述优化过程之前，我们还是先得给出一些定义，首先，我们将上面的 $d$ 称为<strong>间隔（Margin）</strong>，将虚线穿过的向量称为<strong>支持向量（Support Vectors）</strong>。通过上面对支持向量机算法的简单描述，我们可以发现，支持向量机找到的最优直线，只与支持向量有关，与其他向量无关，这就是为什么支持向量机也能用在小样本的数据上。</p>
+<p>先给出线性模型的数学描述：</p>
+<ol>
+<li><p>定义训练数据及标签为 $(X_1,y_1)、(X_2,y_2)…(X_n,y_n)$，其中，$X$ 是样本的特征，在上面给出的例子里，每个样本的特征是二维的，也就是说 $X=\left[ \begin{array}{} x_1 \\ x_2 \end{array}\right]$ ，分别对应 x 轴和 y 轴；而 $y$ 是标签，在上面这个二分类问题里，标签只有两种，所以 $y\in\{-1,1\}$。</p>
+</li>
+<li><p>我们定义一个线性模型为 $(W,b)$，其中 $W$ 是一个向量，其维数与特征向量 $X$ 一致，$b$ 是一个常数，一个线性模型确定一个<strong>超平面（Hyperplane）</strong>，所谓超平面就是指划分空间的平面，超平面在二维空间里表现为我们上面所说的那条划分样本点的直线，而在更高的维度里就是一个平面，故称之为超平面。超平面由 $W$ 和 $b$ 确定，其方程为 $W^TX+b=0$。机器学习的目标，就是通过所有样本的特征 $X$ 来找到一个 $W$ 和 $b$，使能够确定一个超平面能划分所有的样本点。</p>
+</li>
+<li><p>一个训练集线性可分是指：对于 $\{(X<em>i,y_i)\}</em>{i=1\sim N}$，$\exist(W,b)$，使 $\forall i=1\sim N$，有：</p>
+<ol>
+<li>若 $y_i=+1$，则 $W^TX_i+b\ge0$；</li>
+<li>若 $y_i=-1$，则 $W^TX_i+b\lt0$。</li>
+</ol>
+<p>当然，上述线性可分的定义是不唯一的，将 $\ge$ 和 $\lt$ 换个位置也是一样。对于上面的定义，我们可以发现，凡是线性可分问题，一定存在 $y_i[W^TX_i+b]\ge0$。</p>
+</li>
+</ol>
+<p>接下来给出支持向量机优化问题的数学描述：</p>
+<ol>
+<li>目标：最小化 $||W||^2$</li>
+<li>限制条件：$y_i[W^TX_i+b]\ge1\quad(i=1\sim N)$</li>
+</ol>
+<p>对于上面这两个公式，相信很多人第一眼是懵的，因为按我们之前的描述，支持向量机算法就是去找一条使 $d$ 最大且位于正中间位置的直线，怎么数学公式看起来跟这个过程完全没关系呢？</p>
+<p>要搞清楚这两个公式，我们得先弄清楚两个事实：</p>
+<ol>
+<li>事实一：$W^TX+b=0$ 与 $aW^TX+ab=0\quad(a\in R^+)$ 表示的是同一个平面。</li>
+<li>事实二：向量 $X_0$ 到超平面 $W^TX+b=0$ 的距离是 $d=\frac{|W^TX_0+b|}{||W||}$。（不要慌，这其实就是高中学的点到平面的距离公式，以一维平面 $w_1x+w_2y+b=0$，也就是直线为例，点 $(x_0,y_0)$ 到这条直线的距离就是 $d=\frac{|w_1x_0+w_2y_0+b|}{\sqrt{w_1^2+w_2^2}}$，前面的那个公式只不是这个公式在高维情况下的推广）</li>
+</ol>
+<p>基于事实二，我们知道，支持向量机要做的事情，就是在 $X_0$ 是支持向量的情况下，使 $d$ 最大。</p>
+<p>基于事实一，我们知道，我们可以找到一个正实数 $a$ 来缩放 $W$ 和 $b$，即 $(W,b)\rightarrow(aW,ab)$，使 $d$ 公式的分子 $|W^TX_0+b|=1$。这样的话，$d$ 的公式就变成了 $d=\frac{1}{||W||}$。看到这个公式，就能明白为什么支持向量机的优化目标是最小化 $||W||^2$ 了，因为最小化 $||W||^2$ 就是最大化 $d$。</p>
+<p>现在再来看限制条件，限制条件其实就是规定了，所有样本点到超平面的距离 $W^TX_i+b$，要么等于 $d$（支持向量），要么大于 $d$（非支持向量）。 至于为什么要再乘上一个 $y_i$，其实看<u>线性可分的定义</u>就知道了，乘上 $y_i$ 是为了与线性可分的定义相统一。</p>
+<blockquote>
+<p>补充：</p>
+<ul>
+<li><p>为什么一定要使  $|W^TX_0+b|=1$， $|W^TX_0+b|=2$ 可不可以？可以，等于 1 还是等于 2 或是其他值都没有任何关系，这只取决于 $a$ 的大小，而 $a$ 并不改变超平面。</p>
+</li>
+<li><p>对于任何线性可分样本集，一定能找到一个超平面分割所有样本点；反之，如果是线性不可分，那么将找不到任何一个能满足要求的 $W$ 和 $b$。</p>
+</li>
+<li><p>某些书上会将优化目标写成最小化 $\frac12||W||^2$，这其实没有任何问题，加上 $\frac12$ 只是为了求导方便。</p>
+</li>
+<li><p>支持向量机要解决的问题其实是一个凸优化问题，而且是一个二次规划问题，二次规划问题的特点是：</p>
+<ul>
+<li>目标函数（Objective Function）是二次项；</li>
+<li>限制条件是一次项。</li>
+</ul>
+<p>对于凸优化问题，要么无解，要么只有一个解。凸优化问题是计算机领域研究最多的问题，因为凸优化问题要么无解，要么只要能找到一个解，那便是它唯一的解。所以只要证明一个问题是凸优化问题，那么我们只要找到一个局部极值，也便找到了它的全局极值，我们便可认定这个问题已经被解决了。</p>
+<p>非凸问题的目标函数图像是一条包含很多局部极值的曲线，会使得机器很容易落入局部最优解的陷阱。支持向量机算法优美的地方就在于，它将求解目标化成了一个凸优化问题。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="02-非线性模型"><a href="#02-非线性模型" class="headerlink" title="02 非线性模型"></a>02 非线性模型</h2><h3 id="2-1-优化目标"><a href="#2-1-优化目标" class="headerlink" title="2.1 优化目标"></a>2.1 优化目标</h3><p>之前已经讨论过，非线性模型不是线性可分的，也就是说找不到一个 $W$ 和 $b$，使之确定一个能完美分割所有样本点的超平面，即限制条件 $y_i[W^TX_i+b]\ge1\quad(i=1\sim N)$ 是不可满足的，原本的优化目标是无解的。SVM 处理非线性模型的方法其实不难理解，就是在线性模型的基础上引入了一个<strong>松弛变量（Slack Variable）</strong>，用 $\xi\ (\xi\ge0)$ 表示。新的优化目标如下：</p>
+<ol>
+<li>目标：最小化 $\frac12||W||^2+C\sum_{i=1}^N\xi_i$</li>
+<li>限制条件：<ol>
+<li>$y_i[W^TX_i+b]\ge1-\xi_i\quad(i=1\sim N)$</li>
+<li>$\xi_i\ge0$</li>
+</ol>
+</li>
+</ol>
+<p>可以发现，新的优化目标中，限制条件变成了 $y_i[W^TX_i+b]\ge1-\xi_i\quad(i=1\sim N)$，只要这个 $\xi_i$ 取得足够大，那么大于等于号右边就会无限小，那么限制条件就有了满足的可能；但同时，也不能允许 $\xi_i$ 无限大，不然就没有意义了，所以新的最小化目标函数的末尾还要加上 $\xi_i$。</p>
+<p>接下来要明确，在上面的式子中，哪些是已知的，哪些是要求解的参数。显然，$X$ 和 $y<em>i$ 是已知的，$W$、$b$ 以及 $\xi$ 是要求的，但是这里还有个 $C$，这个 $C$ 是什么？$C$ 是一个由人事先设定的参数，这种参数一般称为<strong>超参数（Hyperparameter）</strong>，作用是平衡 $\frac12||W||^2$ 和 $\sum</em>{i=1}^N\xi_i$ 的权重。至于 $C$ 具体取多少是没有定论的，一般是凭经验，选定一个区间，然后一个一个尝试。SVM 很方便的一点就是，它只有这一个参数需要人来设置，但是在神经网络里，要去一个一个尝试的参数可能有很多。</p>
+<h3 id="2-2-高维映射"><a href="#2-2-高维映射" class="headerlink" title="2.2 高维映射"></a>2.2 高维映射</h3><p>虽然通过引入松弛变量，我们将非线性问题转换为了一个线性可分问题，但是还是存在一个问题，那就是求解目标的本质没有变，最后仍然是找出一条直线，来分割样本点，也就是说，即使一个样本集用肉眼看就能看出其能被一条简单的曲线分割，SVM 还是会找一条直线来分割样本点，如下图所示：</p>
+<p><img src="/img/支持向量机-05.png" alt=""></p>
+<p>这显然不是我们想要的。一些算法会很符合直觉地去找非直线来分割样本集，例如决策树是用矩形来分割，但是 SVM 的思想很精妙，它仍然是找直线，不过它不是在当前空间里去找，而是到高维空间里去找。它定义了一个<strong>高维映射</strong> $\phi(X)$，通过 $\phi$，能将 $X$ 这个低维向量转化成一个高维向量 $\phi(X)$。也就是说，也许在低维空间中，我们不容易去找一条直线能刚刚好分割所有样本点，那么我们就去高维空间中找，或许在高维空间中，我们就能找到样一条理想的直线了。</p>
+<p>接下来我们用异或问题的例子，来具体解释这个过程为什么有效。异或问题是二维空间下最简单的非线性问题，其在二维空间中存在如下样本点分布：</p>
+<p><img src="/img/支持向量机-06.png" alt=""></p>
+<p>我们先将图中四个样本点表示为 $X_1$、$X_2$、$X_3$ 和 $X_4$，并且 $X_1$ 和 $X_2$ 属于一个类别 $C_1$，$X_3$ 和 $X_4$ 属于一个类别 $C_2$，有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&X_1=\left[ \begin{array}{} 0 \\ 0 \end{array} \right]\quad X_2=\left[ \begin{array}{} 1 \\ 1 \end{array} \right]\quad\in C_1\\
+&X_3=\left[ \begin{array}{} 1 \\ 0 \end{array} \right]\quad X_4=\left[ \begin{array}{} 0 \\ 1 \end{array} \right]\quad\in C_2\\
+\end{aligned}</script><p>定义高维映射函数为：</p>
+<script type="math/tex; mode=display">
+\phi(X):\quad X=\left[ \begin{array}{} a \\ b \end{array} \right]\overset{\phi}{\longrightarrow}\phi(X)=\left[ \begin{array}{} a^2 \\ b^2 \\ a \\ b \\ ab \end{array} \right]</script><p>则经过映射，四个样本点将变为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\phi(X_1)=\left[ \begin{array}{} 0 \\ 0 \\ 0 \\ 0 \end{array} \right]\quad \phi(X_2)=\left[ \begin{array}{} 1 \\ 1 \\ 1 \\ 1 \end{array} \right]\quad\in C_1\\
+&\phi(X_3)=\left[ \begin{array}{} 1 \\ 0 \\ 1 \\ 0 \\ 0 \end{array} \right]\quad \phi(X_4)=\left[ \begin{array}{} 0 \\ 1 \\ 0 \\ 1 \\ 0 \end{array} \right]\quad\in C_2\\
+\end{aligned}</script><p>现在，$X$ 变成了五维向量，则 $W$ 也要变成五维向量，$b$ 仍然为常量，求解的目标就变成在五维空间中找一个超平面来分割四个样本点了。能做到分割的超平面不唯一，这里举一个例子：</p>
+<script type="math/tex; mode=display">
+W=\left[ \begin{array}{} -1 \\ -1 \\ -1 \\ -1 \\ 6 \end{array} \right]\quad b=1</script><p>将样本点代入超平面的方程：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&W^T\phi(X_1)+b=1>0\\
+&W^T\phi(X_2)+b=3>0\\
+&W^T\phi(X_3)+b=-1<0\\
+&W^T\phi(X_4)+b=-1<0\\
+\end{aligned}</script><p>如上，该超平面刚刚好把 $X_1$、$X_2$ 与 $X_3$、$X_4$ 分开了。也就是说，在低维空间中线性不可分的样本集，可能在高维空间中就是线性可分的，这也就是我们要去升维的原因。关于这一点也有很多人研究过，它们的结论是，对于任何线性不可分的样本集，特征空间的维数越高，其被线性分割的概率也越大；若维数趋近无穷大，那么其被线性分割的概率将达到 1.</p>
+<h3 id="2-3-核函数"><a href="#2-3-核函数" class="headerlink" title="2.3 核函数"></a>2.3 核函数</h3><p>在引入了高维映射之后，优化式 1 就变成了 $y_i[W^T\phi(X_i)+b]\ge1-\xi_i\quad(i=1\sim N)$，虽然看起来只有 $X_i$ 发生了变化，但不要忘记 $W$ 也跟着一起升维了。那么现在面临的问题就是：<u>如何选取 $\phi$</u> ？SVM 的回答是：无限维。</p>
+<p>将特征空间增长到无限维，线性不可分问题就绝对可以变成线性可分。但是问题在于，当 $\phi(X)$ 变成无限维，$W$ 也要变成无限维，那这个问题就没有办法做了。这也是 SVM 巧妙的另一个地方，它在将特征空间映射到无限维的同时，又采用有限维的手段。</p>
+<p>SVM 的意思是：我们可以不知道无限维映射 $\phi(X)$ 的显式表达，我们只要知道一个<strong>核函数（Kernel Function）</strong>：</p>
+<script type="math/tex; mode=display">
+K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,X_2)$ 其实计算的是 $\phi(X_1)$ 和 $\phi(X_2)$ 的内积，虽然 $\phi(X_1)$ 和 $\phi(X_2)$ 是无限维的，但是两者仍然能进行内积计算，得到的结果 $K(X_1,X_2)$ 是一个数。</p>
+<p>核函数的要求是：能将函数的形式最终拆成 $\phi(X_1)^T\phi(X_2)$ 的形式。常用的核函数有如下几个：</p>
+<ol>
+<li>高斯核：$K(X_1,X_2)=e^{-\frac{||X_1-X_2||^2}{2\sigma^2}}=\phi(X_1)^T\phi(X_2)$，$\sigma^2$ 是方差。</li>
+<li>多项式核：$K(X_1,X_2)=(X_1^TX_2+1)^d=\phi(X_1)^T\phi(X_2)$，$d$ 是多项式阶数。</li>
+</ol>
+<p>而能将核函数 $K(X_1,X_2)$ 拆成 $\phi(X_1)^T\phi(X_2)$ 的充要条件是：</p>
+<ol>
+<li>$K(X_1,X_2)=K(X_2,X_1)$，即交换性；</li>
+<li>$\forall C<em>i,X_i\ (i=1\sim N)$，有 $\sum</em>{i=1}^{N}\sum_{j=1}^{N}C_iC_jK(X_i,X_j)\ge0$，即半正定性，也就是说，我们选取的核函数，必须要对任意选定的常数 $C$ 和向量 $X$ 都满足该式；</li>
+</ol>
+<h3 id="2-4-原问题到对偶问题"><a href="#2-4-原问题到对偶问题" class="headerlink" title="2.4 原问题到对偶问题"></a>2.4 原问题到对偶问题</h3><p>现在我们有了核函数，那么我们要怎样利用核函数，来替代优化式 1 中的 $\phi(X)$ 呢？在这之前，请先阅读<a href="#7.3* 补充：优化理论">优化理论</a>相关的内容。在稍微了解了优化理论中的原问题和对偶问题后，我们要做的，就是<u>把 SVM 的优化问题从原问题转换成对偶问题</u>。</p>
+<p>首先，我们<u>把 SVM 的优化问题转换成原问题</u>：</p>
+<p>对于目标函数，$\frac12||W||^2+C\sum_{i=1}^N\xi_i$ 是一个<strong>凸函数</strong>。</p>
+<p>对于限制条件，$\xi<em>i\ge0$ 不满足原问题的限制条件形式，得先将大于等于号变成小于等于号，也就是变成 $\xi_i\le0$，那么，目标函数就也得变换一下，变成 $\frac12||W||^2-C\sum</em>{i=1}^N\xi_i$；同样，另一个限制条件也得变换一下，变成 $y_i[W^TX_i+b]\ge1+\xi_i\quad(i=1\sim N)$，但是这个不等式也不满足原问题的要求，必须将不等式右边变成 0，所以得到 $1+\xi_i-y_i[W^TX_i+b]\le0\quad(i=1\sim N)$。于是得到优化目标的原问题形式，新的优化目标：</p>
+<ol>
+<li>目标：最小化 $\frac12||W||^2-C\sum_{i=1}^N\xi_i$</li>
+<li>限制条件：<ol>
+<li>$1+\xi_i-y_i[W^T\phi(X_i)+b]\le0\quad(i=1\sim N)$</li>
+<li>$\xi_i\le0$</li>
+</ol>
+</li>
+</ol>
+<p><u>将其转换为对偶问题</u>：</p>
+<ol>
+<li><p>目标：最大化 $\theta(\alpha,\beta)=\underset{(w,\xi<em>i,b)}{\inf}\{\frac12||W||^2-C\sum</em>{i=1}^N\xi<em>i+\sum</em>{i=1}^{N}\alpha<em>i(1+\xi_i-y_i[W^T\phi(X_i)+b])+\sum</em>{i=1}^N\beta_i\xi_i\}$</p>
+</li>
+<li><p>限制条件：</p>
+<ol>
+<li>$\alpha_i\ge0\quad(i=1\sim N)$</li>
+<li>$\beta_i\ge0\quad(i=1\sim N)$</li>
+</ol>
+</li>
+</ol>
+<p>解释一下这样变换的原因：</p>
+<ol>
+<li>原问题中的 $w$ 对应了原问题要求解的变量，有三个，分别是 $W$、$b$ 和 $\xi$，所以对偶问题中要遍历所有的 $w$，到这里就变成了遍历所有的 $W$、$b$ 和 $\xi$。</li>
+<li>根据对偶问题的定义，$L(\omega,\alpha,\beta)=f(\omega)+\sum<em>{i=1}^{K}\alpha_ig_i(\omega)+\sum</em>{i=1}^M\beta<em>ih_i(\omega)$，其中，$f(w)=\frac12||W||^2-C\sum</em>{i=1}^N\xi_i$，这一点是没有疑问的，关键是下面，千万不要以为这里的 $\alpha$ 和 $\beta$ 分别对应了上面的 $\alpha_i$ 和 $\beta_i$，不是这样的，在对偶问题中，$\alpha$ 管的是不等式条件，每个不等式条件要与 $\alpha$ 相乘，$\beta$ 管的是等式条件，每个等式条件要与 $\beta$ 相乘。但是在这里，SVM 原问题中的限制条件都是不等式，所以应该只有 $\alpha$，没有 $\beta$，只是说为了方便表示，这里仍然沿用 $\alpha_i$ 和 $\beta_i$，并且，由于 $\alpha$ 应该大于 0，所以到这里就变成了 $\alpha_i\ge0\quad(i=1\sim N)$，并且 $\beta_i\ge0\quad(i=1\sim N)$。其他部分就是照抄的关系了。</li>
+</ol>
+<p>接下来我们就来求一下 $L(W,\xi_i,b,\alpha)$ 的最小值：</p>
+<p>令偏导 $\frac{\partial L}{\partial W}=0$，$\frac{\partial L}{\partial \xi_i}=0$，$\frac{\partial L}{\partial b}=0$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\frac{\partial L}{\partial W}=0\Rightarrow W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)&①\\
+&\frac{\partial L}{\partial \xi_i}=0\Rightarrow C=\beta_i+\alpha_i&②\\
+&\frac{\partial L}{\partial b}=0\Rightarrow \sum_{i=1}^N\alpha_iy_i=0&③
+\end{aligned}</script><p>接下来，我们要将上面得到的三个式子代回到 $L(W,\xi<em>i,b,\alpha)$ 中去，好消息是，将式 ② 和式 ③ 代入之后，式子中的大部分项就能被消掉了，得到 $\theta(\alpha,\beta)=\frac12||W||^2+\sum</em>{i=1}^N\alpha<em>i-\sum</em>{i=1}^N\alpha_iy_iW^T\phi(X_i)$，先来计算 $\frac12||W||^2$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac12||W||^2&=\frac12W^TW\\
+&=\frac12(\sum_{i=1}^N\alpha_iy_i\phi(X_i))^T(\sum_{j=1}^N\alpha_jy_j\phi(X_j))\\
+&=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j\phi(X_i)^T\phi(X_j)\\
+&=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
+\end{aligned}</script><p>一件惊喜的事情：上式的最终化简结果里出现了核函数！接下来化简 $-\sum_{i=1}^N\alpha_iy_iW^T\phi(X_i)$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+-\sum_{i=1}^N\alpha_iy_iW^T\phi(X_i)&=-\sum_{i=1}^N\alpha_iy_i(\sum_{j=1}^N\alpha_jy_j\phi(X_j))^T\phi(X_i)\\
+&=-\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j\phi(X_j)^T\phi(X_i)\\
+&=-\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
+\end{aligned}</script><p>所以，最后会得到：</p>
+<script type="math/tex; mode=display">
+\theta(\alpha,\beta)=\sum_{i=1}^{N}\alpha_i-\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)</script><p>经过这样一系列的推导，最终问题的形式会变成：</p>
+<ol>
+<li><p>目标：最大化 $\theta(\alpha)=\sum<em>{i=1}^{N}\alpha_i-\frac12\sum</em>{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)$</p>
+</li>
+<li><p>限制条件：</p>
+<ol>
+<li>$0\le\alpha_i\le C\quad(i=1\sim N)$</li>
+<li>$\sum_{i=1}^N\alpha_iy_i=0$</li>
+</ol>
+</li>
+</ol>
+<p>解释一下限制条件：根据之前求的偏导我们得到了 $\beta_i+\alpha_i=C$，由于之前的限制条件规定了 $\beta_i\ge0$ 以及 $\alpha_i\ge0$，所以我们可以直接把这两个条件合并成一个条件，即 $0\le\alpha_i\le C\quad(i=1\sim N)$，那么为什么要合并呢？因为我们现在的目标函数中只剩下了 $\alpha_i$ 和 $\alpha_j$，已经不存在 $\beta$ 了；而第二个限制条件则是直接照抄的令 $\frac{\partial L}{\partial b}=0$ 得到的结果。</p>
+<p>在这个对偶问题中，目标函数仍然是一个<strong>凸函数</strong>。并且，其中未知的参数只有 $\alpha_i$ 和 $\alpha_j$，核函数是已经确定的了。由于是一个凸优化问题，所以它应该是很容易求解的。有一种凸优化问题求解算法叫做 <strong>SMO 算法</strong>，在这里不再展开叙述，感兴趣的同学自行了解。总之，我们只需要知道，这个问题是有解的。</p>
+<p>但是到这里还没结束，我们现在已经将 SVM 的优化问题从原问题转换成了对偶问题，将 $\phi(X_i)$ 用核函数进行了替换，但是还有一个问题：<u>对偶问题是求解 $\alpha_i$ 和 $\alpha_j$，而我们要的是 $W$ 和 $b$，如何在这两者之间进行转换？</u></p>
+<p>这里又体现了 SVM 的精妙之处，我们并不需要知道 $W$ 具体长什么样，根据我们之前求偏导的结果，我们知道 $W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)$，同时我们也知道，最后分类的方法是，对于测试样本 $X$，若：</p>
+<ol>
+<li>$W^T\phi(X)+b\ge0$，则 $y=+1$</li>
+<li>$W^T\phi(X)+b\lt0$，则 $y=-1$</li>
+</ol>
+<p>我们将 $W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)$ 代入到不等式左边的式子中，就会得到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+W^T\phi(X)+b&=\sum_{i=1}^N[\alpha_iy_i\phi(X_i)]^T\phi(X)+b\\
+&=\sum_{i=1}^N\alpha_iy_i\phi(X_i)^T\phi(X)+b\\
+&=\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b
+\end{aligned}</script><p>所以说，我们并不需要知道 $W$ 的具体值，我们只需要有核函数，就能对样本进行分类。现在的关键问题是：<u>$b$ 是多少</u>？$b$ 的求解并不简单，需要用到优化理论中的 <strong>KKT 条件</strong>。</p>
+<p>根据 KKT 条件，当原问题和对偶问题满足强对偶定理时，$\forall i=1\sim K$，要么 $\beta_i^<em>=0$，要么 $h_i(\omega^</em>)=0$；要么 $\alpha_i^<em>=0$，要么 $g_i(\omega^</em>)=0$，而在这个问题中，$g(W)=1+\xi_i-y_i[W^T\phi(X_i)+b]$，所以，要么 $\alpha_i=0$，要么 $g(W)=1+\xi_i-y_i[W^T\phi(X_i)+b]=0$. 现在，我们取一个 $\alpha_i$，使之 $0\lt\alpha_i\lt C$（这是肯定能满足的，原因见限制条件），则根据 KKT 条件，肯定有 $1+\xi_i-y_i[W^T\phi(X_i)+b]=0$。又因为 $\beta_i+\alpha_i=C$，根据 KKT 条件，所以 $\beta_i\neq0$，$h(W)=\xi_i=0$. 将 $\xi_i=0$ 代入前式，就有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&1-y_i[W^T\phi(X_i)+b]=0\\
+&\Downarrow\text{to rearrange the terms}\\
+&b=\frac{1-y_iW^T\phi(X_i)}{y_i}\\
+&\Downarrow\text{to substitute }W^T\phi(X)=\sum_{i=1}^N\alpha_iy_iK(X_i,X)\text{ into it}\\
+&b=\frac{1-y_i\sum_{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}
+\end{aligned}</script><p>于是，就连 $b$ 我们也知道了。在现实中，我们一般会遍历所有 $\alpha_i\notin\{0,C\}$（在上面的讨论中我们只取了一个 $\alpha$），然后计算 $b$，最后取 $b$ 的平均值，这样能使结果更加精确。</p>
+<h3 id="2-5-算法流程总结"><a href="#2-5-算法流程总结" class="headerlink" title="2.5 算法流程总结"></a>2.5 算法流程总结</h3><h4 id="训练流程"><a href="#训练流程" class="headerlink" title="训练流程"></a>训练流程</h4><ol>
+<li>输入：$\{(X_i,y_i)\}\quad i=1\sim N$</li>
+<li>求解优化问题（SMO 算法）：<ol>
+<li>最大化 $\theta(\alpha)=\sum<em>{i=1}^{N}\alpha_i-\frac12\sum</em>{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)$</li>
+<li>限制条件：<ol>
+<li>$0\le\alpha_i\le C\quad(i=1\sim N)$</li>
+<li>$\sum_{i=1}^N\alpha_iy_i=0$</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>通过上一步计算出来的 $\alpha<em>i$ 来计算 $b$：$b=\frac{1-y_i\sum</em>{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}$</li>
+</ol>
+<h4 id="测试流程"><a href="#测试流程" class="headerlink" title="测试流程"></a>测试流程</h4><ol>
+<li>输入测试样本 $X$</li>
+<li>分类：<ol>
+<li>若 $\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b\ge0$，则 $y=+1$</li>
+<li>若 $\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b\lt0$，则 $y=-1$</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>可以发现，最终训练流程和测试流程中完全不需要用到无限维的 $\phi(X)$，只需要使用核函数就行了。这也就是 SVM 用有限维手段来处理无限维问题的方法。</p>
+</blockquote>
+<h2 id="03-补充：优化理论"><a href="#03-补充：优化理论" class="headerlink" title="03* 补充：优化理论"></a>03* 补充：优化理论</h2><p>在优化领域中，在优化理论中，<strong>原问题（Prime Problem）</strong>和<strong>对偶问题（Dual Problem）</strong>是一对相关的数学问题。 </p>
+<p>原问题的定义如下：</p>
+<ol>
+<li>目标：最小化 $f(\omega)$</li>
+<li>限制条件：<ol>
+<li>$g_i(\omega)\le0\quad(i=1\sim K)$</li>
+<li>$h_i(\omega)=0\quad(i=1\sim M)$</li>
+</ol>
+</li>
+</ol>
+<p>原问题是非常普适化的，虽然上面展示的是最小化问题，但只需要在 $f(\omega)$ 前加一个负号，立马就变成了最大化问题；同样地，在 $g_i(\omega)\le0$ 中加一个负号，也就变成了 $-g_i(\omega)\ge0$；而在式 2 的左边减去一个常数 $C$，就立马变成了 $h_i(\omega)-C=0$，这样就可以把等式右边的 0 变成任意常数 $C$。</p>
+<p>对偶问题是从原问题派生出来的一个新问题，对偶问题首先定义了一个函数：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L(\omega,\alpha,\beta)&=f(\omega)+\sum_{i=1}^{K}\alpha_ig_i(\omega)+\sum_{i=1}^M\beta_ih_i(\omega)\quad&①\\
+&=f(\omega)+\alpha^Tg(\omega)+\beta^Th(\omega)\quad&②
+\end{aligned}</script><p>上式中，$\alpha$ 和 $\beta$ 是两个和 $\omega$ 维数一样的向量，并且分别乘上了不等式的限制条件和等式的限制条件。式 ① 是该式的代数形式，式 ② 是该式的矩阵形式。有了这个函数，我们就可以给出对偶问题的定义了：</p>
+<ol>
+<li>目标：最大化 $\theta(\alpha,\beta)=\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$</li>
+<li>限制条件：$\alpha_i\ge0\quad(i=1\sim K)$</li>
+</ol>
+<p>解释一下这里的目标函数，$\inf$ 就是求最小值的意思，下面的 $\omega$ 是指，遍历所有每个 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ ，所以 $\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$ 就是指，求所有 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ 中，$L(\omega,\alpha,\beta)$ 最小的取值。而通过 $\theta(\alpha,\beta)$ 可以看出，$\alpha$ 和 $\beta$ 是固定的，也就是说，我们每确定一组 $\alpha$ 和 $\beta$，就去求一次 $L(\omega,\alpha,\beta)$ 的最小值，所以 $\theta$ 是只和 $\alpha$ 和 $\beta$ 有关的函数。而我们的目标又是最大化 $\theta(\alpha,\beta)$，所以，实质上我们就是要使 $L(\omega,\alpha,\beta)$ 的最小值最大化。而对偶问题的限制条件很简单，只要求每个 $\alpha_i$ 大于 0 即可。</p>
+<p>接下来我们就来介绍一下原问题和对偶问题的关系，有一条定理是这样的：</p>
+<blockquote>
+<p>如果 $\omega^<em>$ 是原问题的解，而 $\alpha^</em>$ 和 $\beta^<em>$ 是对偶问题的解，则有 $f(\omega^</em>)\ge\theta(\alpha^<em>,\beta^</em>)$。</p>
+</blockquote>
+<p>这条定理的证明如下：</p>
+<p>由于 $\alpha^<em>$ 和 $\beta^</em>$ 是对偶问题的解，则下式肯定成立：</p>
+<script type="math/tex; mode=display">
+\theta(\alpha^*,\beta^*)=\underset{\omega}{\inf}\{L(\omega,\alpha^*,\beta^*\}\le L(\omega^*,\alpha^*,\beta^*)</script><p>这里的 $\omega^*$ 是指一个具体的 $\omega$ 的值。根据 $L(\omega,\alpha,\beta)$ 的定义，展开不等式右边的式子有：</p>
+<script type="math/tex; mode=display">
+L(\omega^*,\alpha^*,\beta^*)=f(\omega^*)+\sum_{i=1}^{K}\alpha_i^*g_i(\omega^*)+\sum_{i=1}^M\beta_i^*h_i(\omega^*)</script><p>既然 $\omega^<em>$ 是原问题的解，那么 $\omega^</em>$ 必然满足原问题的两个限制条件，也就是说 $g<em>i(\omega^<em>)\le0$，$h_i(\omega^</em>)=0$；另外，既然 $\alpha^<em>$ 是对偶问题的解，那么 $\alpha^</em>$ 也必然满足 $\alpha^<em>\ge0$。进一步，既然 $h_i(\omega^</em>)=0$，那么上式中 $\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)=0$；既然 $g_i(\omega^<em>)\le0$，$\alpha^</em>\ge0$，那么上式中 $\sum</em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)\le0$，所以存在：</p>
+<script type="math/tex; mode=display">
+\theta(\alpha^*,\beta^*)=\underset{\omega}{\inf}\{L(\omega,\alpha^*,\beta^*\}\le L(\omega^*,\alpha^*,\beta^*)\le f(\omega^*)</script><p>证毕。</p>
+<p>遂定义：</p>
+<script type="math/tex; mode=display">
+G=f(\omega^*)-\theta(\alpha^*,\beta^*)\ge0</script><p>$G$ 叫做原问题与对偶问题的<strong>间距（Duality Gap）</strong>。对应某些特定的优化问题，可以证明 $G=0$. 这里不再证明，直接给出问题的结论——<strong>强对偶定理</strong>：</p>
+<blockquote>
+<p>若 $f(\omega)$ 为凸函数，且 $g(\omega)=A\omega+b$（线性函数），$h(\omega)=CW+d$（一组线性函数），则此优化问题的原问题和对偶问题的间距是 0，即 $f(\omega^<em>)=\theta(\alpha^</em>,\beta^*)$。</p>
+</blockquote>
+<p>问题是，强对偶定理的前提成立意味着什么？假设现在原问题和对偶问题满足强对偶定理，即 $f(\omega^<em>)=\theta(\alpha^</em>,\beta^<em>)$ 成立，那么就有 $f(\omega^</em>)=\theta(\alpha^<em>,\beta^</em>)=\underset{\omega}{\inf}\{L(\omega,\alpha^<em>,\beta^</em>\}$，也就是说，<u>原问题的解 $\omega^<em>$，刚刚就是对偶问题在 $\alpha^</em>$ 和 $\beta^*$ 确定时，取到最小值的那个点</u>。</p>
+<p>更加精妙的是，当 $G=0$ 成立时，$\sum<em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)+\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)=0$，其中，$\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)$ 等于 0 不用再说了，但 $\sum</em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)=0$ 意味着，<u>$\forall i=1\sim K$，要么 $\alpha_i^<em>=0$，要么 $g_i(\omega^</em>)=0$</u>。这个条件叫做 <strong>KKT 条件</strong>。</p>
+
+	
+	</div>
+  <a type="button" href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2023-12-06 </div>
+			<div class="article-title"><a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" >鲁滨逊归结原理</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="1-归结推理"><a href="#1-归结推理" class="headerlink" title="1 归结推理"></a>1 归结推理</h2><p>反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。</p>
+<p>定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当 $(P_1\land P_2\land …\land P_n)\land\neg Q$ 是不可满足的。</p>
+<p>归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：</p>
+<ol>
+<li>欲证明 $P⇒Q$</li>
+<li>化为反命题 $P\land¬Q$</li>
+<li>化成子句集</li>
+<li>证明子句集不可满足(鲁滨逊归结原理)</li>
+</ol>
+<h2 id="2-子句集"><a href="#2-子句集" class="headerlink" title="2 子句集"></a>2 子句集</h2><p>什么是子句？如何将谓词公式化为子句集？</p>
+<p>我们称一个不能再分割的命题为<strong>原子谓词公式</strong>，将原子谓词公式及其否定形式称为<strong>文字</strong>，而<strong>子句</strong>就是任何文字的<u>析取式</u>，任何文字本身也是子句。<strong>空子句</strong>是一个不包含任何文字的子句，它永远为假，不可满足，通常表示为 $NIL$，虽然听上去没什么用，但它却是归结推理中最重要的子句，之后你会知道为什么。以上就是子句的概念，而子句集就是由子句构成的集合。</p>
+<p>以下面这道题为例讲解如何将一个谓词公式化为子句集：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\forall y)P(x,y)\rightarrow\neg(\forall y)(Q(x,y)\rightarrow R(x,y)))</script><p>第一步：消去谓词公式中的 $\rightarrow$ 和 $\leftrightarrow$，得到：</p>
+<script type="math/tex; mode=display">
+(\forall x)(\neg(\forall y)P(x,y)\lor\neg(\forall y)(\neg Q(x,y)\lor R(x,y)))</script><p>第二步：将否定符号 $\neg$ 移到紧靠谓词的位置上：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\exists y)\neg P(x,y)\lor(\exists y)(Q(x,y)\land\neg R(x,y)))</script><p>第三步：变量标准化，将重复的变量名换掉：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\exists y)\neg P(x,y)\lor(\exists z)(Q(x,z)\land\neg R(x,z)))</script><p>第四步：消去存在量词，要用到 <a href="#4* Skolem 函数">Skolem 函数</a>，令 $y=f(x)$，$z=g(x)$：</p>
+<script type="math/tex; mode=display">
+(\forall x)(\neg P(x,f(x))\lor(Q(x,g(x))\land\neg R(x,g(x))))</script><p>第五步：化为前束形，即将所有的全称谓词提到公式最前面，使母式中不存在任何量词，上式已满足前束形。</p>
+<p>第六步：化为 Skolem 标准形，即将母式化为合取式：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\neg P(x,f(x))\lor Q(x,g(x))\land(\neg P(x,f(x))\lor\neg R(x,g(x))))</script><p>第七步：略去全称量词：</p>
+<script type="math/tex; mode=display">
+(\neg P(x,f(x))\lor Q(x,g(x))\land(\neg P(x,f(x))\lor\neg R(x,g(x)))</script><p>第八步：把和取词看作分隔符，把整体化为集合：</p>
+<script type="math/tex; mode=display">
+\{\neg P(x,f(x))\lor Q(x,g(x)),\neg P(x,f(x))\lor\neg R(x,g(x))\}</script><p>第九步：子句变量标准化，即将不同的子句中的变量名字区分开，用不同的符号表示：</p>
+<script type="math/tex; mode=display">
+\{\neg P(x,f(x))\lor Q(x,g(x)),\neg P(y,f(y))\lor\neg R(y,g(y))\}</script><p>以上，就得到了谓词公式的子句集。</p>
+<h2 id="3-鲁滨逊归结原理"><a href="#3-鲁滨逊归结原理" class="headerlink" title="3 鲁滨逊归结原理"></a>3 鲁滨逊归结原理</h2><p>子句集中的各子句是合取关系，所以只要有一个不可满足，则整个子句集不可满足。所以，我们需要去找一个空子句，假如子句集中存在空子句，那就肯定不可满足。但是子句集中直接出现空子句的情况是很少的，那么如何找到空子句？这就是鲁滨逊归结原理要解决的问题，根据鲁滨逊归结原理对子句集进行归结，如果最终归结出一个空子句，则说明该子句集不可满足，进一步说明原命题不可满足。</p>
+<p>鲁滨逊归结原理（也称消解原理）的基本思路是：检查子句集 $\text{S}$ 中是否包含空子句，若包含，则 $\text{S}$ 不可满足；若不包含，在 $\text{S}$ 中选择合适的子句进行归结，一旦归结出空子句，就说明 $\text{S}$ 是不可满足的。</p>
+<p>归结的定义：设 $C<em>1$ 和 $C_2$ 是子句集中的任意两个子句，如果 $C_1$ 中的文字 $L_1$ 与 $C_2$ 中的文字 $L_2$ 互补，那么从 $C_1$ 和 $C_2$ 中分别消去 $L_1$ 和 $L_2$，并将两个子句中余下的部分<strong>析取</strong>，构成一个新子句 $C</em>{12}$。</p>
+<hr>
+<p>例题：设 $C_1=\neg P\lor Q$，$C_2=\neg Q\lor R$，$C_3=P$，请对 ${C_1,C_2,C_3}$ 进行归结。</p>
+<p>$C<em>{1}$ 和 $C</em>{2}$ 中存在互补子句 $Q$ 和 $\neg Q$，所以消去这两个子句集，并将余下子句析取，得到 $C<em>{12}=\neg P\lor R$；$C</em>{12}$ 和 $C<em>{3}$ 中存在互补子句 $\neg P$ 和 $P$，所以消去这两个子句集，并将余下子句析取，得到 $C</em>{123}=R$。所以 $C_{123}$ 就是该子句集归结的结果。</p>
+<hr>
+<p>定理：归结式 $C<em>{12}$ 是其亲本子句 $C_1$ 和 $C_2$ 的逻辑结论，即，如果 $C_1$ 和 $C_2$ 为真，则 $C</em>{12}$ 也为真。</p>
+<p>上述定理有一条推论：设 $C<em>1$ 和 $C_2$ 是子句集 $\text S$ 中的两个子句集，$C</em>{12}$ 是它们的归结式，若用 $C<em>{12}$ 代替 $C_1$ 和 $C_2$ 后得到新子句集 $\text{S}_1$，则由 $\text{S}_1$ 不可满足性可推出 $\text{S}$ 的不可满足性。但是注意，这条推论不能证明若 $\text{S}$ 是不可满足的，则 $\text{S}_1$ 也不可满足，所以还有另一条推论：设 $C_1$ 和 $C_2$ 是子句集 $\text S$ 中的两个子句集，$C</em>{12}$ 是它们的归结式，若 $C_{12}$ 加入原子句集 $\text{S}$，得到新子句集 $\text{S}_2$，则 $\text S$ 和 $\text S_2$ 在不可满足性上是<u>等价</u>的，即若 $\text{S}$ 是不可满足的，则 $\text{S}_2$ 也不可满足，反之亦然。不过我们的目的只是为了证明原子句集不可满足，也就是归结出一个空子句，所以上述两个推论均可用。</p>
+<h2 id="4-归结反演"><a href="#4-归结反演" class="headerlink" title="4 归结反演"></a>4 归结反演</h2><p>应用鲁滨逊归结原理证明定理的过程称为<strong>归结反演</strong>。它总共分为以下四个步骤：</p>
+<ol>
+<li>将已知前提表示为谓词公式 $F$；</li>
+<li>将待证明的结论表示为谓词公式 $Q$，并否定得到 $\neg Q$；</li>
+<li>把谓词公式集 ${F,\neg Q}$ 化为子句集 $\text S$；</li>
+<li>应用归结原理对子句集 $\text S$ 中的子句进行归结，并把每次归结得到的归结式都并入到 $\text S$ 中。如此反复进行，若出现了空子句，则停止归结，此时就证明了 $Q$ 为真。</li>
+</ol>
+<hr>
+<p>例题：某公司招聘工作人员，A，B，C 三人面试，经面试后公司表示如下想法：</p>
+<ul>
+<li>三人中至少录取一人；</li>
+<li>如果录取 A 而不录取 B，则一定录取 C；</li>
+<li>如果录取 B，则一定录取 C。</li>
+</ul>
+<p>求证：公司一定录取 C。</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 $P(x)$ 表示录取 $x$。于是可得如下前提：</p>
+<ul>
+<li>$P(A)\lor P(B)\lor P(C)$</li>
+<li>$P(A)\land\neg P(B)\rightarrow P(C)$</li>
+<li>$P(B)\rightarrow P(C)$</li>
+</ul>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：$\neg P(C)$。</p>
+<p>第三步，将上述谓词公式化为子句集：</p>
+<ol>
+<li>$P(A)\lor P(B)\lor P(C)$</li>
+<li>$\neg P(A)\lor P(B)\lor P(C)$</li>
+<li>$\neg P(B)\lor P(C)$</li>
+<li>$\neg P(C)$</li>
+</ol>
+<p>第四步，应用归结原理进行归结：</p>
+<ol>
+<li>$P(B)\lor P(C)\quad 归结(1)和(2)$</li>
+<li>$P(C)\quad\quad\quad\quad\ \ 归结(3)和(5)$</li>
+<li>$NIL\quad\quad\quad\quad\ \ \ 归结(4)和(6)$</li>
+</ol>
+<p>由于归结出了空子句，所以成功证明了 $\neg P(C)$ 为假，因此原命题 $P(C)$ 为真，公司一定录取 C。</p>
+<hr>
+<p>例题：已知：</p>
+<ul>
+<li>任何人的兄弟不是女性；</li>
+<li>任何人的姐妹必是女性；</li>
+<li>Mary 是 Bill 的姐妹。</li>
+</ul>
+<p>求证：Mary 不是 Tom 的兄弟。</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 $brother(x,y)$ 表示录取 $x$ 是 $y$ 的兄弟，设 $sister(x,y)$ 表示录取 $x$ 是 $y$ 的姐妹，设 $woman(x)$ 表示录取 $x$ 是女性。于是可得如下前提：</p>
+<ul>
+<li>$(\forall x)(\forall y)(brother(x,y)\rightarrow\neg woman(x))$</li>
+<li>$(\forall x)(\forall y)(sister(x,y)\rightarrow woman(x))$</li>
+<li>$sister(Mary,Bill)$</li>
+</ul>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：$brother(Mary,Tom)$。</p>
+<p>第三步，将上述谓词公式化为子句集：</p>
+<ol>
+<li>$C_1=\neg brother(x,y)\lor\neg woman(x)$</li>
+<li>$C_2=\neg sister(x,y)\lor woman(x)$</li>
+<li>$C_3=sister(Mary,Bill)$</li>
+<li>$C_4=brother(Mary,Tom)$</li>
+</ol>
+<p>第四步，应用归结原理进行归结：</p>
+<ol>
+<li>$C_{23}=woman(Mary)$</li>
+<li>$C_{123}=\neg borther(Mary,y)$</li>
+<li>$C_{1234}=NIL$</li>
+</ol>
+<p>由于归结出了空子句，所以成功证明了 $brother(Mary,Tom)$ 为假，因此原命题 $\neg brother(Mary,Tom)$ 为真，Mary 不是 Tom 的兄弟。</p>
+
+	
+	</div>
+  <a type="button" href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2023-10-24 </div>
+			<div class="article-title"><a href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/" >初识Transformer</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="01-Seq2seq"><a href="#01-Seq2seq" class="headerlink" title="01 Seq2seq"></a>01 Seq2seq</h2><p>Transformer 是一个 sequence-to-sequence model，我们一般简写作 seq2seq。seq2seq 的意思是指，输入是一个 sequence，输出也是一个 sequence，并且两个 sequence 的长度不一定，这里的长度不一定的意思是指：1. 输入的长度不一定；2. 输出的长度由机器自己决定；3. 输入和输出的长度并不存在必然关系。</p>
+<p>比较典型的 seq2seq 的例子有语音识别、文字翻译、语音翻译等，还有例如 text-to-speech (文字转语音) 的 model 也是一种 seq2seq，甚至是聊天机器人 chatbot，也是 seq2seq。</p>
+<p>其实，seq2seq 在 NLP 方面的应用是很广泛的，很多你认为可能跟 seq2seq 无关的任务也可以转换成 seq2seq。NLP 的本质其实是 question answering (QA)，而只要能想象成 QA，就基本上都能用 seq2seq 解决。</p>
+<p>Seq2seq 还可以用于解决 multi-label classification，multi-label 是将一个东西分到多个类别里的任务，并且一个东西可能属于不止一个类别，而 seq2seq 的输出长度是机器自己决定的，也就是机器觉得有几个输出就几个输出，也就是机器觉得这个东西属于哪几个类别那就是哪几个类别，所以 seq2seq 也可以硬解 multi-label classification。</p>
+<p>除此以外，就连图像识别问题也可以用 seq2seq，但是这里就不展开了。至少至此，我们已经知道了 seq2seq 是一个强大的 model，那么它究竟是怎么做到的，接下来我们就要开始研究了。</p>
+<h2 id="02-Mechanism"><a href="#02-Mechanism" class="headerlink" title="02 Mechanism"></a>02 Mechanism</h2><p>Seq2seq 主要由两大部分组成 —— encoder 和 decoder。</p>
+<p><img src="/img/Transformer-01.png" alt=""></p>
+<p>Encoder 负责接收和处理数据，然后将处理过的数据交给 decoder，decoder 则根据数据决定输出结果。接下来，我们就来具体来看看 encoder 和 decoder 的结构。</p>
+<h3 id="2-1-Encoder"><a href="#2-1-Encoder" class="headerlink" title="2.1 Encoder"></a>2.1 Encoder</h3><p>简单来说，encoder 要做的事情就是将接收的一排向量，转换成另一排向量，这一个过程可以用很多种方法来完成，例如 RNN 和 CNN，而 transformer 采用的是 [[Self-attention|self-attention]]，大名鼎鼎的注意力机制也就是从 transformer 中诞生的。</p>
+<p>Encoder 内部其实是一个一个 block (块)，每个 block 都接收一排向量，输出一排向量，而且每个 block 的工作也大致都是相同的，其实都是对 input 做 self-attention，然后将 output1 丢进一个全连接网络，得到 output2，这个就是一个 block 的输出。所以 encoder 的结构大致如下：</p>
+<p><img src="/img/Transformer-02.png" alt=""></p>
+<p>实际上，transformer 中的 self-attention 是比我们之前讲的 self-attention 更复杂的。在 transformer 中，self-attention 的 output 还要再加上最开始的 input，才算得到最终的 output，这种架构被称为 <strong>residual connection (残差连接)</strong>，这个技术旨在解决深度神经网络训练过程中的梯度消失和梯度爆炸等问题。然后，还要对得到的 residule 做 layer normalization，方法是：求 residule 整个序列的均值 $m$ 和标准差 $\sigma$，然后做标准化：</p>
+<script type="math/tex; mode=display">
+x_i^\prime=\frac{x_i-m}{\sigma}</script><p>这样得到的序列才是全连接网络的输入，但是还没完，全连接网络的输出仍要再进行一次 residule connection，即将输入和输出相加，然后同样要对 residule 进行 layer normalization，这样才能得到 block 的输出。</p>
+<p>现在我们来看一下 <em>Attention is all you need</em> 这篇论文中所画的 encoder 的结构：</p>
+<p><img src="/img/Transformer-03.png" alt=""></p>
+<p>首先，input 进行 embedding 之后，作为输入进行 multi-head attention，考虑到有些时候序列可能是有序的，所以图中还画出了 positional encoding 的环节，这项技术在 self-attention 的笔记中有提到。Attention 之后，得到的输出要先于最初的输入进行相加 (add)，然后进行 layer normalization，这就是上图中淡黄色框的含义。再网上要进行 feed forward，其实就是把上一步得到的结果喂给全连接网络，然后对得到的结果再进行一次 Add &amp; Norm。这就是上图的含义。</p>
+<h3 id="2-2-Decoder"><a href="#2-2-Decoder" class="headerlink" title="2.2 Decoder"></a>2.2 Decoder</h3><p>Decoder 的架构其实分为两种 —— autoregressive (AT) 和 non-autoregressive (NAT)，接下来要将的 autoprogressive 是比较常见的架构，我们将以语音辨识为例进行讲解。</p>
+<h4 id="2-2-1-Autoprogressive"><a href="#2-2-1-Autoprogressive" class="headerlink" title="2.2.1 Autoprogressive"></a>2.2.1 Autoprogressive</h4><h5 id="decoder-的工作流程"><a href="#decoder-的工作流程" class="headerlink" title="decoder 的工作流程"></a>decoder 的工作流程</h5><p>假设我们在处理语音辨识的问题，现在，语音已经通过 encoder 转换成了一个序列，decoder 要接收这个序列，然后输出对应的文字。我们暂且不提 decoder 是如何接收 encoder 的输出的，我们假设 decoder 能接收到 encoder 的输出，然后来解释一下 decoder 的工作流程。</p>
+<p>首先，我们得给 decoder 一个特殊的 token，我们称之为 BOS (begin of sentence)，接下来简称 BEGIN。当 decoder 接收到这个 token 时，它就开始输出，它的输出应该是一个 one-hot vector，也就是一个独热编码的向量，其大小等同于词汇的大小，以中文为例，可能就是所有中文字的数量。当然你可能会说这有点太大了，那实际上，我们可能只取常见的几千个中文字，生僻字我们不去管。</p>
+<p>这个 vector 中的数字就是每个对应位置上的中文字的可能性，它们的总和是 1，由对 decoder 的输出做 softmax 之后得到，最终 decoder 生成汉字就是取其中可能性最大的那个。</p>
+<p>总而言之，我们现在得到了第一个汉字，假设这个汉字是“机”，那么下一步，我们要把这个 decoder 生成的汉字加入到 decoder 的输入中，也就是说，现在的 decoder 的输入不只有 BEGIN 了，还有了“机”，于是重复上面的步骤，得到第二个输出“器”，周而复始……最终得到完整的输出“机器学习”。在这个过程中，decoder 当然也有读入 encoder 的输出，但是这一部分我们先不讲。总结上面的过程，我们可以说，其实 decoder 就是将自己前一刻的输出当作输入，进一步得到下一时刻的输出。这里就诞生了一个问题：要是 decoder 自己预测的内容出错了怎么办？会不会造成 error propagation，也就是一步错步步错？当然是有可能的，但是这个问题我们之后再谈，我们先暂且当作没这回事。</p>
+<h5 id="decoder-和-encoder-的结构对比"><a href="#decoder-和-encoder-的结构对比" class="headerlink" title="decoder 和 encoder 的结构对比"></a>decoder 和 encoder 的结构对比</h5><p>现在我们来看看论文中画的 decoder 的结构，decoder 看上去很复杂，但如果我们将其与 encoder 的结构进行对比，似乎能发现一些相似之处。</p>
+<p><img src="/img/Transformer-04.png" alt=""></p>
+<p>你可能会发现，如果我们把 decoder 中间那一块盖起来，encoder 的结构好像就跟 decoder 差不了多少了，无非是 decoder 的输出最后还要经过一个线性层，再经过 softmax 激活，来输出可能性罢了。唯一的不同可能就是 decoder 中，一开始的 attention 是 masked multi-head attention，那这个 masked 是什么意思？</p>
+<h5 id="masked-self-attention"><a href="#masked-self-attention" class="headerlink" title="masked self-attention"></a>masked self-attention</h5><p>在我们原来所讲的 self-attention 中，输出的 $b_1$ 是考虑了 $a_1\sim a_n$ 所有的资讯之后得到的 $a_1$ 的资讯，$b_2\sim b_n$ 皆是如此；而在 masked self-attention 中，输出不再能考虑后面的资讯，意思是，$b_1$ 只是考虑了 $a_1$ 后，$a_1$ 的资讯；$b_2$ 是考虑了 $a_1, a_2$ 之后，$a_2$ 的资讯；$b_3$ 是考虑了 $a_1, a_2, a_3$ 之后，$a_3$ 的资讯……只有 $b_n$ 是考虑了整个输入后，输出的资讯。这就是 masked self-attention。</p>
+<p>至于为什么要用 masked，其实原因很简单。我们之前也解释了，decoder 会拿自己的输出作为输入，输出是从左到右依次产生的，输入肯定也只能从左到右依次输入，所以就出现了这样只能读左边，而不能读右边的 masked self-attention 机制。</p>
+<h5 id="何时终止输出"><a href="#何时终止输出" class="headerlink" title="何时终止输出"></a>何时终止输出</h5><p>之前说过，transformer 的输出长度是机器自己决定的，也就是由 decoder 决定的，但到目前为止，我们都还没有讨论过，decoder 到底是如何决定输出长度的，它是怎么知道什么时候该停止输出的。就像前面举的例子，在 decoder 输出完“机器学习”之后，万一它又把 BEGIN+“机器学习”作为输入，输出了个“惯”字怎么办？</p>
+<p>对这一点的处理是很巧妙的，要解决这个问题，我们还得再准备一个特殊的 token，叫作 END。就像 BEGIN 是开始的标志，END 就是终止的标志，并且，END 存储在 encoder 的输出 one-hot vector 里，也就是说，one-hot vector 的长度是 vocabulary 的长度再加上 END。如果根据 encoder 的计算，发现输出的 one-hot vector 中，END 的概率是最高的，那就意味着输出该结束了。通过这种方式，encoder 就能自行决定何时终止输出。</p>
+<h4 id="2-2-2-Non-autoregressive"><a href="#2-2-2-Non-autoregressive" class="headerlink" title="2.2.2 Non-autoregressive"></a>2.2.2 Non-autoregressive</h4><p>接下来我们简短地介绍一下另一种 decoder 的架构 —— non-autoregressive，简称 NAT。</p>
+<h5 id="AT-vs-NAT"><a href="#AT-vs-NAT" class="headerlink" title="AT vs NAT"></a>AT vs NAT</h5><p>AT 的运作方式是，先将开始标志 BEGIN 作为输入传入，得到一个输出，随后将自己的输出作为输入再传进来，再得到下一个输出，然后再将下一个输出继续传进来，得到下下个输出，循环往复，直到输出 END；而 NAT 则不一样，它一开始就接收多个 BEGIN，于是得到多个输出，也就是一个完整的句子，然后就结束了。</p>
+<h5 id="何时终止输出-1"><a href="#何时终止输出-1" class="headerlink" title="何时终止输出"></a>何时终止输出</h5><p>那么问题就来了，既然我们一开始都不知道输出的长度，那我们要怎么知道该给 decoder 多少个 BEGIN？</p>
+<p>解决这个问题的方法有很多，一种方法就是准备一个 classifier，将 encoder 的输出先丢给 classifier，由 classifier 决定输出的长度，于是就丢对应长度的 BEGIN。</p>
+<p>另一种可能的处理方法是，不管输出的长度，直接丢给 decoder 尽可能大的 BEGIN 数目，然后看看 decoder 的输出中，哪里出现了 END 标志，我们只取 END 前面的内容，END 后面的输出就不管了。</p>
+<h5 id="NAT-的优势"><a href="#NAT-的优势" class="headerlink" title="NAT 的优势"></a>NAT 的优势</h5><p>NAT 的优势在于，它的运算是平行的，而不像 AT 那样，要预测下一个输出，就必须等前一个输出完成，所以 NAT 的速度应该是比 AT 要快的；另外，它的输出长度是可控的，这就允许我们人为地去控制输出。</p>
+<p>NAT 是一个热门的研究话题，它的性能比 AT 要好，也比 AT 的可控性高，但一个严重的问题是，NAT 的准确率是远不及 AT 的。NAT 要想赶上 AT 的准确率，往往需要很多的秘诀才能做到，而 AT 可能只要随便跑跑就能达到比较高的准确率。所以，如何让 NAT 赶上 AT 的准确率，是目前一个大热门。不过这里就不细讲了，毕竟这是一个大坑，有兴趣的话可以自己去了解。</p>
+<h3 id="2-3-Encoder-Decoder"><a href="#2-3-Encoder-Decoder" class="headerlink" title="2.3 Encoder-Decoder"></a>2.3 Encoder-Decoder</h3><p>接下来，我们就要来看看之前说先暂且遮起来的那一块了。</p>
+<p><img src="/img/Transformer-05.png" alt=""></p>
+<h5 id="cross-attention"><a href="#cross-attention" class="headerlink" title="cross attention"></a>cross attention</h5><p>图中被框起来的那一部分叫作 cross attention，它是连接 encoder 和 decoder 的桥梁。你可以看到，从 encoder 引出了两个箭头连接到了 multi-head attention，除此以外还有一个箭头是从 decoder 的上一层引出的，那这个模组到底是怎么运作的？我们继续以语音辨识的例子进行阐述。</p>
+<p>首先，encoder 读进一个向量 $a^1,a^2,a^3$，并且输出一个等长的向量 $b^1, b^2, b^3$，用同样的方法，得到对应的 $k^1,k^2,k^3$ 和 $v^1,v^2,v^3$；同时，decoder 读进一个 BEGIN，进行 masked self-attention，由于是 attention，所以输出也肯定是一个和 BEGIN 等长的向量，接下来，将这个输出乘上一个矩阵，进行 transform，得到 $q$；然后用 $q$ 与 $k^1, k^2, k^3$ 去分别计算，得到 $\alpha^1,\alpha^2,\alpha^3$，然后再分别乘上 $v^1,v^2,v^3$，将加权的结果加起来，得到 $v$，这个 $v$ 就是接下来的全连接网络的输入。在这个过程中，$\alpha, k, v$ 都来自 encoder，而 $q$ 来自 decoder，所以这个过程就叫做 <strong>cross attention</strong>。</p>
+<p><img src="/img/Transformer-06.png" alt=""></p>
+<p>如果说现在 decoder 已经产生了一个输出“机”，那么接下来的操作也是一样的，将“机”作为输入传进去，进行 masked self-attention，然后得到 $q^\prime$，去做相同的运算得到 $v^\prime$，再丢进全连接网络得到下一个输出，如此往复……</p>
+<h3 id="2-4-Conclusion"><a href="#2-4-Conclusion" class="headerlink" title="2.4 Conclusion"></a>2.4 Conclusion</h3><p>Transformer 的工作流程已经讲完了，为了深入理解这些过程，而不是仅仅停留于表面的数学运算，我们还得从实例中剖析这个过程。Ecoder 所做的工作其实是对 input 进行提炼，方法就是 self-attention；而 decoder 则是将 encoder 提炼后的数据，以及一个开始标志 BEGIN 作为输入，开始生成结果，并且每得到一个 output，就将这个结果加入到自己的 input 中，做 masked self-attention，以此不断得到新的 output，直到 decoder 输出 END 为止。</p>
+<p>下面我们以机器翻译为例，假设我们需要机器翻译“我喜欢你”这句话，那么 transfomer 做的第一件事是，将这句话输入到 encoder 当中，通过 self-attention 获取语义编码，这里以 $c$ 标识，这里的 $c$ 是一个向量，其中包括了 $c_1,c_2,…$ 等等，每一个汉字就对应一个 $c$。</p>
+<script type="math/tex; mode=display">
+c=\operatorname{Encoder}(\text{"我喜欢你"})</script><p>然后，decoder 将该语义编码与一个 token，也就是上面说的 BEGIN 作为输入，得到第一个单词的输出：</p>
+<script type="math/tex; mode=display">
+\text{I}=\operatorname{Decoder}(c_1,BEGIN)</script><p>然后将这个单词作为输入，再进行一次输出：</p>
+<script type="math/tex; mode=display">
+\operatorname{love}=\operatorname{Decoder}(c_2,BEGIN,I)</script><p>重复上面的过程，直到输出 END：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\text{you} = \operatorname{Decoder}(c_3,BEGIN,I,love)\\\\
+&\text{END}=\operatorname{Decoder}(c_4,BEGIN,I,love,you)
+\end{aligned}</script><p>于是最后得到的翻译结果：$\text{I love you.}$</p>
+<h2 id="03-Training"><a href="#03-Training" class="headerlink" title="03 Training"></a>03 Training</h2><p>现在我们已经把 transformer 的内部运作方式给讲完了，下一步，就是讲讲 transformer 的训练。</p>
+<p>我们知道，机器学习的目标就是不断降低 loss。而 seq2seq 这件事，似乎就是在做分类，最后的输出是从所有汉字中选择一个最可能的，所以衡量 seq2seq 的 loss，可以使用和 classifier 类似的方法。在 transformer 中，我们继续以语音辨识为例，decoder 输出的每一个汉字都与正确答案之间有一个 cross entropy，模型优化的目标就是，使所有输出与正确答案之间的 cross entropy 的总和最小。</p>
+<h3 id="3-1-Copy-mechanism"><a href="#3-1-Copy-mechanism" class="headerlink" title="3.1 Copy mechanism"></a>3.1 Copy mechanism</h3><p>有些时候，输出的序列会和输入的序列有重合的部分，例如下面这个 chatbot 的例子：</p>
+<p><img src="/img/Transformer-07.png" alt=""></p>
+<p>再比如说文献摘要，让机器来给一篇文献写摘要，摘要中肯定会有与正文内容重复的部分。我们当然是希望机器能够从输入的内容中，直接把这些重合的部分提取出来，而不是自己合成，那这就需要借助 copy mechanism，让机器能够直接从输入中把部分内容 copy 过来。这样的模型当然是存在的，最早的具有复制能力的模型是 copy network，后来还有论文 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1603.06393">Incorporating Copy Mechanism in Sequence-to-Sequence Learning</a> 也做过这个，如果感兴趣可以自己去了解。</p>
+<h3 id="3-2-Guided-attention"><a href="#3-2-Guided-attention" class="headerlink" title="3.2 Guided attention"></a>3.2 Guided attention</h3><p>机器观察输入，对输入做 attention 的顺序是不固定的，这是机器自己学习的结果，自己学习就会导致问题。例如在 TTS (Text to Speech) 的任务中，有些时候，机器居然会漏字。如果是一般的 chatbot 或者 summarization 问题，那么漏一两个字可能也没什么关系，但在 TTS 中，漏字是非常严重的问题。这个时候，我们可以用 guided attention 来教给机器一个固定的顺序来处理输入。</p>
+<p>例如说，在 TTS 中，读入一段文字之后，机器应该从左到右依次做 attention，这样才是正确解决问题的方法。但如果机器颠三倒四，先看后面，再看前面，最后看中间，那显然有些事情就做错了，需要我们人工纠正。</p>
+<p><img src="/img/Transformer-08.png" alt=""></p>
+<p>所以 guided attention 就是要求机器的 attention 遵循一个固定的法则，这个法则肯定是我们事先就知道了这个问题的处理方式才得出的，guided attention 也一般只适用于那些有固定解法的问题。</p>
+<p>一些关于 guided attention 的关键词汇：<u>monotonic attention</u>、<u>location-aware attention</u>。如果感兴趣可以自行搜索。</p>
+<h3 id="3-3-Beam-search"><a href="#3-3-Beam-search" class="headerlink" title="3.3 Beam search"></a>3.3 Beam search</h3><p>继续以语音辨识为例，假设现在的 vocabulary 中只有 A 和 B 两个字，那么我们可以构建出一棵树，每次 decoder 都只面对 A 和 B 两种选择。那么根据原则，在每一个节点处，decoder 会选择分数最高的那个，一直到叶子节点。这种搜索方法叫作 greedy decoding，因为它每次都挑分数最高的。</p>
+<p>但是有时候，选择当前分数最高的，未必能选出一条总分数最高的 path，如下图所示：</p>
+<p><img src="/img/Transformer-09.png" alt=""></p>
+<p>虽然一开始 B 的分数比 A 低，但是我们可以看到，之后路径上的节点的分数明显比 A 之后路径上节点分数要高，所以总体而言，一开始选分数较低的那个，反而能得到一条更好的 path。但是我们要怎么做才能选出这条 path 呢？一种方法是 dfs，即全部走一遍，但显然这种方法不显示，毕竟中文里的汉字有几千个，不可能用 dfs 来搜索。</p>
+<p>那么还有一种方法就是 beam search，它可以找出一条相对好的，但也不是很精准的 path。那么这个算法到底有没有用呢？有趣的是，它有时候有效，有时候就没什么作用。那什么时候有用呢？根据研究，当一个问题有一个比较明确的解时，beam search 就会比较有用；但当一个问题需要发挥机器自己的想象力来完成的时候，beam search 就比较没用。如果感兴趣，可以自行了解。</p>
+
+	
+	</div>
+  <a type="button" href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
 
 		</div>
 
@@ -497,7 +1083,13 @@ flowchart LR
 		
 			<li><a href="/categories/Software-Analysis-Testing-and-Verification/">Software Analysis, Testing and Verification<span>1</span></a></li>
 		
-			<li><a href="/categories/solutions/">solutions<span>1</span></a></li>
+			<li><a href="/categories/deep-learning/">deep learning<span>1</span></a></li>
+		
+			<li><a href="/categories/machine-learning/">machine learning<span>2</span></a></li>
+		
+			<li><a href="/categories/math/">math<span>1</span></a></li>
+		
+			<li><a href="/categories/solutions/">solutions&#34;<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -508,15 +1100,9 @@ flowchart LR
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/deep-learning/">deep learning<span>1</span></a></li>
-		
-			<li><a href="/tags/lecture-notes/">lecture notes<span>1</span></a></li>
-		
-			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
-		
 			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
-			<li><a href="/tags/software-analysis/">software analysis<span>1</span></a></li>
+			<li><a href="/tags/lecture-notes/">lecture notes<span>5</span></a></li>
 		
 		 
 		</ul>
@@ -530,15 +1116,23 @@ flowchart LR
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2025/04/08/%E5%88%9D%E8%AF%86Transformer/" ><i class="fa fa-file-o"></i>初识Transformer</a>
-      </li>
-    
-      <li>
         <a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" ><i class="fa fa-file-o"></i>A WSL Error Encountered Whe...</a>
       </li>
     
       <li>
         <a href="/2025/04/07/Introduction-to-Program-Analysis/" ><i class="fa fa-file-o"></i>Introduction to Program Ana...</a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/" ><i class="fa fa-file-o"></i>隐马尔可夫模型</a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" ><i class="fa fa-file-o"></i>支持向量机</a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" ><i class="fa fa-file-o"></i>鲁滨逊归结原理</a>
       </li>
     
   </ul>
@@ -568,11 +1162,12 @@ flowchart LR
     </div>
   </div>
   <div class="container-narrow">
-    <footer> <p>
+    <footer> <!--<p>
   &copy; 2025 John Doe
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
-</p> </footer>
+</p>-->
+ </footer>
   </div> <!-- container-narrow -->
   
 

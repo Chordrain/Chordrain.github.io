@@ -1,0 +1,572 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>支持向量机 | Jiahao Peng</title>
+  <meta name="author" content="John Doe">
+  
+  <meta name="description" content="支持向量机（support vector machines, SVM）是一种二分类模型，它的基本模型是定义在特征空间上的间隔最大的线性分类器，间隔最大使它有别于感知机；SVM还包括核技巧，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="支持向量机"/>
+  <meta property="og:site_name" content="Jiahao Peng"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Jiahao Peng" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/spacelab.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+  <![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  
+  
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">Jiahao Peng</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+    <div class="content">
+      
+
+
+	
+		<div class="page-header ">		
+			<h1 class="title "> 支持向量机</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p><strong>支持向量机（support vector machines, SVM）</strong>是一种二分类模型，它的基本模型是定义在特征空间上的<strong>间隔最大的线性分类器</strong>，间隔最大使它有别于感知机；SVM还包括<strong>核技巧</strong>，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。</p>
+<h2 id="01-线性模型"><a href="#01-线性模型" class="headerlink" title="01 线性模型"></a>01 线性模型</h2><h3 id="1-1-算法思路"><a href="#1-1-算法思路" class="headerlink" title="1.1 算法思路"></a>1.1 算法思路</h3><p>假设训练样本在空间中的分布如下左图分布，圆圈和星星分别代表两类不同类别的数据，那么我们能找出一条直线，将两者分割开，我们就称这样的训练样本集为一个<strong>线性可分（Linear Separable）样本集</strong>，这样的模型就被称为<strong>线性模型</strong>；同理，倘若我们找不到这样一条直线，将两者完全分离开，如下右图所示，则称这样的训练样本集为一个<strong>线性不可分（Non-Linear Separable）样本集</strong>，这样的模型就被称为<strong>非线性模型</strong>。</p>
+<p><img src="/img/支持向量机-01.png" alt=""></p>
+<p><strong>支持向量机</strong>算法的思路大致是这样的：首先讨论如何在线性可分的训练样本集上找一条直线将样本分开，然后想办法将这样的方法推广到线性不可分的训练样本集上。所以，我们首先讨论第一部分：如何找到一条直线将线性可分训练样本集分开。</p>
+<p>对于一个训练样本集，可以证明：<u>只要存在一条直线可以将样本集分开，就肯定存在无数条直线能将该样本集分开</u>（如下图所示）。既然如此，支持向量机提出的第一个问题就是：哪条直线是最好的？</p>
+<p><img src="/img/支持向量机-02.png" alt=""></p>
+<p>通过直觉来判断，我们也可以感受出上图中的红色直线应该是最好的，问题是为什么？要解答这个问题，我们就必须定义一种性能指标（Performace Measure），来评估每一条直线的好坏。</p>
+<p>为了给出这个性能指标，支持向量机做的事情是，将上面的红线向左右两边平行移动，直到这条线碰到一个或几个样本点为止（如下图中两条虚线所示）：</p>
+<p><img src="/img/支持向量机-03.png" alt=""></p>
+<p>然后，支持向量机给出了这个性能指标的定义，就是上图中两条虚线的距离（Gap），用 $d$ 表示。而性能最好的那条线，就是能使 $d$ 最大的那条线。但是这样还不完善，要知道，能使 $d$ 最大的线也不唯一，将上图中的实线左右移动，作一条平行线，只要平行线不越过两条虚线所界定的范围，$d$ 就是不变的，所以还得给出另一个限制条件：直线必须位于两根平行线的正中间，也就是使上图中的实线与左右两根平行虚线的距离分别为 $\frac d2$。</p>
+<p><img src="/img/支持向量机-04.png" alt=""></p>
+<h3 id="1-2-数学描述"><a href="#1-2-数学描述" class="headerlink" title="1.2 数学描述"></a>1.2 数学描述</h3><p>既然性能指标已经确定了，下一个问题就是如何描述这个优化过程了。在描述优化过程之前，我们还是先得给出一些定义，首先，我们将上面的 $d$ 称为<strong>间隔（Margin）</strong>，将虚线穿过的向量称为<strong>支持向量（Support Vectors）</strong>。通过上面对支持向量机算法的简单描述，我们可以发现，支持向量机找到的最优直线，只与支持向量有关，与其他向量无关，这就是为什么支持向量机也能用在小样本的数据上。</p>
+<p>先给出线性模型的数学描述：</p>
+<ol>
+<li><p>定义训练数据及标签为 $(X_1,y_1)、(X_2,y_2)…(X_n,y_n)$，其中，$X$ 是样本的特征，在上面给出的例子里，每个样本的特征是二维的，也就是说 $X=\left[ \begin{array}{} x_1 \\ x_2 \end{array}\right]$ ，分别对应 x 轴和 y 轴；而 $y$ 是标签，在上面这个二分类问题里，标签只有两种，所以 $y\in\{-1,1\}$。</p>
+</li>
+<li><p>我们定义一个线性模型为 $(W,b)$，其中 $W$ 是一个向量，其维数与特征向量 $X$ 一致，$b$ 是一个常数，一个线性模型确定一个<strong>超平面（Hyperplane）</strong>，所谓超平面就是指划分空间的平面，超平面在二维空间里表现为我们上面所说的那条划分样本点的直线，而在更高的维度里就是一个平面，故称之为超平面。超平面由 $W$ 和 $b$ 确定，其方程为 $W^TX+b=0$。机器学习的目标，就是通过所有样本的特征 $X$ 来找到一个 $W$ 和 $b$，使能够确定一个超平面能划分所有的样本点。</p>
+</li>
+<li><p>一个训练集线性可分是指：对于 $\{(X<em>i,y_i)\}</em>{i=1\sim N}$，$\exist(W,b)$，使 $\forall i=1\sim N$，有：</p>
+<ol>
+<li>若 $y_i=+1$，则 $W^TX_i+b\ge0$；</li>
+<li>若 $y_i=-1$，则 $W^TX_i+b\lt0$。</li>
+</ol>
+<p>当然，上述线性可分的定义是不唯一的，将 $\ge$ 和 $\lt$ 换个位置也是一样。对于上面的定义，我们可以发现，凡是线性可分问题，一定存在 $y_i[W^TX_i+b]\ge0$。</p>
+</li>
+</ol>
+<p>接下来给出支持向量机优化问题的数学描述：</p>
+<ol>
+<li>目标：最小化 $||W||^2$</li>
+<li>限制条件：$y_i[W^TX_i+b]\ge1\quad(i=1\sim N)$</li>
+</ol>
+<p>对于上面这两个公式，相信很多人第一眼是懵的，因为按我们之前的描述，支持向量机算法就是去找一条使 $d$ 最大且位于正中间位置的直线，怎么数学公式看起来跟这个过程完全没关系呢？</p>
+<p>要搞清楚这两个公式，我们得先弄清楚两个事实：</p>
+<ol>
+<li>事实一：$W^TX+b=0$ 与 $aW^TX+ab=0\quad(a\in R^+)$ 表示的是同一个平面。</li>
+<li>事实二：向量 $X_0$ 到超平面 $W^TX+b=0$ 的距离是 $d=\frac{|W^TX_0+b|}{||W||}$。（不要慌，这其实就是高中学的点到平面的距离公式，以一维平面 $w_1x+w_2y+b=0$，也就是直线为例，点 $(x_0,y_0)$ 到这条直线的距离就是 $d=\frac{|w_1x_0+w_2y_0+b|}{\sqrt{w_1^2+w_2^2}}$，前面的那个公式只不是这个公式在高维情况下的推广）</li>
+</ol>
+<p>基于事实二，我们知道，支持向量机要做的事情，就是在 $X_0$ 是支持向量的情况下，使 $d$ 最大。</p>
+<p>基于事实一，我们知道，我们可以找到一个正实数 $a$ 来缩放 $W$ 和 $b$，即 $(W,b)\rightarrow(aW,ab)$，使 $d$ 公式的分子 $|W^TX_0+b|=1$。这样的话，$d$ 的公式就变成了 $d=\frac{1}{||W||}$。看到这个公式，就能明白为什么支持向量机的优化目标是最小化 $||W||^2$ 了，因为最小化 $||W||^2$ 就是最大化 $d$。</p>
+<p>现在再来看限制条件，限制条件其实就是规定了，所有样本点到超平面的距离 $W^TX_i+b$，要么等于 $d$（支持向量），要么大于 $d$（非支持向量）。 至于为什么要再乘上一个 $y_i$，其实看<u>线性可分的定义</u>就知道了，乘上 $y_i$ 是为了与线性可分的定义相统一。</p>
+<blockquote>
+<p>补充：</p>
+<ul>
+<li><p>为什么一定要使  $|W^TX_0+b|=1$， $|W^TX_0+b|=2$ 可不可以？可以，等于 1 还是等于 2 或是其他值都没有任何关系，这只取决于 $a$ 的大小，而 $a$ 并不改变超平面。</p>
+</li>
+<li><p>对于任何线性可分样本集，一定能找到一个超平面分割所有样本点；反之，如果是线性不可分，那么将找不到任何一个能满足要求的 $W$ 和 $b$。</p>
+</li>
+<li><p>某些书上会将优化目标写成最小化 $\frac12||W||^2$，这其实没有任何问题，加上 $\frac12$ 只是为了求导方便。</p>
+</li>
+<li><p>支持向量机要解决的问题其实是一个凸优化问题，而且是一个二次规划问题，二次规划问题的特点是：</p>
+<ul>
+<li>目标函数（Objective Function）是二次项；</li>
+<li>限制条件是一次项。</li>
+</ul>
+<p>对于凸优化问题，要么无解，要么只有一个解。凸优化问题是计算机领域研究最多的问题，因为凸优化问题要么无解，要么只要能找到一个解，那便是它唯一的解。所以只要证明一个问题是凸优化问题，那么我们只要找到一个局部极值，也便找到了它的全局极值，我们便可认定这个问题已经被解决了。</p>
+<p>非凸问题的目标函数图像是一条包含很多局部极值的曲线，会使得机器很容易落入局部最优解的陷阱。支持向量机算法优美的地方就在于，它将求解目标化成了一个凸优化问题。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="02-非线性模型"><a href="#02-非线性模型" class="headerlink" title="02 非线性模型"></a>02 非线性模型</h2><h3 id="2-1-优化目标"><a href="#2-1-优化目标" class="headerlink" title="2.1 优化目标"></a>2.1 优化目标</h3><p>之前已经讨论过，非线性模型不是线性可分的，也就是说找不到一个 $W$ 和 $b$，使之确定一个能完美分割所有样本点的超平面，即限制条件 $y_i[W^TX_i+b]\ge1\quad(i=1\sim N)$ 是不可满足的，原本的优化目标是无解的。SVM 处理非线性模型的方法其实不难理解，就是在线性模型的基础上引入了一个<strong>松弛变量（Slack Variable）</strong>，用 $\xi\ (\xi\ge0)$ 表示。新的优化目标如下：</p>
+<ol>
+<li>目标：最小化 $\frac12||W||^2+C\sum_{i=1}^N\xi_i$</li>
+<li>限制条件：<ol>
+<li>$y_i[W^TX_i+b]\ge1-\xi_i\quad(i=1\sim N)$</li>
+<li>$\xi_i\ge0$</li>
+</ol>
+</li>
+</ol>
+<p>可以发现，新的优化目标中，限制条件变成了 $y_i[W^TX_i+b]\ge1-\xi_i\quad(i=1\sim N)$，只要这个 $\xi_i$ 取得足够大，那么大于等于号右边就会无限小，那么限制条件就有了满足的可能；但同时，也不能允许 $\xi_i$ 无限大，不然就没有意义了，所以新的最小化目标函数的末尾还要加上 $\xi_i$。</p>
+<p>接下来要明确，在上面的式子中，哪些是已知的，哪些是要求解的参数。显然，$X$ 和 $y<em>i$ 是已知的，$W$、$b$ 以及 $\xi$ 是要求的，但是这里还有个 $C$，这个 $C$ 是什么？$C$ 是一个由人事先设定的参数，这种参数一般称为<strong>超参数（Hyperparameter）</strong>，作用是平衡 $\frac12||W||^2$ 和 $\sum</em>{i=1}^N\xi_i$ 的权重。至于 $C$ 具体取多少是没有定论的，一般是凭经验，选定一个区间，然后一个一个尝试。SVM 很方便的一点就是，它只有这一个参数需要人来设置，但是在神经网络里，要去一个一个尝试的参数可能有很多。</p>
+<h3 id="2-2-高维映射"><a href="#2-2-高维映射" class="headerlink" title="2.2 高维映射"></a>2.2 高维映射</h3><p>虽然通过引入松弛变量，我们将非线性问题转换为了一个线性可分问题，但是还是存在一个问题，那就是求解目标的本质没有变，最后仍然是找出一条直线，来分割样本点，也就是说，即使一个样本集用肉眼看就能看出其能被一条简单的曲线分割，SVM 还是会找一条直线来分割样本点，如下图所示：</p>
+<p><img src="/img/支持向量机-05.png" alt=""></p>
+<p>这显然不是我们想要的。一些算法会很符合直觉地去找非直线来分割样本集，例如决策树是用矩形来分割，但是 SVM 的思想很精妙，它仍然是找直线，不过它不是在当前空间里去找，而是到高维空间里去找。它定义了一个<strong>高维映射</strong> $\phi(X)$，通过 $\phi$，能将 $X$ 这个低维向量转化成一个高维向量 $\phi(X)$。也就是说，也许在低维空间中，我们不容易去找一条直线能刚刚好分割所有样本点，那么我们就去高维空间中找，或许在高维空间中，我们就能找到样一条理想的直线了。</p>
+<p>接下来我们用异或问题的例子，来具体解释这个过程为什么有效。异或问题是二维空间下最简单的非线性问题，其在二维空间中存在如下样本点分布：</p>
+<p><img src="/img/支持向量机-06.png" alt=""></p>
+<p>我们先将图中四个样本点表示为 $X_1$、$X_2$、$X_3$ 和 $X_4$，并且 $X_1$ 和 $X_2$ 属于一个类别 $C_1$，$X_3$ 和 $X_4$ 属于一个类别 $C_2$，有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&X_1=\left[ \begin{array}{} 0 \\ 0 \end{array} \right]\quad X_2=\left[ \begin{array}{} 1 \\ 1 \end{array} \right]\quad\in C_1\\
+&X_3=\left[ \begin{array}{} 1 \\ 0 \end{array} \right]\quad X_4=\left[ \begin{array}{} 0 \\ 1 \end{array} \right]\quad\in C_2\\
+\end{aligned}</script><p>定义高维映射函数为：</p>
+<script type="math/tex; mode=display">
+\phi(X):\quad X=\left[ \begin{array}{} a \\ b \end{array} \right]\overset{\phi}{\longrightarrow}\phi(X)=\left[ \begin{array}{} a^2 \\ b^2 \\ a \\ b \\ ab \end{array} \right]</script><p>则经过映射，四个样本点将变为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\phi(X_1)=\left[ \begin{array}{} 0 \\ 0 \\ 0 \\ 0 \end{array} \right]\quad \phi(X_2)=\left[ \begin{array}{} 1 \\ 1 \\ 1 \\ 1 \end{array} \right]\quad\in C_1\\
+&\phi(X_3)=\left[ \begin{array}{} 1 \\ 0 \\ 1 \\ 0 \\ 0 \end{array} \right]\quad \phi(X_4)=\left[ \begin{array}{} 0 \\ 1 \\ 0 \\ 1 \\ 0 \end{array} \right]\quad\in C_2\\
+\end{aligned}</script><p>现在，$X$ 变成了五维向量，则 $W$ 也要变成五维向量，$b$ 仍然为常量，求解的目标就变成在五维空间中找一个超平面来分割四个样本点了。能做到分割的超平面不唯一，这里举一个例子：</p>
+<script type="math/tex; mode=display">
+W=\left[ \begin{array}{} -1 \\ -1 \\ -1 \\ -1 \\ 6 \end{array} \right]\quad b=1</script><p>将样本点代入超平面的方程：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&W^T\phi(X_1)+b=1>0\\
+&W^T\phi(X_2)+b=3>0\\
+&W^T\phi(X_3)+b=-1<0\\
+&W^T\phi(X_4)+b=-1<0\\
+\end{aligned}</script><p>如上，该超平面刚刚好把 $X_1$、$X_2$ 与 $X_3$、$X_4$ 分开了。也就是说，在低维空间中线性不可分的样本集，可能在高维空间中就是线性可分的，这也就是我们要去升维的原因。关于这一点也有很多人研究过，它们的结论是，对于任何线性不可分的样本集，特征空间的维数越高，其被线性分割的概率也越大；若维数趋近无穷大，那么其被线性分割的概率将达到 1.</p>
+<h3 id="2-3-核函数"><a href="#2-3-核函数" class="headerlink" title="2.3 核函数"></a>2.3 核函数</h3><p>在引入了高维映射之后，优化式 1 就变成了 $y_i[W^T\phi(X_i)+b]\ge1-\xi_i\quad(i=1\sim N)$，虽然看起来只有 $X_i$ 发生了变化，但不要忘记 $W$ 也跟着一起升维了。那么现在面临的问题就是：<u>如何选取 $\phi$</u> ？SVM 的回答是：无限维。</p>
+<p>将特征空间增长到无限维，线性不可分问题就绝对可以变成线性可分。但是问题在于，当 $\phi(X)$ 变成无限维，$W$ 也要变成无限维，那这个问题就没有办法做了。这也是 SVM 巧妙的另一个地方，它在将特征空间映射到无限维的同时，又采用有限维的手段。</p>
+<p>SVM 的意思是：我们可以不知道无限维映射 $\phi(X)$ 的显式表达，我们只要知道一个<strong>核函数（Kernel Function）</strong>：</p>
+<script type="math/tex; mode=display">
+K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,X_2)$ 其实计算的是 $\phi(X_1)$ 和 $\phi(X_2)$ 的内积，虽然 $\phi(X_1)$ 和 $\phi(X_2)$ 是无限维的，但是两者仍然能进行内积计算，得到的结果 $K(X_1,X_2)$ 是一个数。</p>
+<p>核函数的要求是：能将函数的形式最终拆成 $\phi(X_1)^T\phi(X_2)$ 的形式。常用的核函数有如下几个：</p>
+<ol>
+<li>高斯核：$K(X_1,X_2)=e^{-\frac{||X_1-X_2||^2}{2\sigma^2}}=\phi(X_1)^T\phi(X_2)$，$\sigma^2$ 是方差。</li>
+<li>多项式核：$K(X_1,X_2)=(X_1^TX_2+1)^d=\phi(X_1)^T\phi(X_2)$，$d$ 是多项式阶数。</li>
+</ol>
+<p>而能将核函数 $K(X_1,X_2)$ 拆成 $\phi(X_1)^T\phi(X_2)$ 的充要条件是：</p>
+<ol>
+<li>$K(X_1,X_2)=K(X_2,X_1)$，即交换性；</li>
+<li>$\forall C<em>i,X_i\ (i=1\sim N)$，有 $\sum</em>{i=1}^{N}\sum_{j=1}^{N}C_iC_jK(X_i,X_j)\ge0$，即半正定性，也就是说，我们选取的核函数，必须要对任意选定的常数 $C$ 和向量 $X$ 都满足该式；</li>
+</ol>
+<h3 id="2-4-原问题到对偶问题"><a href="#2-4-原问题到对偶问题" class="headerlink" title="2.4 原问题到对偶问题"></a>2.4 原问题到对偶问题</h3><p>现在我们有了核函数，那么我们要怎样利用核函数，来替代优化式 1 中的 $\phi(X)$ 呢？在这之前，请先阅读<a href="#7.3* 补充：优化理论">优化理论</a>相关的内容。在稍微了解了优化理论中的原问题和对偶问题后，我们要做的，就是<u>把 SVM 的优化问题从原问题转换成对偶问题</u>。</p>
+<p>首先，我们<u>把 SVM 的优化问题转换成原问题</u>：</p>
+<p>对于目标函数，$\frac12||W||^2+C\sum_{i=1}^N\xi_i$ 是一个<strong>凸函数</strong>。</p>
+<p>对于限制条件，$\xi<em>i\ge0$ 不满足原问题的限制条件形式，得先将大于等于号变成小于等于号，也就是变成 $\xi_i\le0$，那么，目标函数就也得变换一下，变成 $\frac12||W||^2-C\sum</em>{i=1}^N\xi_i$；同样，另一个限制条件也得变换一下，变成 $y_i[W^TX_i+b]\ge1+\xi_i\quad(i=1\sim N)$，但是这个不等式也不满足原问题的要求，必须将不等式右边变成 0，所以得到 $1+\xi_i-y_i[W^TX_i+b]\le0\quad(i=1\sim N)$。于是得到优化目标的原问题形式，新的优化目标：</p>
+<ol>
+<li>目标：最小化 $\frac12||W||^2-C\sum_{i=1}^N\xi_i$</li>
+<li>限制条件：<ol>
+<li>$1+\xi_i-y_i[W^T\phi(X_i)+b]\le0\quad(i=1\sim N)$</li>
+<li>$\xi_i\le0$</li>
+</ol>
+</li>
+</ol>
+<p><u>将其转换为对偶问题</u>：</p>
+<ol>
+<li><p>目标：最大化 $\theta(\alpha,\beta)=\underset{(w,\xi<em>i,b)}{\inf}\{\frac12||W||^2-C\sum</em>{i=1}^N\xi<em>i+\sum</em>{i=1}^{N}\alpha<em>i(1+\xi_i-y_i[W^T\phi(X_i)+b])+\sum</em>{i=1}^N\beta_i\xi_i\}$</p>
+</li>
+<li><p>限制条件：</p>
+<ol>
+<li>$\alpha_i\ge0\quad(i=1\sim N)$</li>
+<li>$\beta_i\ge0\quad(i=1\sim N)$</li>
+</ol>
+</li>
+</ol>
+<p>解释一下这样变换的原因：</p>
+<ol>
+<li>原问题中的 $w$ 对应了原问题要求解的变量，有三个，分别是 $W$、$b$ 和 $\xi$，所以对偶问题中要遍历所有的 $w$，到这里就变成了遍历所有的 $W$、$b$ 和 $\xi$。</li>
+<li>根据对偶问题的定义，$L(\omega,\alpha,\beta)=f(\omega)+\sum<em>{i=1}^{K}\alpha_ig_i(\omega)+\sum</em>{i=1}^M\beta<em>ih_i(\omega)$，其中，$f(w)=\frac12||W||^2-C\sum</em>{i=1}^N\xi_i$，这一点是没有疑问的，关键是下面，千万不要以为这里的 $\alpha$ 和 $\beta$ 分别对应了上面的 $\alpha_i$ 和 $\beta_i$，不是这样的，在对偶问题中，$\alpha$ 管的是不等式条件，每个不等式条件要与 $\alpha$ 相乘，$\beta$ 管的是等式条件，每个等式条件要与 $\beta$ 相乘。但是在这里，SVM 原问题中的限制条件都是不等式，所以应该只有 $\alpha$，没有 $\beta$，只是说为了方便表示，这里仍然沿用 $\alpha_i$ 和 $\beta_i$，并且，由于 $\alpha$ 应该大于 0，所以到这里就变成了 $\alpha_i\ge0\quad(i=1\sim N)$，并且 $\beta_i\ge0\quad(i=1\sim N)$。其他部分就是照抄的关系了。</li>
+</ol>
+<p>接下来我们就来求一下 $L(W,\xi_i,b,\alpha)$ 的最小值：</p>
+<p>令偏导 $\frac{\partial L}{\partial W}=0$，$\frac{\partial L}{\partial \xi_i}=0$，$\frac{\partial L}{\partial b}=0$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\frac{\partial L}{\partial W}=0\Rightarrow W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)&①\\
+&\frac{\partial L}{\partial \xi_i}=0\Rightarrow C=\beta_i+\alpha_i&②\\
+&\frac{\partial L}{\partial b}=0\Rightarrow \sum_{i=1}^N\alpha_iy_i=0&③
+\end{aligned}</script><p>接下来，我们要将上面得到的三个式子代回到 $L(W,\xi<em>i,b,\alpha)$ 中去，好消息是，将式 ② 和式 ③ 代入之后，式子中的大部分项就能被消掉了，得到 $\theta(\alpha,\beta)=\frac12||W||^2+\sum</em>{i=1}^N\alpha<em>i-\sum</em>{i=1}^N\alpha_iy_iW^T\phi(X_i)$，先来计算 $\frac12||W||^2$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac12||W||^2&=\frac12W^TW\\
+&=\frac12(\sum_{i=1}^N\alpha_iy_i\phi(X_i))^T(\sum_{j=1}^N\alpha_jy_j\phi(X_j))\\
+&=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j\phi(X_i)^T\phi(X_j)\\
+&=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
+\end{aligned}</script><p>一件惊喜的事情：上式的最终化简结果里出现了核函数！接下来化简 $-\sum_{i=1}^N\alpha_iy_iW^T\phi(X_i)$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+-\sum_{i=1}^N\alpha_iy_iW^T\phi(X_i)&=-\sum_{i=1}^N\alpha_iy_i(\sum_{j=1}^N\alpha_jy_j\phi(X_j))^T\phi(X_i)\\
+&=-\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j\phi(X_j)^T\phi(X_i)\\
+&=-\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
+\end{aligned}</script><p>所以，最后会得到：</p>
+<script type="math/tex; mode=display">
+\theta(\alpha,\beta)=\sum_{i=1}^{N}\alpha_i-\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)</script><p>经过这样一系列的推导，最终问题的形式会变成：</p>
+<ol>
+<li><p>目标：最大化 $\theta(\alpha)=\sum<em>{i=1}^{N}\alpha_i-\frac12\sum</em>{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)$</p>
+</li>
+<li><p>限制条件：</p>
+<ol>
+<li>$0\le\alpha_i\le C\quad(i=1\sim N)$</li>
+<li>$\sum_{i=1}^N\alpha_iy_i=0$</li>
+</ol>
+</li>
+</ol>
+<p>解释一下限制条件：根据之前求的偏导我们得到了 $\beta_i+\alpha_i=C$，由于之前的限制条件规定了 $\beta_i\ge0$ 以及 $\alpha_i\ge0$，所以我们可以直接把这两个条件合并成一个条件，即 $0\le\alpha_i\le C\quad(i=1\sim N)$，那么为什么要合并呢？因为我们现在的目标函数中只剩下了 $\alpha_i$ 和 $\alpha_j$，已经不存在 $\beta$ 了；而第二个限制条件则是直接照抄的令 $\frac{\partial L}{\partial b}=0$ 得到的结果。</p>
+<p>在这个对偶问题中，目标函数仍然是一个<strong>凸函数</strong>。并且，其中未知的参数只有 $\alpha_i$ 和 $\alpha_j$，核函数是已经确定的了。由于是一个凸优化问题，所以它应该是很容易求解的。有一种凸优化问题求解算法叫做 <strong>SMO 算法</strong>，在这里不再展开叙述，感兴趣的同学自行了解。总之，我们只需要知道，这个问题是有解的。</p>
+<p>但是到这里还没结束，我们现在已经将 SVM 的优化问题从原问题转换成了对偶问题，将 $\phi(X_i)$ 用核函数进行了替换，但是还有一个问题：<u>对偶问题是求解 $\alpha_i$ 和 $\alpha_j$，而我们要的是 $W$ 和 $b$，如何在这两者之间进行转换？</u></p>
+<p>这里又体现了 SVM 的精妙之处，我们并不需要知道 $W$ 具体长什么样，根据我们之前求偏导的结果，我们知道 $W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)$，同时我们也知道，最后分类的方法是，对于测试样本 $X$，若：</p>
+<ol>
+<li>$W^T\phi(X)+b\ge0$，则 $y=+1$</li>
+<li>$W^T\phi(X)+b\lt0$，则 $y=-1$</li>
+</ol>
+<p>我们将 $W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)$ 代入到不等式左边的式子中，就会得到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+W^T\phi(X)+b&=\sum_{i=1}^N[\alpha_iy_i\phi(X_i)]^T\phi(X)+b\\
+&=\sum_{i=1}^N\alpha_iy_i\phi(X_i)^T\phi(X)+b\\
+&=\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b
+\end{aligned}</script><p>所以说，我们并不需要知道 $W$ 的具体值，我们只需要有核函数，就能对样本进行分类。现在的关键问题是：<u>$b$ 是多少</u>？$b$ 的求解并不简单，需要用到优化理论中的 <strong>KKT 条件</strong>。</p>
+<p>根据 KKT 条件，当原问题和对偶问题满足强对偶定理时，$\forall i=1\sim K$，要么 $\beta_i^<em>=0$，要么 $h_i(\omega^</em>)=0$；要么 $\alpha_i^<em>=0$，要么 $g_i(\omega^</em>)=0$，而在这个问题中，$g(W)=1+\xi_i-y_i[W^T\phi(X_i)+b]$，所以，要么 $\alpha_i=0$，要么 $g(W)=1+\xi_i-y_i[W^T\phi(X_i)+b]=0$. 现在，我们取一个 $\alpha_i$，使之 $0\lt\alpha_i\lt C$（这是肯定能满足的，原因见限制条件），则根据 KKT 条件，肯定有 $1+\xi_i-y_i[W^T\phi(X_i)+b]=0$。又因为 $\beta_i+\alpha_i=C$，根据 KKT 条件，所以 $\beta_i\neq0$，$h(W)=\xi_i=0$. 将 $\xi_i=0$ 代入前式，就有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&1-y_i[W^T\phi(X_i)+b]=0\\
+&\Downarrow\text{to rearrange the terms}\\
+&b=\frac{1-y_iW^T\phi(X_i)}{y_i}\\
+&\Downarrow\text{to substitute }W^T\phi(X)=\sum_{i=1}^N\alpha_iy_iK(X_i,X)\text{ into it}\\
+&b=\frac{1-y_i\sum_{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}
+\end{aligned}</script><p>于是，就连 $b$ 我们也知道了。在现实中，我们一般会遍历所有 $\alpha_i\notin\{0,C\}$（在上面的讨论中我们只取了一个 $\alpha$），然后计算 $b$，最后取 $b$ 的平均值，这样能使结果更加精确。</p>
+<h3 id="2-5-算法流程总结"><a href="#2-5-算法流程总结" class="headerlink" title="2.5 算法流程总结"></a>2.5 算法流程总结</h3><h4 id="训练流程"><a href="#训练流程" class="headerlink" title="训练流程"></a>训练流程</h4><ol>
+<li>输入：$\{(X_i,y_i)\}\quad i=1\sim N$</li>
+<li>求解优化问题（SMO 算法）：<ol>
+<li>最大化 $\theta(\alpha)=\sum<em>{i=1}^{N}\alpha_i-\frac12\sum</em>{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)$</li>
+<li>限制条件：<ol>
+<li>$0\le\alpha_i\le C\quad(i=1\sim N)$</li>
+<li>$\sum_{i=1}^N\alpha_iy_i=0$</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>通过上一步计算出来的 $\alpha<em>i$ 来计算 $b$：$b=\frac{1-y_i\sum</em>{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}$</li>
+</ol>
+<h4 id="测试流程"><a href="#测试流程" class="headerlink" title="测试流程"></a>测试流程</h4><ol>
+<li>输入测试样本 $X$</li>
+<li>分类：<ol>
+<li>若 $\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b\ge0$，则 $y=+1$</li>
+<li>若 $\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b\lt0$，则 $y=-1$</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>可以发现，最终训练流程和测试流程中完全不需要用到无限维的 $\phi(X)$，只需要使用核函数就行了。这也就是 SVM 用有限维手段来处理无限维问题的方法。</p>
+</blockquote>
+<h2 id="03-补充：优化理论"><a href="#03-补充：优化理论" class="headerlink" title="03* 补充：优化理论"></a>03* 补充：优化理论</h2><p>在优化领域中，在优化理论中，<strong>原问题（Prime Problem）</strong>和<strong>对偶问题（Dual Problem）</strong>是一对相关的数学问题。 </p>
+<p>原问题的定义如下：</p>
+<ol>
+<li>目标：最小化 $f(\omega)$</li>
+<li>限制条件：<ol>
+<li>$g_i(\omega)\le0\quad(i=1\sim K)$</li>
+<li>$h_i(\omega)=0\quad(i=1\sim M)$</li>
+</ol>
+</li>
+</ol>
+<p>原问题是非常普适化的，虽然上面展示的是最小化问题，但只需要在 $f(\omega)$ 前加一个负号，立马就变成了最大化问题；同样地，在 $g_i(\omega)\le0$ 中加一个负号，也就变成了 $-g_i(\omega)\ge0$；而在式 2 的左边减去一个常数 $C$，就立马变成了 $h_i(\omega)-C=0$，这样就可以把等式右边的 0 变成任意常数 $C$。</p>
+<p>对偶问题是从原问题派生出来的一个新问题，对偶问题首先定义了一个函数：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L(\omega,\alpha,\beta)&=f(\omega)+\sum_{i=1}^{K}\alpha_ig_i(\omega)+\sum_{i=1}^M\beta_ih_i(\omega)\quad&①\\
+&=f(\omega)+\alpha^Tg(\omega)+\beta^Th(\omega)\quad&②
+\end{aligned}</script><p>上式中，$\alpha$ 和 $\beta$ 是两个和 $\omega$ 维数一样的向量，并且分别乘上了不等式的限制条件和等式的限制条件。式 ① 是该式的代数形式，式 ② 是该式的矩阵形式。有了这个函数，我们就可以给出对偶问题的定义了：</p>
+<ol>
+<li>目标：最大化 $\theta(\alpha,\beta)=\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$</li>
+<li>限制条件：$\alpha_i\ge0\quad(i=1\sim K)$</li>
+</ol>
+<p>解释一下这里的目标函数，$\inf$ 就是求最小值的意思，下面的 $\omega$ 是指，遍历所有每个 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ ，所以 $\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$ 就是指，求所有 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ 中，$L(\omega,\alpha,\beta)$ 最小的取值。而通过 $\theta(\alpha,\beta)$ 可以看出，$\alpha$ 和 $\beta$ 是固定的，也就是说，我们每确定一组 $\alpha$ 和 $\beta$，就去求一次 $L(\omega,\alpha,\beta)$ 的最小值，所以 $\theta$ 是只和 $\alpha$ 和 $\beta$ 有关的函数。而我们的目标又是最大化 $\theta(\alpha,\beta)$，所以，实质上我们就是要使 $L(\omega,\alpha,\beta)$ 的最小值最大化。而对偶问题的限制条件很简单，只要求每个 $\alpha_i$ 大于 0 即可。</p>
+<p>接下来我们就来介绍一下原问题和对偶问题的关系，有一条定理是这样的：</p>
+<blockquote>
+<p>如果 $\omega^<em>$ 是原问题的解，而 $\alpha^</em>$ 和 $\beta^<em>$ 是对偶问题的解，则有 $f(\omega^</em>)\ge\theta(\alpha^<em>,\beta^</em>)$。</p>
+</blockquote>
+<p>这条定理的证明如下：</p>
+<p>由于 $\alpha^<em>$ 和 $\beta^</em>$ 是对偶问题的解，则下式肯定成立：</p>
+<script type="math/tex; mode=display">
+\theta(\alpha^*,\beta^*)=\underset{\omega}{\inf}\{L(\omega,\alpha^*,\beta^*\}\le L(\omega^*,\alpha^*,\beta^*)</script><p>这里的 $\omega^*$ 是指一个具体的 $\omega$ 的值。根据 $L(\omega,\alpha,\beta)$ 的定义，展开不等式右边的式子有：</p>
+<script type="math/tex; mode=display">
+L(\omega^*,\alpha^*,\beta^*)=f(\omega^*)+\sum_{i=1}^{K}\alpha_i^*g_i(\omega^*)+\sum_{i=1}^M\beta_i^*h_i(\omega^*)</script><p>既然 $\omega^<em>$ 是原问题的解，那么 $\omega^</em>$ 必然满足原问题的两个限制条件，也就是说 $g<em>i(\omega^<em>)\le0$，$h_i(\omega^</em>)=0$；另外，既然 $\alpha^<em>$ 是对偶问题的解，那么 $\alpha^</em>$ 也必然满足 $\alpha^<em>\ge0$。进一步，既然 $h_i(\omega^</em>)=0$，那么上式中 $\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)=0$；既然 $g_i(\omega^<em>)\le0$，$\alpha^</em>\ge0$，那么上式中 $\sum</em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)\le0$，所以存在：</p>
+<script type="math/tex; mode=display">
+\theta(\alpha^*,\beta^*)=\underset{\omega}{\inf}\{L(\omega,\alpha^*,\beta^*\}\le L(\omega^*,\alpha^*,\beta^*)\le f(\omega^*)</script><p>证毕。</p>
+<p>遂定义：</p>
+<script type="math/tex; mode=display">
+G=f(\omega^*)-\theta(\alpha^*,\beta^*)\ge0</script><p>$G$ 叫做原问题与对偶问题的<strong>间距（Duality Gap）</strong>。对应某些特定的优化问题，可以证明 $G=0$. 这里不再证明，直接给出问题的结论——<strong>强对偶定理</strong>：</p>
+<blockquote>
+<p>若 $f(\omega)$ 为凸函数，且 $g(\omega)=A\omega+b$（线性函数），$h(\omega)=CW+d$（一组线性函数），则此优化问题的原问题和对偶问题的间距是 0，即 $f(\omega^<em>)=\theta(\alpha^</em>,\beta^*)$。</p>
+</blockquote>
+<p>问题是，强对偶定理的前提成立意味着什么？假设现在原问题和对偶问题满足强对偶定理，即 $f(\omega^<em>)=\theta(\alpha^</em>,\beta^<em>)$ 成立，那么就有 $f(\omega^</em>)=\theta(\alpha^<em>,\beta^</em>)=\underset{\omega}{\inf}\{L(\omega,\alpha^<em>,\beta^</em>\}$，也就是说，<u>原问题的解 $\omega^<em>$，刚刚就是对偶问题在 $\alpha^</em>$ 和 $\beta^*$ 确定时，取到最小值的那个点</u>。</p>
+<p>更加精妙的是，当 $G=0$ 成立时，$\sum<em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)+\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)=0$，其中，$\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)$ 等于 0 不用再说了，但 $\sum</em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)=0$ 意味着，<u>$\forall i=1\sim K$，要么 $\alpha_i^<em>=0$，要么 $g_i(\omega^</em>)=0$</u>。这个条件叫做 <strong>KKT 条件</strong>。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+		<li class="prev"><a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+          <li class="next"><a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-12-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/machine-learning/">machine learning<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/lecture-notes/">lecture notes<span>5</span></a></li>
+
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-1-%E7%AE%97%E6%B3%95%E6%80%9D%E8%B7%AF"><span class="toc-article-text">1.1 算法思路</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-2-%E6%95%B0%E5%AD%A6%E6%8F%8F%E8%BF%B0"><span class="toc-article-text">1.2 数学描述</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#02-%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 非线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-1-%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.1 优化目标</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-2-%E9%AB%98%E7%BB%B4%E6%98%A0%E5%B0%84"><span class="toc-article-text">2.2 高维映射</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-3-%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="toc-article-text">2.3 核函数</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-4-%E5%8E%9F%E9%97%AE%E9%A2%98%E5%88%B0%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-article-text">2.4 原问题到对偶问题</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-5-%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-article-text">2.5 算法流程总结</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B"><span class="toc-article-text">训练流程</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-article-text">测试流程</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#03-%E8%A1%A5%E5%85%85%EF%BC%9A%E4%BC%98%E5%8C%96%E7%90%86%E8%AE%BA"><span class="toc-article-text">03* 补充：优化理论</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+
+    </div>
+  </div>
+  <div class="container-narrow">
+    <footer> <!--<p>
+  &copy; 2025 John Doe
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p>-->
+ </footer>
+  </div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+<!-- syntax highlighting -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</html>

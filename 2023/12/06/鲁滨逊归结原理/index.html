@@ -1,0 +1,415 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>鲁滨逊归结原理 | Jiahao Peng</title>
+  <meta name="author" content="John Doe">
+  
+  <meta name="description" content="1 归结推理反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。
+定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="鲁滨逊归结原理"/>
+  <meta property="og:site_name" content="Jiahao Peng"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Jiahao Peng" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/spacelab.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+  <![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  
+  
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">Jiahao Peng</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+    <div class="content">
+      
+
+
+	
+		<div class="page-header ">		
+			<h1 class="title "> 鲁滨逊归结原理</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="1-归结推理"><a href="#1-归结推理" class="headerlink" title="1 归结推理"></a>1 归结推理</h2><p>反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。</p>
+<p>定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当 $(P_1\land P_2\land …\land P_n)\land\neg Q$ 是不可满足的。</p>
+<p>归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：</p>
+<ol>
+<li>欲证明 $P⇒Q$</li>
+<li>化为反命题 $P\land¬Q$</li>
+<li>化成子句集</li>
+<li>证明子句集不可满足(鲁滨逊归结原理)</li>
+</ol>
+<h2 id="2-子句集"><a href="#2-子句集" class="headerlink" title="2 子句集"></a>2 子句集</h2><p>什么是子句？如何将谓词公式化为子句集？</p>
+<p>我们称一个不能再分割的命题为<strong>原子谓词公式</strong>，将原子谓词公式及其否定形式称为<strong>文字</strong>，而<strong>子句</strong>就是任何文字的<u>析取式</u>，任何文字本身也是子句。<strong>空子句</strong>是一个不包含任何文字的子句，它永远为假，不可满足，通常表示为 $NIL$，虽然听上去没什么用，但它却是归结推理中最重要的子句，之后你会知道为什么。以上就是子句的概念，而子句集就是由子句构成的集合。</p>
+<p>以下面这道题为例讲解如何将一个谓词公式化为子句集：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\forall y)P(x,y)\rightarrow\neg(\forall y)(Q(x,y)\rightarrow R(x,y)))</script><p>第一步：消去谓词公式中的 $\rightarrow$ 和 $\leftrightarrow$，得到：</p>
+<script type="math/tex; mode=display">
+(\forall x)(\neg(\forall y)P(x,y)\lor\neg(\forall y)(\neg Q(x,y)\lor R(x,y)))</script><p>第二步：将否定符号 $\neg$ 移到紧靠谓词的位置上：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\exists y)\neg P(x,y)\lor(\exists y)(Q(x,y)\land\neg R(x,y)))</script><p>第三步：变量标准化，将重复的变量名换掉：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\exists y)\neg P(x,y)\lor(\exists z)(Q(x,z)\land\neg R(x,z)))</script><p>第四步：消去存在量词，要用到 <a href="#4* Skolem 函数">Skolem 函数</a>，令 $y=f(x)$，$z=g(x)$：</p>
+<script type="math/tex; mode=display">
+(\forall x)(\neg P(x,f(x))\lor(Q(x,g(x))\land\neg R(x,g(x))))</script><p>第五步：化为前束形，即将所有的全称谓词提到公式最前面，使母式中不存在任何量词，上式已满足前束形。</p>
+<p>第六步：化为 Skolem 标准形，即将母式化为合取式：</p>
+<script type="math/tex; mode=display">
+(\forall x)((\neg P(x,f(x))\lor Q(x,g(x))\land(\neg P(x,f(x))\lor\neg R(x,g(x))))</script><p>第七步：略去全称量词：</p>
+<script type="math/tex; mode=display">
+(\neg P(x,f(x))\lor Q(x,g(x))\land(\neg P(x,f(x))\lor\neg R(x,g(x)))</script><p>第八步：把和取词看作分隔符，把整体化为集合：</p>
+<script type="math/tex; mode=display">
+\{\neg P(x,f(x))\lor Q(x,g(x)),\neg P(x,f(x))\lor\neg R(x,g(x))\}</script><p>第九步：子句变量标准化，即将不同的子句中的变量名字区分开，用不同的符号表示：</p>
+<script type="math/tex; mode=display">
+\{\neg P(x,f(x))\lor Q(x,g(x)),\neg P(y,f(y))\lor\neg R(y,g(y))\}</script><p>以上，就得到了谓词公式的子句集。</p>
+<h2 id="3-鲁滨逊归结原理"><a href="#3-鲁滨逊归结原理" class="headerlink" title="3 鲁滨逊归结原理"></a>3 鲁滨逊归结原理</h2><p>子句集中的各子句是合取关系，所以只要有一个不可满足，则整个子句集不可满足。所以，我们需要去找一个空子句，假如子句集中存在空子句，那就肯定不可满足。但是子句集中直接出现空子句的情况是很少的，那么如何找到空子句？这就是鲁滨逊归结原理要解决的问题，根据鲁滨逊归结原理对子句集进行归结，如果最终归结出一个空子句，则说明该子句集不可满足，进一步说明原命题不可满足。</p>
+<p>鲁滨逊归结原理（也称消解原理）的基本思路是：检查子句集 $\text{S}$ 中是否包含空子句，若包含，则 $\text{S}$ 不可满足；若不包含，在 $\text{S}$ 中选择合适的子句进行归结，一旦归结出空子句，就说明 $\text{S}$ 是不可满足的。</p>
+<p>归结的定义：设 $C<em>1$ 和 $C_2$ 是子句集中的任意两个子句，如果 $C_1$ 中的文字 $L_1$ 与 $C_2$ 中的文字 $L_2$ 互补，那么从 $C_1$ 和 $C_2$ 中分别消去 $L_1$ 和 $L_2$，并将两个子句中余下的部分<strong>析取</strong>，构成一个新子句 $C</em>{12}$。</p>
+<hr>
+<p>例题：设 $C_1=\neg P\lor Q$，$C_2=\neg Q\lor R$，$C_3=P$，请对 ${C_1,C_2,C_3}$ 进行归结。</p>
+<p>$C<em>{1}$ 和 $C</em>{2}$ 中存在互补子句 $Q$ 和 $\neg Q$，所以消去这两个子句集，并将余下子句析取，得到 $C<em>{12}=\neg P\lor R$；$C</em>{12}$ 和 $C<em>{3}$ 中存在互补子句 $\neg P$ 和 $P$，所以消去这两个子句集，并将余下子句析取，得到 $C</em>{123}=R$。所以 $C_{123}$ 就是该子句集归结的结果。</p>
+<hr>
+<p>定理：归结式 $C<em>{12}$ 是其亲本子句 $C_1$ 和 $C_2$ 的逻辑结论，即，如果 $C_1$ 和 $C_2$ 为真，则 $C</em>{12}$ 也为真。</p>
+<p>上述定理有一条推论：设 $C<em>1$ 和 $C_2$ 是子句集 $\text S$ 中的两个子句集，$C</em>{12}$ 是它们的归结式，若用 $C<em>{12}$ 代替 $C_1$ 和 $C_2$ 后得到新子句集 $\text{S}_1$，则由 $\text{S}_1$ 不可满足性可推出 $\text{S}$ 的不可满足性。但是注意，这条推论不能证明若 $\text{S}$ 是不可满足的，则 $\text{S}_1$ 也不可满足，所以还有另一条推论：设 $C_1$ 和 $C_2$ 是子句集 $\text S$ 中的两个子句集，$C</em>{12}$ 是它们的归结式，若 $C_{12}$ 加入原子句集 $\text{S}$，得到新子句集 $\text{S}_2$，则 $\text S$ 和 $\text S_2$ 在不可满足性上是<u>等价</u>的，即若 $\text{S}$ 是不可满足的，则 $\text{S}_2$ 也不可满足，反之亦然。不过我们的目的只是为了证明原子句集不可满足，也就是归结出一个空子句，所以上述两个推论均可用。</p>
+<h2 id="4-归结反演"><a href="#4-归结反演" class="headerlink" title="4 归结反演"></a>4 归结反演</h2><p>应用鲁滨逊归结原理证明定理的过程称为<strong>归结反演</strong>。它总共分为以下四个步骤：</p>
+<ol>
+<li>将已知前提表示为谓词公式 $F$；</li>
+<li>将待证明的结论表示为谓词公式 $Q$，并否定得到 $\neg Q$；</li>
+<li>把谓词公式集 ${F,\neg Q}$ 化为子句集 $\text S$；</li>
+<li>应用归结原理对子句集 $\text S$ 中的子句进行归结，并把每次归结得到的归结式都并入到 $\text S$ 中。如此反复进行，若出现了空子句，则停止归结，此时就证明了 $Q$ 为真。</li>
+</ol>
+<hr>
+<p>例题：某公司招聘工作人员，A，B，C 三人面试，经面试后公司表示如下想法：</p>
+<ul>
+<li>三人中至少录取一人；</li>
+<li>如果录取 A 而不录取 B，则一定录取 C；</li>
+<li>如果录取 B，则一定录取 C。</li>
+</ul>
+<p>求证：公司一定录取 C。</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 $P(x)$ 表示录取 $x$。于是可得如下前提：</p>
+<ul>
+<li>$P(A)\lor P(B)\lor P(C)$</li>
+<li>$P(A)\land\neg P(B)\rightarrow P(C)$</li>
+<li>$P(B)\rightarrow P(C)$</li>
+</ul>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：$\neg P(C)$。</p>
+<p>第三步，将上述谓词公式化为子句集：</p>
+<ol>
+<li>$P(A)\lor P(B)\lor P(C)$</li>
+<li>$\neg P(A)\lor P(B)\lor P(C)$</li>
+<li>$\neg P(B)\lor P(C)$</li>
+<li>$\neg P(C)$</li>
+</ol>
+<p>第四步，应用归结原理进行归结：</p>
+<ol>
+<li>$P(B)\lor P(C)\quad 归结(1)和(2)$</li>
+<li>$P(C)\quad\quad\quad\quad\ \ 归结(3)和(5)$</li>
+<li>$NIL\quad\quad\quad\quad\ \ \ 归结(4)和(6)$</li>
+</ol>
+<p>由于归结出了空子句，所以成功证明了 $\neg P(C)$ 为假，因此原命题 $P(C)$ 为真，公司一定录取 C。</p>
+<hr>
+<p>例题：已知：</p>
+<ul>
+<li>任何人的兄弟不是女性；</li>
+<li>任何人的姐妹必是女性；</li>
+<li>Mary 是 Bill 的姐妹。</li>
+</ul>
+<p>求证：Mary 不是 Tom 的兄弟。</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 $brother(x,y)$ 表示录取 $x$ 是 $y$ 的兄弟，设 $sister(x,y)$ 表示录取 $x$ 是 $y$ 的姐妹，设 $woman(x)$ 表示录取 $x$ 是女性。于是可得如下前提：</p>
+<ul>
+<li>$(\forall x)(\forall y)(brother(x,y)\rightarrow\neg woman(x))$</li>
+<li>$(\forall x)(\forall y)(sister(x,y)\rightarrow woman(x))$</li>
+<li>$sister(Mary,Bill)$</li>
+</ul>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：$brother(Mary,Tom)$。</p>
+<p>第三步，将上述谓词公式化为子句集：</p>
+<ol>
+<li>$C_1=\neg brother(x,y)\lor\neg woman(x)$</li>
+<li>$C_2=\neg sister(x,y)\lor woman(x)$</li>
+<li>$C_3=sister(Mary,Bill)$</li>
+<li>$C_4=brother(Mary,Tom)$</li>
+</ol>
+<p>第四步，应用归结原理进行归结：</p>
+<ol>
+<li>$C_{23}=woman(Mary)$</li>
+<li>$C_{123}=\neg borther(Mary,y)$</li>
+<li>$C_{1234}=NIL$</li>
+</ol>
+<p>由于归结出了空子句，所以成功证明了 $brother(Mary,Tom)$ 为假，因此原命题 $\neg brother(Mary,Tom)$ 为真，Mary 不是 Tom 的兄弟。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+		<li class="prev"><a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+          <li class="next"><a href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-12-06 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/math/">math<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/lecture-notes/">lecture notes<span>5</span></a></li>
+
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-%E5%BD%92%E7%BB%93%E6%8E%A8%E7%90%86"><span class="toc-article-text">1 归结推理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-%E5%AD%90%E5%8F%A5%E9%9B%86"><span class="toc-article-text">2 子句集</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86"><span class="toc-article-text">3 鲁滨逊归结原理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-%E5%BD%92%E7%BB%93%E5%8F%8D%E6%BC%94"><span class="toc-article-text">4 归结反演</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+
+    </div>
+  </div>
+  <div class="container-narrow">
+    <footer> <!--<p>
+  &copy; 2025 John Doe
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p>-->
+ </footer>
+  </div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+<!-- syntax highlighting -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</html>

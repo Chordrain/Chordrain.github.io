@@ -97,7 +97,7 @@
 
 <!-- title -->
 <div class="page-header ">
-  <h1 class="archive-title-tag title ">deep learning</h1>
+  <h1 class="archive-title-category title ">deep learning</h1>
 </div>
 
 <div class="row page">
@@ -116,8 +116,8 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
-			<div class="date"> 2025-04-08 </div>
-			<div class="article-title"><a href="/2025/04/08/%E5%88%9D%E8%AF%86Transformer/" >初识Transformer</a></div>
+			<div class="date"> 2023-10-24 </div>
+			<div class="article-title"><a href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/" >初识Transformer</a></div>
 		</h3>
 	
 
@@ -187,15 +187,7 @@ c=\operatorname{Encoder}(\text{"我喜欢你"})</script><p>然后，decoder 将�
 <p>我们知道，机器学习的目标就是不断降低 loss。而 seq2seq 这件事，似乎就是在做分类，最后的输出是从所有汉字中选择一个最可能的，所以衡量 seq2seq 的 loss，可以使用和 classifier 类似的方法。在 transformer 中，我们继续以语音辨识为例，decoder 输出的每一个汉字都与正确答案之间有一个 cross entropy，模型优化的目标就是，使所有输出与正确答案之间的 cross entropy 的总和最小。</p>
 <h3 id="3-1-Copy-mechanism"><a href="#3-1-Copy-mechanism" class="headerlink" title="3.1 Copy mechanism"></a>3.1 Copy mechanism</h3><p>有些时候，输出的序列会和输入的序列有重合的部分，例如下面这个 chatbot 的例子：</p>
 <p><img src="/img/Transformer-07.png" alt=""></p>
-<p>再比如说文献摘要，让机器来给一篇文献写摘要，摘要中肯定会有与正文内容相同的部分。</p>
-<pre class="mermaid">%%{init: {"flowchart": {"htmlLabels": false}} }%%
-flowchart LR
-    input["document"]
-    model("model")
-    output["summary"]
-    input --> model --> output</pre>
-
-<p>我们当然是希望机器能够从输入的内容中，直接把这些重合的部分提取出来，而不是自己合成，那这就需要借助 copy mechanism，让机器能够直接从输入中把部分内容 copy 过来。这样的模型当然是存在的，最早的具有复制能力的模型是 copy network，后来还有论文 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1603.06393">Incorporating Copy Mechanism in Sequence-to-Sequence Learning</a> 也做过这个，如果感兴趣可以自己去了解。</p>
+<p>再比如说文献摘要，让机器来给一篇文献写摘要，摘要中肯定会有与正文内容重复的部分。我们当然是希望机器能够从输入的内容中，直接把这些重合的部分提取出来，而不是自己合成，那这就需要借助 copy mechanism，让机器能够直接从输入中把部分内容 copy 过来。这样的模型当然是存在的，最早的具有复制能力的模型是 copy network，后来还有论文 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1603.06393">Incorporating Copy Mechanism in Sequence-to-Sequence Learning</a> 也做过这个，如果感兴趣可以自己去了解。</p>
 <h3 id="3-2-Guided-attention"><a href="#3-2-Guided-attention" class="headerlink" title="3.2 Guided attention"></a>3.2 Guided attention</h3><p>机器观察输入，对输入做 attention 的顺序是不固定的，这是机器自己学习的结果，自己学习就会导致问题。例如在 TTS (Text to Speech) 的任务中，有些时候，机器居然会漏字。如果是一般的 chatbot 或者 summarization 问题，那么漏一两个字可能也没什么关系，但在 TTS 中，漏字是非常严重的问题。这个时候，我们可以用 guided attention 来教给机器一个固定的顺序来处理输入。</p>
 <p>例如说，在 TTS 中，读入一段文字之后，机器应该从左到右依次做 attention，这样才是正确解决问题的方法。但如果机器颠三倒四，先看后面，再看前面，最后看中间，那显然有些事情就做错了，需要我们人工纠正。</p>
 <p><img src="/img/Transformer-08.png" alt=""></p>
@@ -209,7 +201,7 @@ flowchart LR
 
 	
 	</div>
-  <a type="button" href="/2025/04/08/%E5%88%9D%E8%AF%86Transformer/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/#more" class="btn btn-default more">Read More</a>
 </div>
 
 	       
@@ -254,7 +246,13 @@ flowchart LR
 		
 			<li><a href="/categories/Software-Analysis-Testing-and-Verification/">Software Analysis, Testing and Verification<span>1</span></a></li>
 		
-			<li><a href="/categories/solutions/">solutions<span>1</span></a></li>
+			<li><a href="/categories/deep-learning/">deep learning<span>1</span></a></li>
+		
+			<li><a href="/categories/machine-learning/">machine learning<span>2</span></a></li>
+		
+			<li><a href="/categories/math/">math<span>1</span></a></li>
+		
+			<li><a href="/categories/solutions/">solutions&#34;<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -265,15 +263,9 @@ flowchart LR
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/lecture-notes/">lecture notes<span>1</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>1</span></a></li>
+			<li><a href="/tags/lecture-notes/">lecture notes<span>5</span></a></li>
 		
 			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
-			<li><a href="/tags/software-analysis/">software analysis<span>1</span></a></li>
-		
-			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -287,15 +279,23 @@ flowchart LR
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2025/04/08/%E5%88%9D%E8%AF%86Transformer/" ><i class="fa fa-file-o"></i>初识Transformer</a>
-      </li>
-    
-      <li>
         <a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" ><i class="fa fa-file-o"></i>A WSL Error Encountered Whe...</a>
       </li>
     
       <li>
         <a href="/2025/04/07/Introduction-to-Program-Analysis/" ><i class="fa fa-file-o"></i>Introduction to Program Ana...</a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/" ><i class="fa fa-file-o"></i>隐马尔可夫模型</a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" ><i class="fa fa-file-o"></i>支持向量机</a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" ><i class="fa fa-file-o"></i>鲁滨逊归结原理</a>
       </li>
     
   </ul>
@@ -323,11 +323,12 @@ flowchart LR
     </div>
   </div>
   <div class="container-narrow">
-    <footer> <p>
+    <footer> <!--<p>
   &copy; 2025 John Doe
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
-</p> </footer>
+</p>-->
+ </footer>
   </div> <!-- container-narrow -->
   
 
