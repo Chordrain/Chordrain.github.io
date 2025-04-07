@@ -135,7 +135,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2025-04-07 </div>
-			<div class="article-title"><a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" >A WSL Error Encountered When installing Docker</a></div>
+			<div class="article-title"><a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" >A WSL Error Encountered When Installing Docker</a></div>
 		</h3>
 	
 
@@ -150,11 +150,9 @@
 <p>After installing Docker, an <code>Unexpected WSL error</code> was encountered, and the process was terminated. After conducting some online research, I discovered that this error message was indicating that I needed to enable the <strong>Hyper-V</strong>, <strong>Windows Subsystem for Linux</strong> and <strong>Virtual Machine Platform</strong> functions on my system. I opened the configuration panel and found that the latter two functions had been properly enabled, but the option for the first one was missing. It took me a some time to find the solution.</p>
 <p>To address the issue, it was necessary to create and run a file named <code>Hyper-V.bat</code> as administrator, which contains the following content:</p>
 <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pushd</span> &quot;%~dp0&quot;</span><br><span class="line"><span class="built_in">dir</span> /b <span class="variable">%SystemRoot%</span>\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt</span><br><span class="line"><span class="keyword">for</span> /f <span class="variable">%%i</span> <span class="keyword">in</span> (&#x27;<span class="built_in">findstr</span> /i . hyper-v.txt <span class="number">2</span>^&gt;<span class="built_in">nul</span>&#x27;) <span class="keyword">do</span> dism /online /norestart /add-package:&quot;<span class="variable">%SystemRoot%</span>\servicing\Packages\<span class="variable">%%i</span>&quot;</span><br><span class="line"><span class="built_in">del</span> hyper-v.txt</span><br><span class="line">Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL</span><br></pre></td></tr></table></figure>
-
 <p>The program will then require you to restart your machine, at which point you will see that Hyper-V is properly enabled. But Docker still cannot run normally.</p>
 <p>After that, you need to install WSL2. To do this, run the following command:</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wsl --install	# may require VPN</span><br><span class="line">wsl --<span class="built_in">set</span>-default-version <span class="number">2</span>	# <span class="built_in">set</span> the default wsl version to wsl2</span><br><span class="line">wsl --update	# may <span class="keyword">not</span> be necessary</span><br></pre></td></tr></table></figure>
-
 <p>Finally, Docker can run without any problems after all this work.</p>
 <hr>
 <p>Off topic:</p>
@@ -221,7 +219,6 @@
 </ul>
 <h2 id="02-Terminology"><a href="#02-Terminology" class="headerlink" title="02 Terminology"></a>02 Terminology</h2><p>The following is a snippet of JavaScript code.</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> r = <span class="title class_">Math</span>.<span class="title function_">random</span>();	<span class="comment">//value in [0,1)</span></span><br><span class="line"><span class="keyword">var</span> out = <span class="string">&quot;yes&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(r &lt; <span class="number">0.5</span>)</span><br><span class="line">	out = <span class="string">&quot;no&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(r == <span class="number">1</span>)</span><br><span class="line">	out = <span class="string">&quot;maybe&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(out);</span><br></pre></td></tr></table></figure>
-
 <p>Q: What are the possible outputs?</p>
 <h3 id="2-1-Overapproximation-v-s-Underapproximation"><a href="#2-1-Overapproximation-v-s-Underapproximation" class="headerlink" title="2.1 Overapproximation v.s. Underapproximation"></a>2.1 Overapproximation v.s. Underapproximation</h3><p>Judging from the static code, it seems that there are three possible outputs: “yes”, “no” or “maybe”. (Overapproximation)</p>
 <p>If we consider the case of only one execution like <code>r=0.7</code>, its output is “yes”. (Underapproximation)</p>
@@ -230,35 +227,34 @@
 <li>Overapproximation: Consider all paths</li>
 <li>Underapproximation: Execute the program once</li>
 </ul>
-<h3 id="2-2-Soundness-Completeness"><a href="#2-2-Soundness-Completeness" class="headerlink" title="2.2 Soundness &amp; Completeness"></a>2.2 Soundness &amp; Completeness</h3><p>It is easy for us humans to give the right answer —— “yes” or “no”. We think these answers are <strong>sound</strong> and <strong>complete</strong>.</p>
+<h3 id="2-2-Soundness-amp-Completeness"><a href="#2-2-Soundness-amp-Completeness" class="headerlink" title="2.2 Soundness &amp; Completeness"></a>2.2 Soundness &amp; Completeness</h3><p>It is easy for us humans to give the right answer —— “yes” or “no”. We think these answers are <strong>sound</strong> and <strong>complete</strong>.</p>
 <p>“Soundness” means it contains all the possible outputs we want (might give <strong>false positives</strong>).</p>
 <p>“Completeness” means it excludes all the impossible outputs we do not want (might give <strong>false negtives</strong>).</p>
 <p>When we put these two ideas together, we get a definition that includes exactly all possible outputs.</p>
-<h3 id="2-3-False-Positives-False-Negatives"><a href="#2-3-False-Positives-False-Negatives" class="headerlink" title="2.3 False Positives &amp; False Negatives"></a>2.3 False Positives &amp; False Negatives</h3><p>The definitions of false positives and false negatives:</p>
+<h3 id="2-3-False-Positives-amp-False-Negatives"><a href="#2-3-False-Positives-amp-False-Negatives" class="headerlink" title="2.3 False Positives &amp; False Negatives"></a>2.3 False Positives &amp; False Negatives</h3><p>The definitions of false positives and false negatives:</p>
 <ul>
 <li>False positives: impossible outputs that are indicated possible</li>
 <li>False negatives: possible outputs that are indicated impossible</li>
 </ul>
 <p>Let $P$ be <em>Program</em>, $i$ be <em>Input</em>, $P(i)$ be <em>Behavior</em>. The following graph shows the relations between the above ideas.</p>
-<img src="01.png" style="zoom:33%;" />
-
-<h3 id="2-4-Precision-Recall"><a href="#2-4-Precision-Recall" class="headerlink" title="2.4 Precision &amp; Recall"></a>2.4 Precision &amp; Recall</h3><p>Differentiate precision and recall:</p>
+<p><img src="01.png" style="zoom:33%;" /></p>
+<h3 id="2-4-Precision-amp-Recall"><a href="#2-4-Precision-amp-Recall" class="headerlink" title="2.4 Precision &amp; Recall"></a>2.4 Precision &amp; Recall</h3><p>Differentiate precision and recall:</p>
 <ul>
 <li><p>Precision: how many retrieved items are relevant</p>
 </li>
 <li><p>Recall: how many relevant items are retrieved</p>
 </li>
 </ul>
-<p>Take the overapproximated answer aforementioned for instance, the precision and the recall are:<br>$$<br>\begin{aligned}<br>&amp;\mathrm{precision}&#x3D;\frac{2}{3}&#x3D;0.67\<br>&amp;\mathrm{recall}&#x3D;\frac{1}{2}&#x3D;0.5\<br>\end{aligned}<br>$$</p>
-<h3 id="2-5-Program-Invariants"><a href="#2-5-Program-Invariants" class="headerlink" title="2.5 Program Invariants"></a>2.5 Program Invariants</h3><p>Program Invariants are logical assertions whose certain conditions or properties remain true throughout the execution of a program. These invariants are key to program correctness. They help verify that the program behaves as expected and play an important role in software development.</p>
+<p>Take the overapproximated answer aforementioned for instance, the precision and the recall are:</p>
+<script type="math/tex; mode=display">
+\mathrm{precision}=\frac{2}{3}=0.67</script><script type="math/tex; mode=display">
+\mathrm{recall}=\frac{1}{2}=0.5</script><h3 id="2-5-Program-Invariants"><a href="#2-5-Program-Invariants" class="headerlink" title="2.5 Program Invariants"></a>2.5 Program Invariants</h3><p>Program Invariants are logical assertions whose certain conditions or properties remain true throughout the execution of a program. These invariants are key to program correctness. They help verify that the program behaves as expected and play an important role in software development.</p>
 <p>See the below code snippet:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">    <span class="keyword">if</span> (getc() == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">    	z = p(<span class="number">6</span>) + <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	z = p(<span class="number">-7</span>) - <span class="number">7</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>Q: An invariant at the end of the program is <code>(z == c)</code> for some constant <code>c</code>. What is <code>c</code>?</p>
 <p>Clearly, the <code>z</code> will yield <code>42</code> regardless of any inputs. Therefore, <code>(z == 42)</code> is definitely an invariant, while <code>(z == 30)</code> is definitely not an invariant.</p>
 <p>Using the invariant to avert disaster:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">    <span class="keyword">if</span> (getc() == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">    	z = p(<span class="number">6</span>) + <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	z = p(<span class="number">-7</span>) - <span class="number">7</span>;</span><br><span class="line">    <span class="keyword">if</span> (z != <span class="number">42</span>) &#123;</span><br><span class="line">        disaster();	<span class="comment">// disaster averted</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="03-Others"><a href="#03-Others" class="headerlink" title="03 Others"></a>03 Others</h2><h3 id="3-1-Undecidability-of-Program-Properties"><a href="#3-1-Undecidability-of-Program-Properties" class="headerlink" title="3.1 Undecidability of Program Properties"></a>3.1 Undecidability of Program Properties</h3><ul>
 <li>Q: Can program analysis be sound and complete? A: Not if we want it to terminate!</li>
 <li>Questions like “is a program point reachable on some input?” are <strong>undecidable</strong>.</li>
@@ -267,12 +263,10 @@
 <h3 id="3-2-Why-Take-This-Course"><a href="#3-2-Why-Take-This-Course" class="headerlink" title="3.2 Why Take This Course?"></a>3.2 Why Take This Course?</h3><ul>
 <li><p>Learn methods to improve software quality, reliability, security, performance, etc.</p>
 </li>
-<li><p>Become a better software developer&#x2F;tester</p>
+<li><p>Become a better software developer/tester</p>
 </li>
-<li><p>Build specialized tools for software analysis, testing and verification</p>
-</li>
-<li><p>Finding Jobs &amp; Do research</p>
-</li>
+<li>Build specialized tools for software analysis, testing and verification</li>
+<li>Finding Jobs &amp; Do research</li>
 </ul>
 <h3 id="3-3-Who-Needs-Program-Analysis"><a href="#3-3-Who-Needs-Program-Analysis" class="headerlink" title="3.3 Who Needs Program Analysis?"></a>3.3 Who Needs Program Analysis?</h3><p>Three primary consumers of program analysis:</p>
 <ul>
@@ -284,10 +278,8 @@
 <p>For example, we use program analysis to generate efficient code.</p>
 <p>Before:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> arg)</span> &#123;</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">    <span class="keyword">if</span> (arg != <span class="number">0</span>)</span><br><span class="line">    	z = p(<span class="number">6</span>) + <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	z = p(<span class="number">-7</span>) - <span class="number">7</span>;</span><br><span class="line">    print (z);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>After:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">	print (<span class="number">42</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h4 id="3-3-2-Software-Quality-Tools"><a href="#3-3-2-Software-Quality-Tools" class="headerlink" title="3.3.2 Software Quality Tools"></a>3.3.2 Software Quality Tools</h4><p>Software quality tools are tools for testing, debugging, and verification.</p>
 <p>Software quality tools use program analysis for:</p>
 <ul>
@@ -303,7 +295,7 @@
 <li>Suspicious error patterns: <em>Lint</em>, <em>SpotBugs</em>, <em>Coverity</em></li>
 <li>Memory leak detection: <em>Facebook Infer</em></li>
 <li>Checking API usage rules: <em>Microsoft SLAM</em></li>
-<li>Verifying invariants: <em>ESC&#x2F;Java</em></li>
+<li>Verifying invariants: <em>ESC/Java</em></li>
 </ul>
 </li>
 <li>Dynamic Program Analysis<ul>
@@ -327,26 +319,30 @@
 <h2 id="04-Quiz"><a href="#04-Quiz" class="headerlink" title="04 Quiz"></a>04 Quiz</h2><ol>
 <li>Dynamic vs. Static Analysis:</li>
 </ol>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center"></th>
-<th align="center">Dynamic</th>
-<th align="center">Static</th>
+<th style="text-align:center"></th>
+<th style="text-align:center">Dynamic</th>
+<th style="text-align:center">Static</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">Cost</td>
-<td align="center"><u>Proportional to program’s execution time</u></td>
-<td align="center"><u>Proportional to program’s size</u></td>
+<tbody>
+<tr>
+<td style="text-align:center">Cost</td>
+<td style="text-align:center"><u>Proportional to program’s execution time</u></td>
+<td style="text-align:center"><u>Proportional to program’s size</u></td>
 </tr>
 <tr>
-<td align="center">Effectiveness</td>
-<td align="center"><u>Unsound (may miss errors)</u></td>
-<td align="center"><u>Incomplete (may report spurious errors)</u></td>
+<td style="text-align:center">Effectiveness</td>
+<td style="text-align:center"><u>Unsound (may miss errors)</u></td>
+<td style="text-align:center"><u>Incomplete (may report spurious errors)</u></td>
 </tr>
-</tbody></table>
-<ol start="2">
+</tbody>
+</table>
+</div>
+<ol>
 <li>Unsoundness yields <u>false negatives</u>; incompleteness yields <u>false positives</u>.</li>
 </ol>
 
@@ -418,9 +414,9 @@
 		
 			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
-			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
-		
 			<li><a href="/tags/software-analysis/">software analysis<span>1</span></a></li>
+		
+			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -532,5 +528,20 @@
   </script>
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

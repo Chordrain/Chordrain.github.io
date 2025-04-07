@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>A WSL Error Encountered When installing Docker | Jiahao Peng</title>
+  <title>A WSL Error Encountered When Installing Docker | Jiahao Peng</title>
   <meta name="author" content="John Doe">
   
   <meta name="description" content="This document explains the problems the author had installing Docker and how to solve them. You can find and download the installation package for Doc">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="A WSL Error Encountered When installing Docker"/>
+  <meta property="og:title" content="A WSL Error Encountered When Installing Docker"/>
   <meta property="og:site_name" content="Jiahao Peng"/>
 
   
@@ -106,7 +106,7 @@
 
 	
 		<div class="page-header ">		
-			<h1 class="title "> A WSL Error Encountered When installing Docker</h1>
+			<h1 class="title "> A WSL Error Encountered When Installing Docker</h1>
 		</div>		
 	
 
@@ -130,11 +130,9 @@
 <p>After installing Docker, an <code>Unexpected WSL error</code> was encountered, and the process was terminated. After conducting some online research, I discovered that this error message was indicating that I needed to enable the <strong>Hyper-V</strong>, <strong>Windows Subsystem for Linux</strong> and <strong>Virtual Machine Platform</strong> functions on my system. I opened the configuration panel and found that the latter two functions had been properly enabled, but the option for the first one was missing. It took me a some time to find the solution.</p>
 <p>To address the issue, it was necessary to create and run a file named <code>Hyper-V.bat</code> as administrator, which contains the following content:</p>
 <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pushd</span> &quot;%~dp0&quot;</span><br><span class="line"><span class="built_in">dir</span> /b <span class="variable">%SystemRoot%</span>\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt</span><br><span class="line"><span class="keyword">for</span> /f <span class="variable">%%i</span> <span class="keyword">in</span> (&#x27;<span class="built_in">findstr</span> /i . hyper-v.txt <span class="number">2</span>^&gt;<span class="built_in">nul</span>&#x27;) <span class="keyword">do</span> dism /online /norestart /add-package:&quot;<span class="variable">%SystemRoot%</span>\servicing\Packages\<span class="variable">%%i</span>&quot;</span><br><span class="line"><span class="built_in">del</span> hyper-v.txt</span><br><span class="line">Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL</span><br></pre></td></tr></table></figure>
-
 <p>The program will then require you to restart your machine, at which point you will see that Hyper-V is properly enabled. But Docker still cannot run normally.</p>
 <p>After that, you need to install WSL2. To do this, run the following command:</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wsl --install	# may require VPN</span><br><span class="line">wsl --<span class="built_in">set</span>-default-version <span class="number">2</span>	# <span class="built_in">set</span> the default wsl version to wsl2</span><br><span class="line">wsl --update	# may <span class="keyword">not</span> be necessary</span><br></pre></td></tr></table></figure>
-
 <p>Finally, Docker can run without any problems after all this work.</p>
 <hr>
 <p>Off topic:</p>
@@ -207,7 +205,7 @@
 		   no_comment: "No comments yet. Press the button and go to comment now!",
 		   go_to_comment: "Go to comment",
 		   no_issue: "no_issue",
-		   issue_title: "A WSL Error Encountered When installing Docker",
+		   issue_title: "A WSL Error Encountered When Installing Docker",
 		   issue_id: "",
 		   btn_class: "btn btn-primary",
 		   comments_target: "#comment-thread",
@@ -327,5 +325,20 @@
   </script>
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
