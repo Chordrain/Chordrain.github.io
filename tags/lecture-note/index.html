@@ -40,12 +40,6 @@
 
   <script src="/js/jquery-2.0.3.min.js"></script>
   
-    <script src="/js/marked.js"></script>
-    <script src="/js/comment.js"></script>
-    <script src="/js/timeago.min.js"></script>
-    <script src="/js/highlight.min.js"></script>
-	<script src="/js/spin.min.js"></script>
-  
   
   <!-- analytics -->
   
@@ -335,20 +329,6 @@
 		
 			<div class="widget">
     
-	    <h4 class="dsq-widget-title">Recent Comments</h4>
-		<div id="recent-comments"></div>
-		<script type="text/javascript">
-		    getRecentCommentsList({
-			   type: "github" ? "github" : "github",
-			   user: "wzpan",
-               repo: "hexo-theme-freemind-blog",
-               client_id: "bf7d4ba11877db88543e",
-               client_secret: "bff8a6b06b745c0bfcdccbe225623ea8e2a057bb",
-			   count: "5" ? "5" : 5,
-			   recent_comments_target: "#recent-comments"
-			});
-		</script>
-	
 </div>
 
 		
@@ -359,11 +339,11 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
+		
 			<li><a href="/tags/software-analysis/">software analysis<span>1</span></a></li>
 		
 			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
-			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -451,22 +431,6 @@
 
 
 <!-- syntax highlighting -->
-
-  <script>
-  marked.setOptions({
-    highlight: function (code, lang) {
-        return hljs.highlightAuto(code).value;
-    }
-  });
-  function Highlighting(){
-    var markdowns = document.getElementsByClassName('markdown');
-    for(var i=0;i<markdowns.length;i++){
-        if(markdowns[i].innerHTML) markdowns[i].innerHTML =marked(markdowns[i].innerHTML);
-    }
-  }
-  window.addEventListener('DOMContentLoaded', Highlighting, false);
-  window.addEventListener('load', Highlighting, false);
-  </script>
 
 
 <script type="text/x-mathjax-config">
