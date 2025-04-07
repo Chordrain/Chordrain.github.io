@@ -65,9 +65,24 @@ a {
   font-size: 16px;
 }
 
+/* font.css */
+@font-face {
+  font-family: 'english'; /* 自定义字体名称 */
+  src: url('./bahnschrift.ttf') format('truetype');
+  font-weight: normal; /* 字体粗细 */
+  font-style: normal; /* 字体风格 */
+}
+
+@font-face {
+  font-family: 'chinese'; /* 自定义字体名称 */
+  src: url('./TsangerYuMo.ttf') format('truetype'); 
+  font-weight: normal; /* 字体粗细 */
+  font-style: normal; /* 字体风格 */
+}
+
 .page, .post{
   line-height: 1.5em;
-  font-family: 'Open Sans',"Helvetica Neue", "Helvetica","Microsoft YaHei", "WenQuanYi Micro Hei",Arial, sans-serif;
+  font-family: 'english', 'chinese', 'Bahnschrift', 'Open Sans',"Helvetica Neue", "Helvetica","Microsoft YaHei", "WenQuanYi Micro Hei",Arial, sans-serif;
 }
 
 .post .date {
@@ -191,7 +206,7 @@ a.search-result-title {
 }
 
 p.search-result {
-  color=#555;
+  color: #555;
 }
 
 em.search-keyword {
@@ -228,7 +243,7 @@ a.label-anchor {
   text-align: right;
   width: 200px;
   left: -210px;
-  font-family: 'PT Sans', sans-serif;
+  font-family: 'english', 'chinese', 'PT Sans', sans-serif;
 }
 a.label-anchor:target span {
   background-color: #b94a48;
@@ -263,7 +278,7 @@ a.inline-ref:hover {
    ========================================================================== */
 
 blockquote p, blockquote ol, blockquote ul, blockquote li, .slogan{
-  font-family: 'Open Sans',"Helvetica Neue", Helvetica, "Segoe UI", Ubuntu, "Hiragino Sans GB", '楷体', 'STKaiti';
+  font-family: 'english', 'chinese', 'Open Sans',"Helvetica Neue", Helvetica, "Segoe UI", Ubuntu, "Hiragino Sans GB", '楷体', 'STKaiti';
 }
 
 /* =============================================================================
@@ -292,7 +307,8 @@ img, video {
 }
 
 .slogan{
-  font-size: 1.2em;
+  /* font-size: 1.2em; */
+  font-size: 18px;
   color: #888;  
   display:block;
   margin-bottom: 1em;
@@ -340,7 +356,7 @@ h1{
 h1,h2,h3,h4,h5,h6{
   text-rendering:optimizelegibility;
   font-weight:bold;
-  font-family: 'Open Sans', "Helvetica Neue", "Helvetica","Microsoft YaHei", "WenQuanYi Micro Hei",Arial, sans-serif;
+  font-family: 'english', 'chinese', 'Open Sans', "Helvetica Neue", "Helvetica","Microsoft YaHei", "WenQuanYi Micro Hei",Arial, sans-serif;
 }
 
 h2{
@@ -547,7 +563,7 @@ td {
  * Include this rule to trigger hasLayout and contain floats.
  */
 .cf {
-  *zoom: 1;
+  zoom: 1;
 }
 
 /* RSS button */

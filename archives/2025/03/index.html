@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Docker | Jiahao Peng</title>
+  <title>Archives: 2025/3 | Jiahao Peng</title>
   <meta name="author" content="John Doe">
   
   
@@ -103,7 +103,7 @@
 
 <!-- title -->
 <div class="page-header ">
-  <h1 class="archive-title-tag title ">Docker</h1>
+  <h1 class="archive-title title ">2025/3</h1>
 </div>
 
 <div class="row page">
@@ -115,55 +115,44 @@
 	  <div id="top_search"></div>
 
       
-         <!-- display as entry -->
-	     <div class="mypage">
-	       
-		     
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2025-04-07 </div>
-			<div class="article-title"><a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" >A WSL Error Encountered When Installing Docker</a></div>
-		</h3>
-	
-
-
-		     
-<div class="entry">
-
-  <div class="row">
-	
-	
-		<p>This document explains the problems the author had installing Docker and how to solve them. You can find and download the installation package for Docker <a target="_blank" rel="noopener" href="https://www.docker.com/">here</a>.</p>
-<p>After installing Docker, an <code>Unexpected WSL error</code> was encountered, and the process was terminated. After conducting some online research, I discovered that this error message was indicating that I needed to enable the <strong>Hyper-V</strong>, <strong>Windows Subsystem for Linux</strong> and <strong>Virtual Machine Platform</strong> functions on my system. I opened the configuration panel and found that the latter two functions had been properly enabled, but the option for the first one was missing. It took me a some time to find the solution.</p>
-<p>To address the issue, it was necessary to create and run a file named <code>Hyper-V.bat</code> as administrator, which contains the following content:</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pushd</span> &quot;%~dp0&quot;</span><br><span class="line"><span class="built_in">dir</span> /b <span class="variable">%SystemRoot%</span>\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt</span><br><span class="line"><span class="keyword">for</span> /f <span class="variable">%%i</span> <span class="keyword">in</span> (&#x27;<span class="built_in">findstr</span> /i . hyper-v.txt <span class="number">2</span>^&gt;<span class="built_in">nul</span>&#x27;) <span class="keyword">do</span> dism /online /norestart /add-package:&quot;<span class="variable">%SystemRoot%</span>\servicing\Packages\<span class="variable">%%i</span>&quot;</span><br><span class="line"><span class="built_in">del</span> hyper-v.txt</span><br><span class="line">Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL</span><br></pre></td></tr></table></figure>
-<p>The program will then require you to restart your machine, at which point you will see that Hyper-V is properly enabled. But Docker still cannot run normally.</p>
-<p>After that, you need to install WSL2. To do this, run the following command:</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wsl --install	# may require VPN</span><br><span class="line">wsl --<span class="built_in">set</span>-default-version <span class="number">2</span>	# <span class="built_in">set</span> the default wsl version to wsl2</span><br><span class="line">wsl --update	# may <span class="keyword">not</span> be necessary</span><br></pre></td></tr></table></figure>
-<p>Finally, Docker can run without any problems after all this work.</p>
-<hr>
-<p>Off topic:</p>
-<p>When using the VSCode extension <code>Remote Containers</code> to set up containers, you might encounter the message “the container does not meet all the requirements of the VS Code Server”. This happens because VSCode has increased the minimum requirements for remote server build toolchain since version 1.86. To solve the problem, just downgrade your VSCode to a version below 1.86. You can download version 1.85.2 <a target="_blank" rel="noopener" href="https://update.code.visualstudio.com/1.85.2/win32-x64-archive/stable">here</a>. Besides, it is necessary to downgrade your extensions as well.</p>
-
-	
-	</div>
-  <a type="button" href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/#more" class="btn btn-default more">Read More</a>
-</div>
-
-	       
-	     </div>
-	     <div>
-	       <center>
-	         <div class="pagination">
-<ul class="pagination">
-	 
-</ul>
-</div>
-
-	       </center>
-	     </div>	
-      
+	  <div class="archive">
+		
+		
+		
+			
+			
+			<h4 class="archive-ul" data-toggle="collapse" data-target="#2025">2025<b class="caret"></b></h4>
+			<ul id="2025" class="collapse in">
+			
+		
+		<li class="listing-item">
+		<span class="date_class"> 2025-04-07 </span> &raquo;
+		
+		   <span class="title"><a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" >A WSL Error Encountered When Installing Docker</a></span>
+		
+		</li>			
+		
+		
+		
+		<li class="listing-item">
+		<span class="date_class"> 2025-04-07 </span> &raquo;
+		
+		   <span class="title"><a href="/2025/04/07/Introduction-to-Program-Analysis/" >Introduction to Program Analysis</a></span>
+		
+		</li>			
+		
+		
+		
+		<li class="listing-item">
+		<span class="date_class"> 2025-03-23 </span> &raquo;
+		
+		   <span class="title"><a href="/2025/03/23/ECNU%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%AD%A6%E7%A1%95%E5%A4%8D%E8%AF%95%E5%A4%8D%E7%9B%98/" >ECNU软件工程学硕复试复盘</a></span>
+		
+		</li>			
+		
+		</ul>
+		</div>
+        
 
 </div> <!-- col-md-9/col-md-12 -->
 
@@ -220,9 +209,9 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/casual/">casual<span>1</span></a></li>
-		
 			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
+		
+			<li><a href="/tags/casual/">casual<span>1</span></a></li>
 		
 			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
