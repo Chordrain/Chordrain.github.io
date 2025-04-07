@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<!-- title -->
+	
+<title>
+    
+        02 The LLVM Framework&nbsp;&nbsp;✦&nbsp;
+    
+    Hexo
+</title>
+
+	<!-- keywords,description -->
+	
+
+
+
+
+
+
+
+	<!-- favicon -->
+	
+		<link rel="shortcut icon" href="/favicon.ico">
+	
+
+	<!-- css, script -->
+	
+<link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
+
+	
+<link rel="stylesheet" href="/css/main.css">
+
+
+	
+<script src="https://cdn.jsdelivr.net/npm/darkreader@4.9.58/darkreader.min.js"></script>
+
+	
+<script src="/js/main.js"></script>
+
+
+	<!-- custom css and js -->
+	
+
+
+
+
+
+	<!-- search -->
+	<script async>
+	window.searchEngine = "https://www.google.com/search?q=" ?? "https://www.google.com/search?q=";
+	window.homeHost = "http://example.com" ?? window.location.host;
+</script>
+
+	<!-- statistics -->
+	
+	<script async reload src="https://cn.vercount.one/js"></script>
+
+
+	<!-- analysis -->
+	
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+	<header id="header">
+	<a id="title" href="/" class="logo">
+		<img id="logo" src="/favicon-white.ico" alt="logo"/>
+		Hexo
+	</a>
+
+	<ul id="menu">
+		
+			<li class="menu-item">
+				<a href="/about" class="menu-item-link">About</a>
+			</li>
+		
+		
+			<li class="menu-item">
+				<a href="/tags" class="menu-item-link">Tags</a>
+			</li>
+		
+		
+			<li class="menu-item">
+				<a href="/categories" class="menu-item-link">Categories</a>
+			</li>
+		
+		
+			<li class="menu-item">
+				<a href="" class="menu-item-link item-icon" target="_blank">
+					<i class="fa fa-github fa-2x"></i>
+				</a>
+			</li>
+		
+		
+			<li class="menu-item dark-mode">
+				<a href="#" class="menu-item-link item-icon">
+					<i class="fa fa-moon-o fa-2x"></i>
+				</a>
+			</li>
+
+			<script async>
+				const localModel = localStorage.getItem("darkModel");
+				const darkModel = !localModel ? 0 : localModel;
+
+				const darkModeIcon = document.querySelector("#menu .dark-mode i");
+
+				if (darkModel == 1) {
+					darkModeIcon.classList.replace("fa-moon-o", "fa-sun-o");
+					DarkReader.enable({
+						brightness: 100,
+						contrast: 90,
+						sepia: 10,
+					});
+				}
+
+				darkModeIcon.addEventListener("click", () => {
+					const isMoon = darkModeIcon.classList.contains("fa-moon-o");
+					darkModeIcon.classList.toggle("fa-moon-o", !isMoon);
+					darkModeIcon.classList.toggle("fa-sun-o", isMoon);
+					localStorage.setItem("darkModel", isMoon ? 1 : 0);
+					isMoon ? DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 }) : DarkReader.disable();
+				});
+			</script>
+		
+	</ul>
+</header>
+
+<script async>
+	let startHeight = 0;
+	window.addEventListener("scroll", () => {
+		const { scrollY: endHeight } = window;
+		const distance = endHeight - startHeight;
+		startHeight = endHeight;
+		document.querySelector("#header").style.display = distance > 0 && endHeight > 50 ? "none" : "";
+	});
+</script>
+	<div id="sidebar">
+	<button id="sidebar-toggle" class="toggle" ><i class="fa fa-arrow-right " aria-hidden="true"></i></button>
+	<div id="site-toc">
+		<input id="search-input" class="search-input" type="search" placeholder="Press Enter to search the entire site">
+		<div id="tree">
+			
+			
+							<ul>
+								<li class="file">
+									<a href="/2025/04/07/hello-world/" title="/2025/04/07/hello-world">
+									
+										hello-world
+									
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2025/04/07/01%20Introduction%20to%20Program%20Analysis/" title="/2025/04/07/01 Introduction to Program Analysis">
+									
+										01 Introduction to Program Analysis
+									
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file active">
+									<a href="/2025/04/07/02%20The%20LLVM%20Framework/" title="/2025/04/07/02 The LLVM Framework">
+									
+										02 The LLVM Framework
+									
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+		</div>
+	</div>
+</div>
+
+	<div id="content">
+		<h1 id="article-title">
+	02 The LLVM Framework
+</h1>
+
+<div class="article-meta">
+	<span> John Doe </span>
+	<span> 2025-04-07 21:29:27 </span>
+	<div id="article-categories">
+		
+			<span>Categories：</span>
+			
+		
+		
+			<span>Tags：</span>
+			
+		
+	</div>
+</div>
+
+<div id="article-content">
+	<h1 id="Lec-2-The-LLVM-Framework"><a href="#Lec-2-The-LLVM-Framework" class="headerlink" title="Lec 2 - The LLVM Framework"></a>Lec 2 - The LLVM Framework</h1><p>[TOC]</p>
+<h2 id="01-Overview-of-LLVM"><a href="#01-Overview-of-LLVM" class="headerlink" title="01 Overview of LLVM"></a>01 Overview of LLVM</h2><p>LLVM (Low Level Virtual Machine) is a modular and reusable compiler framework supporting multiple front-ends and back-ends.</p>
+<h3 id="1-1-Architecture-of-LLVM"><a href="#1-1-Architecture-of-LLVM" class="headerlink" title="1.1 Architecture of LLVM"></a>1.1 Architecture of LLVM</h3><p>The job of a compiler is to convert human-friendly source code (C++, C, Java, etc.) into machine-friendly binary code (x86, ARM, etc.), which is comprised of three parts —— <strong>front-ends</strong>, <strong>optimizer</strong> and <strong>back-ends</strong>.</p>
+<p>The front-ends include the <strong>preprocessor</strong>, <strong>parser</strong> and <strong>IR generator</strong>. Take a C++ compiler for example, its preprocessor expands <code>#include</code>s and <code>#define</code>s; its parser checks for syntax mistakes, builds an <strong>Abstract Syntax Tree</strong> (AST); its IR generator converts an AST into an <strong>Intermediate Representation</strong> (IR).</p>
+<p>The optimizer transforms a program into an equivalent one that is more efficient, which is the focus of this course.</p>
+<p>The back-ends include the <strong>compiler backend</strong>, <strong>assembler</strong> and <strong>linker</strong>. Take a C++ compiler for example, its compiler backend converts the IR into target-specific assembly code; its assembler converts the target-specific assembly code into target-specific machine code; its linker combines multiple machine code files into a single image (e.g. executable).</p>
+<p>The front-ends are language-specific, i.e. they target a specific programing language, such as C++ and Clang, Go and Gollvm, Rust and Rustc, etc. The back-ends are architecture-specific, meaning that they convert assembly code into machine code that fits the target architecture (x86, ARM, etc.).</p>
+<h3 id="1-2-LLVM-Passes"><a href="#1-2-LLVM-Passes" class="headerlink" title="1.2 LLVM Passes"></a>1.2 LLVM Passes</h3><p>The LLVM Optimizer (opt) is a series of “passes” that run one after another.</p>
+<p>The Clang frontend, for instance, accepts a C++ source file and produces a LLVM IR. The LLVM IR is then passed to the LLVM Optimizer, which generates another LLVM IR. This iterative process (each iteration is called a “pass”) persists until the IR is accepted by the backend.</p>
+<p>There are two kinds of passes – <strong>analysis</strong> and <strong>transformation</strong>:</p>
+<ul>
+<li>Analysis pass analyzes LLVM IR to <em>check</em> program properties</li>
+<li>Transformation pass transforms LLVM IR to <em>monitor</em> or <em>optimize</em> the program</li>
+</ul>
+<blockquote>
+<p>Note that analysis passes do not change code; transformation passes do.</p>
+</blockquote>
+<p>LLVM is typically extended by implementing new passes that look at and change the LLVM IR as it flows through the compilation process.</p>
+<h3 id="1-3-LLVM-IR"><a href="#1-3-LLVM-IR" class="headerlink" title="1.3 LLVM IR"></a>1.3 LLVM IR</h3><p>We have introduced the concept <strong>LLVM Intermediate Representation</strong> (LLVM IR) hereinbefore. But why do we need LLVM IR? Isn’t it more convenient for LLVM optimizers to directly process the source code? Four reasons:</p>
+<ul>
+<li>Easy to translate from the level above</li>
+<li>Easy to translate to the level below</li>
+<li>Narrow interface (simpler phases&#x2F;optimizations)</li>
+<li>The IR language is independent of the source and target languages in order to maximize the compiler’s ability to support multiple source and target languages</li>
+</ul>
+<h2 id="02-Structure-of-LLVM-IR"><a href="#02-Structure-of-LLVM-IR" class="headerlink" title="02 Structure of LLVM IR"></a>02 Structure of LLVM IR</h2><h2 id="03-The-LLVM-API"><a href="#03-The-LLVM-API" class="headerlink" title="03 The LLVM API"></a>03 The LLVM API</h2><h2 id="04-Navigating-the-Documentation"><a href="#04-Navigating-the-Documentation" class="headerlink" title="04 Navigating the Documentation"></a>04 Navigating the Documentation</h2>
+	
+    <div class="copyright-box">
+		<div class="license-box">
+			<div class="license-header">
+				
+				<div class="license-title">
+					02 The LLVM Framework
+				</div>
+				<div class="license-subTitle">http://example.com/2025/04/07/02 The LLVM Framework/index.html</div>
+			</div>
+			<div class="license-meta">
+				
+					<div class="license-meta-item">
+						<div>Author</div>
+						<div>
+							<a href="">
+								John Doe
+							</a>
+						</div>
+					</div>
+				
+				
+					<div class="license-meta-item license-meta-date">
+					<div>Posted on</div>
+					<div>April 7, 2025</div>
+					</div>
+				
+				
+				
+				
+					<div class="license-meta-item">
+					<div>Licensed under</div>
+					<div>
+						
+						
+						
+							<a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+								<span class="hint--top hint--rounded" aria-label="BY - Attribution">
+									BY - Attribution
+								</span>
+							</a>
+						
+						
+					</div>
+					</div>
+				
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+    
+
+    
+
+    
+        
+        <script async reload>
+            fetch("https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/tokyo-night-dark.css")
+                .then((response) => response.text())
+                .then((cssContent) => {
+                    const style = document.createElement("style");
+                    
+                        cssContent = cssContent
+                            .replace(".hljs-code,", "")
+                            .replaceAll("_", " ")
+                            .replaceAll("hljs-", "hljs .")
+                            .replaceAll(".hljs", " .highlight")
+                            .replaceAll(".built in", ".built_in")
+                            .replaceAll("title.", "");
+                        const figures = document.querySelectorAll("figure.highlight td.gutter");
+                        figures.forEach(figure=>{
+                            figure.classList.add("highlight");
+                        })
+                    
+                    style.innerHTML = cssContent;
+                    document.head.appendChild(style);
+                })
+                .catch((error) => {
+                    console.error("Error loading CSS:", error);
+                });
+        </script>
+    
+
+
+
+
+
+    <script reload>
+        var targets = document.querySelectorAll("figure.highlight, #article-content > pre:not(.highlight,.hljs)");
+        targets.forEach((block) => {
+            const copyBtn = document.createElement("button");
+            copyBtn.innerHTML = `<i class="fa fa-clone" aria-hidden="true"></i>`;
+            copyBtn.className = "code-copy";
+
+            
+                copyBtn.style.color = "#fff";
+            
+
+            copyBtn.addEventListener("click", () => {
+                const text = block.querySelector("td.code")?.textContent || block.querySelector("code")?.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    copyBtn.innerHTML = "Copied!";
+                    setTimeout(() => {
+                        copyBtn.innerHTML = `<i class="fa fa-clone" aria-hidden="true"></i>`;
+                    }, 2000);
+                });
+            });
+            block.appendChild(copyBtn);
+        });
+    </script>
+
+
+
+
+<div class="post-guide">
+	<div class="item left">
+	
+		<a href="/2025/04/07/01%20Introduction%20to%20Program%20Analysis/">
+			<i class="fa fa-angle-left" aria-hidden="true"></i>
+			01 Introduction to Program Analysis
+		</a>
+	
+	</div>
+	<div class="item right">
+		
+	</div>
+</div>
+
+
+
+
+	</div>
+
+	<div id="footer">
+	<div>
+		
+			
+				©2024<span>-</span><span>2025
+			
+			
+			</span>
+			<a href="">
+				John Doe
+			</a>
+		
+		
+			<span id="busuanzi_container_site_pv">
+				Views
+				<span id="vercount_value_page_pv"></span>
+			</span>
+			<span id="busuanzi_container_site_uv">
+				Visitors
+				<span id="vercount_value_site_pv"></span>
+			</span>
+		
+	</div>
+	 <div> Theme <a href="https://github.com/Exisi/hexo-theme-node-tree"	target="_blank">Node-Tree</a> Powered by <a href="https://hexo.io" target="_blank">Hexo</a> </div> 
+</div>
+	<button id="totop-toggle" class="toggle"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
+
+<script async>
+    const topTopBtn = document.querySelector("#totop-toggle");
+	topTopBtn.addEventListener("click", () => {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	});
+</script>
+</body>
+</html>
