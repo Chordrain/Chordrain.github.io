@@ -1,89 +1,479 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
-    <meta name="description" content="">
-    <link rel="shortcut icon" href="/favicon.jpg" type="image/x-icon" />
-    <title>
-        
-        Hexo
-    </title>
-    
-<link rel="stylesheet" href="/css/style.min.css">
+  <meta charset="utf-8">
+  
+  <title>lecture note | Jiahao Peng</title>
+  <meta name="author" content="John Doe">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    
-<link rel="stylesheet" href="/css/partial/atom-one-dark.min.css">
+  
+  <meta property="og:site_name" content="Jiahao Peng"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Jiahao Peng" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/spacelab.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+  <![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  
+    <script src="/js/marked.js"></script>
+    <script src="/js/comment.js"></script>
+    <script src="/js/timeago.min.js"></script>
+    <script src="/js/highlight.min.js"></script>
+	<script src="/js/spin.min.js"></script>
+  
+  
+  <!-- analytics -->
+  
+
+
 
 <meta name="generator" content="Hexo 7.3.0"></head>
-    <body>
-        
-            <header>
-    <a class="title" href="/">
-        <h1>
-            Hexo
-        </h1>
-        
-    </a>
-    <nav>
-        <p>
-            <a href="/">首页</a><a href="/about.html">关于</a>
-        </p>
-    </nav>
-</header>
-        
-        <main>
-    <ul class="blog-posts">
-        
-            
-                <li>
-                    <span>
-                        <i>
-                            <time>
-                                2025/04/07
-                            </time>
-                        </i>
-                    </span>
-                    <a href="/2025/04/07/Introduction-to-Program-Analysis/">Introduction to Program Analysis</a>
-                </li>
-                
-                <li>
-                    <span>
-                        <i>
-                            <time>
-                                2025/04/07
-                            </time>
-                        </i>
-                    </span>
-                    <a href="/2025/04/07/hello-world/">Hello World</a>
-                </li>
-                
-    </ul>
-</main>
-        
-            <footer style="padding:25px 0;">
+
+<body>
+  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">Jiahao Peng</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+    <div class="content">
+      
+
+<!-- title -->
+<div class="page-header ">
+  <h1 class="archive-title-tag title ">lecture note</h1>
+</div>
+
+<div class="row page">
+  <!-- cols -->
+  
+  <div class="col-md-9">
+	
+
+	  <div id="top_search"></div>
+
+      
+         <!-- display as entry -->
+	     <div class="mypage">
+	       
+		     
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2025-04-07 </div>
+			<div class="article-title"><a href="/2025/04/07/Introduction-to-Program-Analysis/" >Introduction to Program Analysis</a></div>
+		</h3>
+	
+
+
+		     
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="01-What-Is-Program-Analysis"><a href="#01-What-Is-Program-Analysis" class="headerlink" title="01 What Is Program Analysis"></a>01 What Is Program Analysis</h2><p>Program analysis is to discover useful facts about programs. You probably have known some manual or automated testing tools like:</p>
+<ul>
+<li><p>Manual testing or semi-automated testing: JUnit, Selenium, etc.</p>
+</li>
+<li><p>Manual “analysis” of programs: Code inspection, debugging, etc.</p>
+</li>
+</ul>
+<p>The focus of this course is <strong>automated</strong> program analysis.</p>
+<p>Program analysis can be broadly classified into three kinds:</p>
+<ul>
+<li><p>Static (compile-time)</p>
+<ul>
+<li>Infer facts by inspecting source or binary code</li>
+<li>Typically:<ul>
+<li>Consider all inputs</li>
+<li>Overapproximate possible behavior</li>
+</ul>
+</li>
+<li>E.g. compilers, lint-like tools</li>
+</ul>
+</li>
+<li><p>Dynamic (execution-time)</p>
+<ul>
+<li>Infer facts by monitoring program executions</li>
+<li>Typically:<ul>
+<li>Consider current input</li>
+<li>Underapproximate possible behavior</li>
+</ul>
+</li>
+<li>E.g. automated testing tools, profilers</li>
+</ul>
+</li>
+<li><p>Hybrid (combining dynamic and static)</p>
+</li>
+</ul>
+<h2 id="02-Terminology"><a href="#02-Terminology" class="headerlink" title="02 Terminology"></a>02 Terminology</h2><p>The following is a snippet of JavaScript code.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> r = <span class="title class_">Math</span>.<span class="title function_">random</span>();	<span class="comment">//value in [0,1)</span></span><br><span class="line"><span class="keyword">var</span> out = <span class="string">&quot;yes&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(r &lt; <span class="number">0.5</span>)</span><br><span class="line">	out = <span class="string">&quot;no&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(r == <span class="number">1</span>)</span><br><span class="line">	out = <span class="string">&quot;maybe&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(out);</span><br></pre></td></tr></table></figure>
+
+<p>Q: What are the possible outputs?</p>
+<h3 id="2-1-Overapproximation-v-s-Underapproximation"><a href="#2-1-Overapproximation-v-s-Underapproximation" class="headerlink" title="2.1 Overapproximation v.s. Underapproximation"></a>2.1 Overapproximation v.s. Underapproximation</h3><p>Judging from the static code, it seems that there are three possible outputs: “yes”, “no” or “maybe”. (Overapproximation)</p>
+<p>If we consider the case of only one execution like <code>r=0.7</code>, its output is “yes”. (Underapproximation)</p>
+<p>However, both responses are erroneous. The first option yields the implausible output “maybe”, while the second excludes the feasible output “no”. These erroneous responses serve as quintessential illustrations of over- and under-approximation, respectively.</p>
+<ul>
+<li>Overapproximation: Consider all paths</li>
+<li>Underapproximation: Execute the program once</li>
+</ul>
+<h3 id="2-2-Soundness-Completeness"><a href="#2-2-Soundness-Completeness" class="headerlink" title="2.2 Soundness &amp; Completeness"></a>2.2 Soundness &amp; Completeness</h3><p>It is easy for us humans to give the right answer —— “yes” or “no”. We think these answers are <strong>sound</strong> and <strong>complete</strong>.</p>
+<p>“Soundness” means it contains all the possible outputs we want (might give <strong>false positives</strong>).</p>
+<p>“Completeness” means it excludes all the impossible outputs we do not want (might give <strong>false negtives</strong>).</p>
+<p>When we put these two ideas together, we get a definition that includes exactly all possible outputs.</p>
+<h3 id="2-3-False-Positives-False-Negatives"><a href="#2-3-False-Positives-False-Negatives" class="headerlink" title="2.3 False Positives &amp; False Negatives"></a>2.3 False Positives &amp; False Negatives</h3><p>The definitions of false positives and false negatives:</p>
+<ul>
+<li>False positives: impossible outputs that are indicated possible</li>
+<li>False negatives: possible outputs that are indicated impossible</li>
+</ul>
+<p>Let $P$ be <em>Program</em>, $i$ be <em>Input</em>, $P(i)$ be <em>Behavior</em>. The following graph shows the relations between the above ideas.</p>
+<img src="01.png" style="zoom:33%;" />
+
+<h3 id="2-4-Precision-Recall"><a href="#2-4-Precision-Recall" class="headerlink" title="2.4 Precision &amp; Recall"></a>2.4 Precision &amp; Recall</h3><p>Differentiate precision and recall:</p>
+<ul>
+<li><p>Precision: how many retrieved items are relevant</p>
+</li>
+<li><p>Recall: how many relevant items are retrieved</p>
+</li>
+</ul>
+<p>Take the overapproximated answer aforementioned for instance, the precision and the recall are:<br>$$<br>\begin{aligned}<br>&amp;\mathrm{precision}&#x3D;\frac{2}{3}&#x3D;0.67\<br>&amp;\mathrm{recall}&#x3D;\frac{1}{2}&#x3D;0.5\<br>\end{aligned}<br>$$</p>
+<h3 id="2-5-Program-Invariants"><a href="#2-5-Program-Invariants" class="headerlink" title="2.5 Program Invariants"></a>2.5 Program Invariants</h3><p>Program Invariants are logical assertions whose certain conditions or properties remain true throughout the execution of a program. These invariants are key to program correctness. They help verify that the program behaves as expected and play an important role in software development.</p>
+<p>See the below code snippet:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">    <span class="keyword">if</span> (getc() == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">    	z = p(<span class="number">6</span>) + <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	z = p(<span class="number">-7</span>) - <span class="number">7</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Q: An invariant at the end of the program is <code>(z == c)</code> for some constant <code>c</code>. What is <code>c</code>?</p>
+<p>Clearly, the <code>z</code> will yield <code>42</code> regardless of any inputs. Therefore, <code>(z == 42)</code> is definitely an invariant, while <code>(z == 30)</code> is definitely not an invariant.</p>
+<p>Using the invariant to avert disaster:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">    <span class="keyword">if</span> (getc() == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">    	z = p(<span class="number">6</span>) + <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	z = p(<span class="number">-7</span>) - <span class="number">7</span>;</span><br><span class="line">    <span class="keyword">if</span> (z != <span class="number">42</span>) &#123;</span><br><span class="line">        disaster();	<span class="comment">// disaster averted</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="03-Others"><a href="#03-Others" class="headerlink" title="03 Others"></a>03 Others</h2><h3 id="3-1-Undecidability-of-Program-Properties"><a href="#3-1-Undecidability-of-Program-Properties" class="headerlink" title="3.1 Undecidability of Program Properties"></a>3.1 Undecidability of Program Properties</h3><ul>
+<li>Q: Can program analysis be sound and complete? A: Not if we want it to terminate!</li>
+<li>Questions like “is a program point reachable on some input?” are <strong>undecidable</strong>.</li>
+<li>Designing a program analysis is an art —— tradeoffs dictated by consumer.</li>
+</ul>
+<h3 id="3-2-Why-Take-This-Course"><a href="#3-2-Why-Take-This-Course" class="headerlink" title="3.2 Why Take This Course?"></a>3.2 Why Take This Course?</h3><ul>
+<li><p>Learn methods to improve software quality, reliability, security, performance, etc.</p>
+</li>
+<li><p>Become a better software developer&#x2F;tester</p>
+</li>
+<li><p>Build specialized tools for software analysis, testing and verification</p>
+</li>
+<li><p>Finding Jobs &amp; Do research</p>
+</li>
+</ul>
+<h3 id="3-3-Who-Needs-Program-Analysis"><a href="#3-3-Who-Needs-Program-Analysis" class="headerlink" title="3.3 Who Needs Program Analysis?"></a>3.3 Who Needs Program Analysis?</h3><p>Three primary consumers of program analysis:</p>
+<ul>
+<li>Compilers</li>
+<li><strong>Software Quality Tools (Primary focus of this course)</strong></li>
+<li>Integrated Development Environments (IDEs)</li>
+</ul>
+<h4 id="3-3-1-Compilers"><a href="#3-3-1-Compilers" class="headerlink" title="3.3.1 Compilers"></a>3.3.1 Compilers</h4><p>Program analysis serves as the bridge between high-level languages and architectures.</p>
+<p>For example, we use program analysis to generate efficient code.</p>
+<p>Before:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> arg)</span> &#123;</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">    <span class="keyword">if</span> (arg != <span class="number">0</span>)</span><br><span class="line">    	z = p(<span class="number">6</span>) + <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	z = p(<span class="number">-7</span>) - <span class="number">7</span>;</span><br><span class="line">    print (z);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>After:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">p</span><span class="params">(<span class="type">int</span> x)</span> &#123; <span class="keyword">return</span> x * x; &#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">	print (<span class="number">42</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-2-Software-Quality-Tools"><a href="#3-3-2-Software-Quality-Tools" class="headerlink" title="3.3.2 Software Quality Tools"></a>3.3.2 Software Quality Tools</h4><p>Software quality tools are tools for testing, debugging, and verification.</p>
+<p>Software quality tools use program analysis for:</p>
+<ul>
+<li>Finding programming errors</li>
+<li>Proving program invariants</li>
+<li>Generating test cases</li>
+<li>Localizing causes of errors</li>
+<li>…</li>
+</ul>
+<p>Some software quality tools:</p>
+<ul>
+<li>Static Program Analysis<ul>
+<li>Suspicious error patterns: <em>Lint</em>, <em>SpotBugs</em>, <em>Coverity</em></li>
+<li>Memory leak detection: <em>Facebook Infer</em></li>
+<li>Checking API usage rules: <em>Microsoft SLAM</em></li>
+<li>Verifying invariants: <em>ESC&#x2F;Java</em></li>
+</ul>
+</li>
+<li>Dynamic Program Analysis<ul>
+<li>Array bound checking: <em>Purify</em></li>
+<li>Datarace detection: <em>Eraser</em></li>
+<li>Memory leak detection: <em>Valgrind</em></li>
+<li>Finding likely invariants: <em>Daikon</em></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-3-3-Integrated-Development-Environments"><a href="#3-3-3-Integrated-Development-Environments" class="headerlink" title="3.3.3 Integrated Development Environments"></a>3.3.3 Integrated Development Environments</h4><p>Examples: <em>Eclipse</em> and <em>VS Code</em></p>
+<p>Use program analysis to help programmers:</p>
+<ul>
+<li>Understand programs</li>
+<li>Refactor programs<ul>
+<li>Restructuring a program without changing its behavior</li>
+</ul>
+</li>
+</ul>
+<p>Useful in dealing with large, complex programs</p>
+<h2 id="04-Quiz"><a href="#04-Quiz" class="headerlink" title="04 Quiz"></a>04 Quiz</h2><ol>
+<li>Dynamic vs. Static Analysis:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Dynamic</th>
+<th align="center">Static</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Cost</td>
+<td align="center"><u>Proportional to program’s execution time</u></td>
+<td align="center"><u>Proportional to program’s size</u></td>
+</tr>
+<tr>
+<td align="center">Effectiveness</td>
+<td align="center"><u>Unsound (may miss errors)</u></td>
+<td align="center"><u>Incomplete (may report spurious errors)</u></td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>Unsoundness yields <u>false negatives</u>; incompleteness yields <u>false positives</u>.</li>
+</ol>
+
+	
+	</div>
+  <a type="button" href="/2025/04/07/Introduction-to-Program-Analysis/#more" class="btn btn-default more">Read More</a>
+</div>
+
+	       
+	     </div>
+	     <div>
+	       <center>
+	         <div class="pagination">
+<ul class="pagination">
+	 
+</ul>
+</div>
+
+	       </center>
+	     </div>	
+      
+
+</div> <!-- col-md-9/col-md-12 -->
+
+
+<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+		
+			<div class="widget">
     
-        
-            
-            <span>
-                <a target="_blank" rel="noopener" href="https://www.examlpe.com/">示例网站</a>
-            </span>
-        
+	    <h4 class="dsq-widget-title">Recent Comments</h4>
+		<div id="recent-comments"></div>
+		<script type="text/javascript">
+		    getRecentCommentsList({
+			   type: "github" ? "github" : "github",
+			   user: "wzpan",
+               repo: "hexo-theme-freemind-blog",
+               client_id: "bf7d4ba11877db88543e",
+               client_secret: "bff8a6b06b745c0bfcdccbe225623ea8e2a057bb",
+			   count: "5" ? "5" : 5,
+			   recent_comments_target: "#recent-comments"
+			});
+		</script>
+	
+</div>
+
+		
+			
+		
+			
+	<div class="widget">
+		<h4>Tag Cloud</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/software-analysis/">software analysis<span>1</span></a></li>
+		
+		 
+		</ul>
+	</div>
+
+
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
     
-    <br/>
+      <li>
+        <a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" ><i class="fa fa-file-o"></i>A WSL Error Encountered Whe...</a>
+      </li>
     
-    <span>
-        &copy; 2025
-            Yojigen.Tech
-    </span>
+      <li>
+        <a href="/2025/04/07/Introduction-to-Program-Analysis/" ><i class="fa fa-file-o"></i>Introduction to Program Ana...</a>
+      </li>
     
-    <span>
-        Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
-    </span>
-    <span>
-        Theme <a target="_blank" rel="noopener" href="https://github.com/mouyase/hexo-theme-zen">Zen</a>
-    </span>
-</footer>
-        
-    </body>
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fa fa-github"></i><a href="https://github.com/wzpan/freemind/" title="Freemind's Github repository." target="_blank"]);">Freemind</a></li>
+	
+		<li><i class="fa fa-github"></i><a href="http://www.github.com/wzpan" title="My Github account." target="_blank"]);">My Github</a></li>
+	
+		<li><i class="fa fa-linkedin"></i><a href="http://www.linkedin.com/in/hahack" title="My Linkin account." target="_blank"]);">My LinkedIn</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+
+
+
+    </div>
+  </div>
+  <div class="container-narrow">
+    <footer> <p>
+  &copy; 2025 John Doe
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+<!-- syntax highlighting -->
+
+  <script>
+  marked.setOptions({
+    highlight: function (code, lang) {
+        return hljs.highlightAuto(code).value;
+    }
+  });
+  function Highlighting(){
+    var markdowns = document.getElementsByClassName('markdown');
+    for(var i=0;i<markdowns.length;i++){
+        if(markdowns[i].innerHTML) markdowns[i].innerHTML =marked(markdowns[i].innerHTML);
+    }
+  }
+  window.addEventListener('DOMContentLoaded', Highlighting, false);
+  window.addEventListener('load', Highlighting, false);
+  </script>
+
+
+</body>
 </html>

@@ -1,49 +1,132 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
-    <meta name="description" content="">
-    <link rel="shortcut icon" href="/favicon.jpg" type="image/x-icon" />
-    <title>
-        
-            Introduction to Program Analysis |
-        
-        Hexo
-    </title>
-    
-<link rel="stylesheet" href="/css/style.min.css">
+  <meta charset="utf-8">
+  
+  <title>Introduction to Program Analysis | Jiahao Peng</title>
+  <meta name="author" content="John Doe">
+  
+  <meta name="description" content="01 What Is Program AnalysisProgram analysis is to discover useful facts about programs. You probably have known some manual or automated testing tools">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    
-<link rel="stylesheet" href="/css/partial/atom-one-dark.min.css">
+  <meta property="og:title" content="Introduction to Program Analysis"/>
+  <meta property="og:site_name" content="Jiahao Peng"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Jiahao Peng" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/spacelab.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+  <![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  
+    <script src="/js/marked.js"></script>
+    <script src="/js/comment.js"></script>
+    <script src="/js/timeago.min.js"></script>
+    <script src="/js/highlight.min.js"></script>
+	<script src="/js/spin.min.js"></script>
+  
+  
+  <!-- analytics -->
+  
+
+
 
 <meta name="generator" content="Hexo 7.3.0"></head>
-    <body>
-        
-            <header>
-    <a class="title" href="/">
-        <h1>
-            Hexo
-        </h1>
-        
-    </a>
-    <nav>
-        <p>
-            <a href="/">首页</a><a href="/about.html">关于</a>
-        </p>
-    </nav>
-</header>
-        
-        <main>
-    
-    <h1>
-        Introduction to Program Analysis
-    </h1>
-    
-    <p>
-        <i><time>2025/04/07 21:58:30</time></i>
-    </p>
-    <h2 id="01-What-Is-Program-Analysis"><a href="#01-What-Is-Program-Analysis" class="headerlink" title="01 What Is Program Analysis"></a>01 What Is Program Analysis</h2><p>Program analysis is to discover useful facts about programs. You probably have known some manual or automated testing tools like:</p>
+
+<body>
+  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">Jiahao Peng</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+    <div class="content">
+      
+
+
+	
+		<div class="page-header ">		
+			<h1 class="title "> Introduction to Program Analysis</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="01-What-Is-Program-Analysis"><a href="#01-What-Is-Program-Analysis" class="headerlink" title="01 What Is Program Analysis"></a>01 What Is Program Analysis</h2><p>Program analysis is to discover useful facts about programs. You probably have known some manual or automated testing tools like:</p>
 <ul>
 <li><p>Manual testing or semi-automated testing: JUnit, Selenium, etc.</p>
 </li>
@@ -99,7 +182,7 @@
 <li>False negatives: possible outputs that are indicated impossible</li>
 </ul>
 <p>Let $P$ be <em>Program</em>, $i$ be <em>Input</em>, $P(i)$ be <em>Behavior</em>. The following graph shows the relations between the above ideas.</p>
-<img src="./D:/Workplace/ALab/Software Analysis, Testing and Verification/lectures/images/01.png" style="zoom:33%;" />
+<img src="01.png" style="zoom:33%;" />
 
 <h3 id="2-4-Precision-Recall"><a href="#2-4-Precision-Recall" class="headerlink" title="2.4 Precision &amp; Recall"></a>2.4 Precision &amp; Recall</h3><p>Differentiate precision and recall:</p>
 <ul>
@@ -208,61 +291,198 @@
 <ol start="2">
 <li>Unsoundness yields <u>false negatives</u>; incompleteness yields <u>false positives</u>.</li>
 </ol>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+		<li class="prev"><a href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+          <li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+
+        
 
     
-        <hr/>
-<div id="twikoo"></div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+    	 
+	 <div id="comment-thread"></div>
+	 <div id="loading-spin"></div>
+	 <script type="text/javascript">
+	   getComments({
+           type: "github" ? "github" : "github",       
+	       user: "wzpan",
+	       repo: "hexo-theme-freemind-blog",
+		   client_id: "bf7d4ba11877db88543e",
+           client_secret: "bff8a6b06b745c0bfcdccbe225623ea8e2a057bb",
+		   no_comment: "No comments yet. Press the button and go to comment now!",
+		   go_to_comment: "Go to comment",
+		   no_issue: "no_issue",
+		   issue_title: "Introduction to Program Analysis",
+		   issue_id: "",
+		   btn_class: "btn btn-primary",
+		   comments_target: "#comment-thread",
+		   loading_target: "#loading_spin"
+		   });
+	 </script>
+  
+</section>
 
-<script src="/js/twikoo.all.min.js"></script>
 
-<script>
-    twikoo.init({
-        envId: '您的环境id',
-        el: '#twikoo',
-        region: 'ap-guangzhou',
-        lang: 'zh-CN',
-    })
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-04-07 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/lecture-note/">lecture note<span>1</span></a></li> <li><a href="/tags/software-analysis/">software analysis<span>1</span></a></li>
+
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#01-What-Is-Program-Analysis"><span class="toc-article-text">01 What Is Program Analysis</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#02-Terminology"><span class="toc-article-text">02 Terminology</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-1-Overapproximation-v-s-Underapproximation"><span class="toc-article-text">2.1 Overapproximation v.s. Underapproximation</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-2-Soundness-Completeness"><span class="toc-article-text">2.2 Soundness &amp; Completeness</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-3-False-Positives-False-Negatives"><span class="toc-article-text">2.3 False Positives &amp; False Negatives</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-4-Precision-Recall"><span class="toc-article-text">2.4 Precision &amp; Recall</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-5-Program-Invariants"><span class="toc-article-text">2.5 Program Invariants</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#03-Others"><span class="toc-article-text">03 Others</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-Undecidability-of-Program-Properties"><span class="toc-article-text">3.1 Undecidability of Program Properties</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-2-Why-Take-This-Course"><span class="toc-article-text">3.2 Why Take This Course?</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-3-Who-Needs-Program-Analysis"><span class="toc-article-text">3.3 Who Needs Program Analysis?</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-3-1-Compilers"><span class="toc-article-text">3.3.1 Compilers</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-3-2-Software-Quality-Tools"><span class="toc-article-text">3.3.2 Software Quality Tools</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-3-3-Integrated-Development-Environments"><span class="toc-article-text">3.3.3 Integrated Development Environments</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#04-Quiz"><span class="toc-article-text">04 Quiz</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+
+    </div>
+  </div>
+  <div class="container-narrow">
+    <footer> <p>
+  &copy; 2025 John Doe
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
-    
-    
-        <hr/>
-<script src="https://beaudar.lipk.org/client.js"
-        repo="mouyase/Yojigen.Tech"
-        branch="main"
-        issue-term="url"
-        issue-label="url"
-        label="Beaudar"
-        theme="github-light"
-        crossorigin="anonymous"
-        input-position="top"
-        async>
-</script>
-    
-</main>
-        
-            <footer style="padding:25px 0;">
-    
-        
-            
-            <span>
-                <a target="_blank" rel="noopener" href="https://www.examlpe.com/">示例网站</a>
-            </span>
-        
-    
-    <br/>
-    
-    <span>
-        &copy; 2025
-            Yojigen.Tech
-    </span>
-    
-    <span>
-        Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
-    </span>
-    <span>
-        Theme <a target="_blank" rel="noopener" href="https://github.com/mouyase/hexo-theme-zen">Zen</a>
-    </span>
-</footer>
-        
-    </body>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+<!-- syntax highlighting -->
+
+  <script>
+  marked.setOptions({
+    highlight: function (code, lang) {
+        return hljs.highlightAuto(code).value;
+    }
+  });
+  function Highlighting(){
+    var markdowns = document.getElementsByClassName('markdown');
+    for(var i=0;i<markdowns.length;i++){
+        if(markdowns[i].innerHTML) markdowns[i].innerHTML =marked(markdowns[i].innerHTML);
+    }
+  }
+  window.addEventListener('DOMContentLoaded', Highlighting, false);
+  window.addEventListener('load', Highlighting, false);
+  </script>
+
+
+</body>
 </html>
