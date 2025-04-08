@@ -7,7 +7,13 @@
   <meta name="author" content="me">
   
   <meta name="description" content="1 归结推理反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。
-定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当">
+定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当 $(P_1\land P_2\land …\land P_n)\land\neg Q$ 是不可满足的。
+归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：
+
+欲证明 $P⇒Q$
+化为反命题 $P\land¬Q$
+化成子句集
+证明子句集不可满足(鲁滨逊归结原理)">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -130,6 +136,7 @@
 <li>化成子句集</li>
 <li>证明子句集不可满足(鲁滨逊归结原理)</li>
 </ol>
+<span id="more"></span>
 <h2 id="2-子句集"><a href="#2-子句集" class="headerlink" title="2 子句集"></a>2 子句集</h2><p>什么是子句？如何将谓词公式化为子句集？</p>
 <p>我们称一个不能再分割的命题为<strong>原子谓词公式</strong>，将原子谓词公式及其否定形式称为<strong>文字</strong>，而<strong>子句</strong>就是任何文字的<u>析取式</u>，任何文字本身也是子句。<strong>空子句</strong>是一个不包含任何文字的子句，它永远为假，不可满足，通常表示为 $NIL$，虽然听上去没什么用，但它却是归结推理中最重要的子句，之后你会知道为什么。以上就是子句的概念，而子句集就是由子句构成的集合。</p>
 <p>以下面这道题为例讲解如何将一个谓词公式化为子句集：</p>

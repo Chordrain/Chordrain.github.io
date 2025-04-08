@@ -6,7 +6,7 @@
   <title>支持向量机 | Jiahao Peng</title>
   <meta name="author" content="me">
   
-  <meta name="description" content="支持向量机（support vector machines, SVM）是一种二分类模型，它的基本模型是定义在特征空间上的间隔最大的线性分类器，间隔最大使它有别于感知机；SVM还包括核技巧，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正">
+  <meta name="description" content="支持向量机（support vector machines, SVM）是一种二分类模型，它的基本模型是定义在特征空间上的间隔最大的线性分类器，间隔最大使它有别于感知机；SVM还包括核技巧，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -121,6 +121,7 @@
 	  		
 
 	  <p><strong>支持向量机（support vector machines, SVM）</strong>是一种二分类模型，它的基本模型是定义在特征空间上的<strong>间隔最大的线性分类器</strong>，间隔最大使它有别于感知机；SVM还包括<strong>核技巧</strong>，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。</p>
+<span id="more"></span>
 <h2 id="01-线性模型"><a href="#01-线性模型" class="headerlink" title="01 线性模型"></a>01 线性模型</h2><h3 id="1-1-算法思路"><a href="#1-1-算法思路" class="headerlink" title="1.1 算法思路"></a>1.1 算法思路</h3><p>假设训练样本在空间中的分布如下左图分布，圆圈和星星分别代表两类不同类别的数据，那么我们能找出一条直线，将两者分割开，我们就称这样的训练样本集为一个<strong>线性可分（Linear Separable）样本集</strong>，这样的模型就被称为<strong>线性模型</strong>；同理，倘若我们找不到这样一条直线，将两者完全分离开，如下右图所示，则称这样的训练样本集为一个<strong>线性不可分（Non-Linear Separable）样本集</strong>，这样的模型就被称为<strong>非线性模型</strong>。</p>
 <p><img src="/img/支持向量机-01.png" alt=""></p>
 <p><strong>支持向量机</strong>算法的思路大致是这样的：首先讨论如何在线性可分的训练样本集上找一条直线将样本分开，然后想办法将这样的方法推广到线性不可分的训练样本集上。所以，我们首先讨论第一部分：如何找到一条直线将线性可分训练样本集分开。</p>
@@ -134,11 +135,11 @@
 <h3 id="1-2-数学描述"><a href="#1-2-数学描述" class="headerlink" title="1.2 数学描述"></a>1.2 数学描述</h3><p>既然性能指标已经确定了，下一个问题就是如何描述这个优化过程了。在描述优化过程之前，我们还是先得给出一些定义，首先，我们将上面的 $d$ 称为<strong>间隔（Margin）</strong>，将虚线穿过的向量称为<strong>支持向量（Support Vectors）</strong>。通过上面对支持向量机算法的简单描述，我们可以发现，支持向量机找到的最优直线，只与支持向量有关，与其他向量无关，这就是为什么支持向量机也能用在小样本的数据上。</p>
 <p>先给出线性模型的数学描述：</p>
 <ol>
-<li><p>定义训练数据及标签为 $(X_1,y_1)、(X_2,y_2)…(X_n,y_n)$，其中，$X$ 是样本的特征，在上面给出的例子里，每个样本的特征是二维的，也就是说 $X=\left[ \begin{array}{} x_1 \\ x_2 \end{array}\right]$ ，分别对应 x 轴和 y 轴；而 $y$ 是标签，在上面这个二分类问题里，标签只有两种，所以 $y\in\{-1,1\}$。</p>
+<li><p>定义训练数据及标签为 $(X_1,y_1)、(X_2,y_2)…(X_n,y_n)$，其中，$X$ 是样本的特征，在上面给出的例子里，每个样本的特征是二维的，也就是说 $X=\left[ \begin{array}{} x_1 \ x_2 \end{array}\right]$ ，分别对应 x 轴和 y 轴；而 $y$ 是标签，在上面这个二分类问题里，标签只有两种，所以 $y\in{-1,1}$。</p>
 </li>
 <li><p>我们定义一个线性模型为 $(W,b)$，其中 $W$ 是一个向量，其维数与特征向量 $X$ 一致，$b$ 是一个常数，一个线性模型确定一个<strong>超平面（Hyperplane）</strong>，所谓超平面就是指划分空间的平面，超平面在二维空间里表现为我们上面所说的那条划分样本点的直线，而在更高的维度里就是一个平面，故称之为超平面。超平面由 $W$ 和 $b$ 确定，其方程为 $W^TX+b=0$。机器学习的目标，就是通过所有样本的特征 $X$ 来找到一个 $W$ 和 $b$，使能够确定一个超平面能划分所有的样本点。</p>
 </li>
-<li><p>一个训练集线性可分是指：对于 $\{(X<em>i,y_i)\}</em>{i=1\sim N}$，$\exist(W,b)$，使 $\forall i=1\sim N$，有：</p>
+<li><p>一个训练集线性可分是指：对于 ${(X<em>i,y_i)}</em>{i=1\sim N}$，$\exist(W,b)$，使 $\forall i=1\sim N$，有：</p>
 <ol>
 <li>若 $y_i=+1$，则 $W^TX_i+b\ge0$；</li>
 <li>若 $y_i=-1$，则 $W^TX_i+b\lt0$。</li>
@@ -246,7 +247,7 @@ K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,
 </ol>
 <p><u>将其转换为对偶问题</u>：</p>
 <ol>
-<li><p>目标：最大化 $\theta(\alpha,\beta)=\underset{(w,\xi<em>i,b)}{\inf}\{\frac12||W||^2-C\sum</em>{i=1}^N\xi<em>i+\sum</em>{i=1}^{N}\alpha<em>i(1+\xi_i-y_i[W^T\phi(X_i)+b])+\sum</em>{i=1}^N\beta_i\xi_i\}$</p>
+<li><p>目标：最大化 $\theta(\alpha,\beta)=\underset{(w,\xi<em>i,b)}{\inf}{\frac12||W||^2-C\sum</em>{i=1}^N\xi<em>i+\sum</em>{i=1}^{N}\alpha<em>i(1+\xi_i-y_i[W^T\phi(X_i)+b])+\sum</em>{i=1}^N\beta_i\xi_i}$</p>
 </li>
 <li><p>限制条件：</p>
 <ol>
@@ -316,9 +317,9 @@ W^T\phi(X)+b&=\sum_{i=1}^N[\alpha_iy_i\phi(X_i)]^T\phi(X)+b\\
 &b=\frac{1-y_iW^T\phi(X_i)}{y_i}\\
 &\Downarrow\text{to substitute }W^T\phi(X)=\sum_{i=1}^N\alpha_iy_iK(X_i,X)\text{ into it}\\
 &b=\frac{1-y_i\sum_{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}
-\end{aligned}</script><p>于是，就连 $b$ 我们也知道了。在现实中，我们一般会遍历所有 $\alpha_i\notin\{0,C\}$（在上面的讨论中我们只取了一个 $\alpha$），然后计算 $b$，最后取 $b$ 的平均值，这样能使结果更加精确。</p>
+\end{aligned}</script><p>于是，就连 $b$ 我们也知道了。在现实中，我们一般会遍历所有 $\alpha_i\notin{0,C}$（在上面的讨论中我们只取了一个 $\alpha$），然后计算 $b$，最后取 $b$ 的平均值，这样能使结果更加精确。</p>
 <h3 id="2-5-算法流程总结"><a href="#2-5-算法流程总结" class="headerlink" title="2.5 算法流程总结"></a>2.5 算法流程总结</h3><h4 id="训练流程"><a href="#训练流程" class="headerlink" title="训练流程"></a>训练流程</h4><ol>
-<li>输入：$\{(X_i,y_i)\}\quad i=1\sim N$</li>
+<li>输入：${(X_i,y_i)}\quad i=1\sim N$</li>
 <li>求解优化问题（SMO 算法）：<ol>
 <li>最大化 $\theta(\alpha)=\sum<em>{i=1}^{N}\alpha_i-\frac12\sum</em>{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)$</li>
 <li>限制条件：<ol>
@@ -359,10 +360,10 @@ L(\omega,\alpha,\beta)&=f(\omega)+\sum_{i=1}^{K}\alpha_ig_i(\omega)+\sum_{i=1}^M
 &=f(\omega)+\alpha^Tg(\omega)+\beta^Th(\omega)\quad&②
 \end{aligned}</script><p>上式中，$\alpha$ 和 $\beta$ 是两个和 $\omega$ 维数一样的向量，并且分别乘上了不等式的限制条件和等式的限制条件。式 ① 是该式的代数形式，式 ② 是该式的矩阵形式。有了这个函数，我们就可以给出对偶问题的定义了：</p>
 <ol>
-<li>目标：最大化 $\theta(\alpha,\beta)=\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$</li>
+<li>目标：最大化 $\theta(\alpha,\beta)=\underset{\omega}{\inf}{L(\omega,\alpha,\beta)}$</li>
 <li>限制条件：$\alpha_i\ge0\quad(i=1\sim K)$</li>
 </ol>
-<p>解释一下这里的目标函数，$\inf$ 就是求最小值的意思，下面的 $\omega$ 是指，遍历所有每个 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ ，所以 $\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$ 就是指，求所有 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ 中，$L(\omega,\alpha,\beta)$ 最小的取值。而通过 $\theta(\alpha,\beta)$ 可以看出，$\alpha$ 和 $\beta$ 是固定的，也就是说，我们每确定一组 $\alpha$ 和 $\beta$，就去求一次 $L(\omega,\alpha,\beta)$ 的最小值，所以 $\theta$ 是只和 $\alpha$ 和 $\beta$ 有关的函数。而我们的目标又是最大化 $\theta(\alpha,\beta)$，所以，实质上我们就是要使 $L(\omega,\alpha,\beta)$ 的最小值最大化。而对偶问题的限制条件很简单，只要求每个 $\alpha_i$ 大于 0 即可。</p>
+<p>解释一下这里的目标函数，$\inf$ 就是求最小值的意思，下面的 $\omega$ 是指，遍历所有每个 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ ，所以 $\underset{\omega}{\inf}{L(\omega,\alpha,\beta)}$ 就是指，求所有 $\omega$ 对应的 $L(\omega,\alpha,\beta)$ 中，$L(\omega,\alpha,\beta)$ 最小的取值。而通过 $\theta(\alpha,\beta)$ 可以看出，$\alpha$ 和 $\beta$ 是固定的，也就是说，我们每确定一组 $\alpha$ 和 $\beta$，就去求一次 $L(\omega,\alpha,\beta)$ 的最小值，所以 $\theta$ 是只和 $\alpha$ 和 $\beta$ 有关的函数。而我们的目标又是最大化 $\theta(\alpha,\beta)$，所以，实质上我们就是要使 $L(\omega,\alpha,\beta)$ 的最小值最大化。而对偶问题的限制条件很简单，只要求每个 $\alpha_i$ 大于 0 即可。</p>
 <p>接下来我们就来介绍一下原问题和对偶问题的关系，有一条定理是这样的：</p>
 <blockquote>
 <p>如果 $\omega^<em>$ 是原问题的解，而 $\alpha^</em>$ 和 $\beta^<em>$ 是对偶问题的解，则有 $f(\omega^</em>)\ge\theta(\alpha^<em>,\beta^</em>)$。</p>
@@ -381,7 +382,7 @@ G=f(\omega^*)-\theta(\alpha^*,\beta^*)\ge0</script><p>$G$ 叫做原问题与对�
 <blockquote>
 <p>若 $f(\omega)$ 为凸函数，且 $g(\omega)=A\omega+b$（线性函数），$h(\omega)=CW+d$（一组线性函数），则此优化问题的原问题和对偶问题的间距是 0，即 $f(\omega^<em>)=\theta(\alpha^</em>,\beta^*)$。</p>
 </blockquote>
-<p>问题是，强对偶定理的前提成立意味着什么？假设现在原问题和对偶问题满足强对偶定理，即 $f(\omega^<em>)=\theta(\alpha^</em>,\beta^<em>)$ 成立，那么就有 $f(\omega^</em>)=\theta(\alpha^<em>,\beta^</em>)=\underset{\omega}{\inf}\{L(\omega,\alpha^<em>,\beta^</em>\}$，也就是说，<u>原问题的解 $\omega^<em>$，刚刚就是对偶问题在 $\alpha^</em>$ 和 $\beta^*$ 确定时，取到最小值的那个点</u>。</p>
+<p>问题是，强对偶定理的前提成立意味着什么？假设现在原问题和对偶问题满足强对偶定理，即 $f(\omega^<em>)=\theta(\alpha^</em>,\beta^<em>)$ 成立，那么就有 $f(\omega^</em>)=\theta(\alpha^<em>,\beta^</em>)=\underset{\omega}{\inf}{L(\omega,\alpha^<em>,\beta^</em>}$，也就是说，<u>原问题的解 $\omega^<em>$，刚刚就是对偶问题在 $\alpha^</em>$ 和 $\beta^*$ 确定时，取到最小值的那个点</u>。</p>
 <p>更加精妙的是，当 $G=0$ 成立时，$\sum<em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)+\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)=0$，其中，$\sum</em>{i=1}^M\beta<em>i^<em>h_i(\omega^</em>)$ 等于 0 不用再说了，但 $\sum</em>{i=1}^{K}\alpha_i^<em>g_i(\omega^</em>)=0$ 意味着，<u>$\forall i=1\sim K$，要么 $\alpha_i^<em>=0$，要么 $g_i(\omega^</em>)=0$</u>。这个条件叫做 <strong>KKT 条件</strong>。</p>
 	  
 	</div>

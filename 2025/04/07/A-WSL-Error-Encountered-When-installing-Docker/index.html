@@ -6,7 +6,8 @@
   <title>A WSL Error Encountered When Installing Docker | Jiahao Peng</title>
   <meta name="author" content="me">
   
-  <meta name="description" content="This document explains the problems the author had installing Docker and how to solve them. You can find and download the installation package for Doc">
+  <meta name="description" content="This document explains the problems the author had installing Docker and how to solve them. You can find and download the installation package for Docker here.
+After installing Docker, an Unexpected WSL error was encountered, and the process was terminated. After conducting some online research, I discovered that this error message was indicating that I needed to enable the Hyper-V, Windows Subsystem for Linux and Virtual Machine Platform functions on my system. I opened the configuration panel and found that the latter two functions had been properly enabled, but the option for the first one was missing. It took me a some time to find the solution.">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -122,6 +123,7 @@
 
 	  <p>This document explains the problems the author had installing Docker and how to solve them. You can find and download the installation package for Docker <a target="_blank" rel="noopener" href="https://www.docker.com/">here</a>.</p>
 <p>After installing Docker, an <code>Unexpected WSL error</code> was encountered, and the process was terminated. After conducting some online research, I discovered that this error message was indicating that I needed to enable the <strong>Hyper-V</strong>, <strong>Windows Subsystem for Linux</strong> and <strong>Virtual Machine Platform</strong> functions on my system. I opened the configuration panel and found that the latter two functions had been properly enabled, but the option for the first one was missing. It took me a some time to find the solution.</p>
+<span id="more"></span>
 <p>To address the issue, it was necessary to create and run a file named <code>Hyper-V.bat</code> as administrator, which contains the following content:</p>
 <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pushd</span> &quot;%~dp0&quot;</span><br><span class="line"><span class="built_in">dir</span> /b <span class="variable">%SystemRoot%</span>\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt</span><br><span class="line"><span class="keyword">for</span> /f <span class="variable">%%i</span> <span class="keyword">in</span> (&#x27;<span class="built_in">findstr</span> /i . hyper-v.txt <span class="number">2</span>^&gt;<span class="built_in">nul</span>&#x27;) <span class="keyword">do</span> dism /online /norestart /add-package:&quot;<span class="variable">%SystemRoot%</span>\servicing\Packages\<span class="variable">%%i</span>&quot;</span><br><span class="line"><span class="built_in">del</span> hyper-v.txt</span><br><span class="line">Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL</span><br></pre></td></tr></table></figure>
 <p>The program will then require you to restart your machine, at which point you will see that Hyper-V is properly enabled. But Docker still cannot run normally.</p>
