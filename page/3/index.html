@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>AI | Jiahao Peng</title>
+  <title>Page 3 | Jiahao Peng</title>
   <meta name="author" content="me">
   
   
@@ -93,121 +93,136 @@
 
   <div class="container">
     <div class="content">
-      
-
-<!-- title -->
-<div class="page-header page-header-inverse ">
-  <h1 class="archive-title-category title title-inverse ">AI</h1>
+      <div class="page-header page-header-inverse ">
+  <h1 class="title title-inverse ">Hello &amp; Welcome!</h1>
 </div>
 
 <div class="row page">
-  <!-- cols -->
-  
-  <div class="col-md-9">
+
+	
+	<div class="col-md-9">
 	
 
-	  <div id="top_search"></div>
+		
+<div class="slogan">
+      Hello and welcome! This is my blog for restoring my lecture notes and other weird thoughts. English &amp; 中文 are both used on this site (sorry about the &#34;language shock&#34;). Hope you find something useful here.
+</div>
 
-      
-         <!-- display as entry -->
-	     <div class="mypage">
-	       
-		     
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+        <!-- render top articles firstly -->
+        
+        <!-- render other articles -->
+        
+           
+			  
 	
 	<!-- display as entry -->	
 		<h3 class="title">
-			<div class="date"> 2023-12-06 </div>
-			<div class="article-title"><a href="/2023/12/06/A-star%E6%90%9C%E7%B4%A2/" >A-star搜索</a></div>
+			<div class="date"> 2022-07-21 </div>
+			<div class="article-title"><a href="/2022/07/21/Linear-Regression-with-Multiple-Variables/" >Linear Regression with Multiple Variables</a></div>
 		</h3>
 	
 
 
-		     
+			  
 <div class="entry">
 
   <div class="row">
 	
 	
-		<h2 id="启发式搜索">01 启发式搜索</h2>
-<p>能有助于简化搜索过程的信息称为启发信息，利用启发信息的搜索过程称为启发式搜索。</p>
-<p>求解问题中能利用的大多是非完备的启发信息，所谓非完备就是指，信息也许对搜索有正面影响的，但是我们无法得知它是否总能提供正面影响，不知道它是否会造成负面影响。就例如极值点导数为
-0，这是一条完备的信息，因为它可被证明总是成立。造成这种结果的原因如下：</p>
-<ol type="1">
-<li>求解问题系统不可能知道与实际问题有关的全部信息，因而无法知道该问题的全部状态空间，也不可能用一套算法来求解所以问题；</li>
-<li>有些问题在理论上虽然存在着求解算法，但是在工程实践中，这些算法不是效率太低，就是根本无法实现(就比如宽度优先搜索，它总能找到最优解，但是无法实现)。</li>
-</ol>
-<p>启发式搜索在搜索过程中根据启发信息评估各个节点的重要性，优先搜索重要的节点。<strong>估价函数</strong>的任务就是估计待搜索节点“有希望”的程度。估价函数
-<span class="math inline"><em>f</em><sub><em>n</em></sub></span>
-表示从初始节点经过 <span class="math inline"><em>n</em></span>
-节点到达目的节点的路径的最小代价估计值，其一般形式为： <span
-class="math display"><em>f</em>(<em>n</em>) = <em>g</em>(<em>n</em>) + <em>h</em>(<em>n</em>)</span>
+		<h2 id="multiple-features">01 Multiple Features</h2>
+<h3 id="intro">1.1 Intro</h3>
+<p>In the previous sections, we’ve talked about linear regression with
+one variate. What if we got more variates?</p>
+<p>Multiple variates mean we will have multiple features. In the
+previous section, we only have one feature and that is the size of the
+house. Now we let’s discuss the multi-feature situation.</p>
 	
 	</div>
-  <a type="button" href="/2023/12/06/A-star%E6%90%9C%E7%B4%A2/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2022/07/21/Linear-Regression-with-Multiple-Variables/#more" class="btn btn-default more">Read More</a>
 </div>
 
-	       
-		     
+           
+		
+           
+			  
 	
 	<!-- display as entry -->	
 		<h3 class="title">
-			<div class="date"> 2023-12-06 </div>
-			<div class="article-title"><a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" >鲁滨逊归结原理</a></div>
+			<div class="date"> 2022-07-21 </div>
+			<div class="article-title"><a href="/2022/07/21/Introduction-to-Machine-Learning/" title="本篇笔记是大一时入门机器学习所写，听的是吴恩达的机器学习入门课程。由于课程是英文课程，所以笔记也是英文的。现在看来当时的写作水平十分生涩。">Introduction to Machine Learning</a></div>
 		</h3>
 	
 
 
-		     
+			  
 <div class="entry">
 
   <div class="row">
 	
 	
-		<h2 id="归结推理">1 归结推理</h2>
-<p>反证法：<span
-class="math inline"><em>P</em> ⇒ <em>Q</em></span>，当且仅当 <span
-class="math inline"><em>P</em> ∧ ¬<em>Q</em> ⇔ <em>F</em></span>，即
-<span class="math inline"><em>Q</em></span> 为 <span
-class="math inline"><em>P</em></span> 的逻辑结论，当且仅当 <span
-class="math inline"><em>P</em> ∧ ¬<em>Q</em></span> 是不可满足的。</p>
-<p>定理：<span class="math inline"><em>Q</em></span> 为 <span
-class="math inline"><em>P</em><sub>1</sub></span>，<span
-class="math inline"><em>P</em><sub>2</sub></span>，……，<span
-class="math inline"><em>P</em><sub><em>n</em></sub></span>
-的逻辑结论，当且仅当 <span
-class="math inline">(<em>P</em><sub>1</sub>∧<em>P</em><sub>2</sub>∧…∧<em>P</em><sub><em>n</em></sub>) ∧ ¬<em>Q</em></span>
-是不可满足的。</p>
-<p>归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：</p>
-<ol type="1">
-<li>欲证明 <span class="math inline"><em>P</em> ⇒ <em>Q</em></span></li>
-<li>化为反命题 <span
-class="math inline"><em>P</em> ∧ ¬<em>Q</em></span></li>
-<li>化成子句集</li>
-<li>证明子句集不可满足(鲁滨逊归结原理)</li>
-</ol>
+		<h2 id="definition">01 Definition</h2>
+<ul>
+<li>Machine Learning: Field of study that gives computers the ability to
+learn without being explicitly programmed. — Arthur Samuel</li>
+<li>Well-posed Learning Problem: <span
+class="math inline"><em>A</em></span> compouter program is said to learn
+from experience <span class="math inline"><em>E</em></span> with respect
+to some task <span class="math inline"><em>T</em></span> and some
+performance measure <span class="math inline"><em>P</em></span>, if its
+performance on <span class="math inline"><em>T</em></span>, as measured
+by <span class="math inline"><em>P</em></span>, imporoves with
+experience <span class="math inline"><em>E</em></span>. — Tom
+Mitchell</li>
+<li>Machine Learning algorithms:
+<ul>
+<li>Supervised learning</li>
+<li>Unsupervised learning</li>
+<li>Others: Reinforcement learning, recommender systems</li>
+</ul></li>
+</ul>
 	
 	</div>
-  <a type="button" href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2022/07/21/Introduction-to-Machine-Learning/#more" class="btn btn-default more">Read More</a>
 </div>
 
-	       
-	     </div>
-	     <div>
-	       <center>
-	         <div class="pagination">
+           
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
 <ul class="pagination">
 	 
+		
+		<li class="prev"><a href="/page/2/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> Prev</a></li>
+  		
+
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+
+		
+          <li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
 </ul>
 </div>
 
-	       </center>
-	     </div>	
-      
+  		</center>
+		</div>
 
-</div> <!-- col-md-9/col-md-12 -->
+		
+		
+	</div> <!-- col-md-9 -->
 
-
-<div class="col-md-3">
+	
+		<div class="col-md-3">
 	<div id="sidebar">
 	
 			
@@ -307,7 +322,9 @@ class="math inline"><em>P</em> ∧ ¬<em>Q</em></span></li>
 	</div> <!-- sidebar -->
 </div> <!-- col-md-3 -->
 
+	
 
+</div> <!-- row-fluid -->
 
 
     </div>
