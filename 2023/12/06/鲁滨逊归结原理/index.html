@@ -6,14 +6,7 @@
   <title>鲁滨逊归结原理 | Jiahao Peng</title>
   <meta name="author" content="me">
   
-  <meta name="description" content="1 归结推理反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。
-定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当 $(P_1\land P_2\land …\land P_n)\land\neg Q$ 是不可满足的。
-归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：
-
-欲证明 $P⇒Q$
-化为反命题 $P\land¬Q$
-化成子句集
-证明子句集不可满足(鲁滨逊归结原理)">
+  <meta name="description" content="这是一篇比较早的笔记，部分公式渲染不正确，目前还没找到解决方法，会影响阅读体验。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -33,7 +26,7 @@
   
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/css/themes/spacelab.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/themes/lumen.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
@@ -58,7 +51,7 @@
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
-  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 	<span class="sr-only">Toggle navigation</span>
@@ -106,8 +99,8 @@
 
 
 	
-		<div class="page-header ">		
-			<h1 class="title "> 鲁滨逊归结原理</h1>
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 鲁滨逊归结原理</h1>
 		</div>		
 	
 
@@ -125,6 +118,11 @@
 
 	<!-- content -->
 	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>这是一篇比较早的笔记，部分公式渲染不正确，目前还没找到解决方法，会影响阅读体验。</p>
+			
+		 </div> <!-- alert -->
 	  		
 
 	  <h2 id="1-归结推理"><a href="#1-归结推理" class="headerlink" title="1 归结推理"></a>1 归结推理</h2><p>反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。</p>
@@ -147,7 +145,7 @@
 <script type="math/tex; mode=display">
 (\forall x)((\exists y)\neg P(x,y)\lor(\exists y)(Q(x,y)\land\neg R(x,y)))</script><p>第三步：变量标准化，将重复的变量名换掉：</p>
 <script type="math/tex; mode=display">
-(\forall x)((\exists y)\neg P(x,y)\lor(\exists z)(Q(x,z)\land\neg R(x,z)))</script><p>第四步：消去存在量词，要用到 <a href="#4* Skolem 函数">Skolem 函数</a>，令 $y=f(x)$，$z=g(x)$：</p>
+(\forall x)((\exists y)\neg P(x,y)\lor(\exists z)(Q(x,z)\land\neg R(x,z)))</script><p>第四步：消去存在量词，要用到 Skolem 函数，令 $y=f(x)$，$z=g(x)$：</p>
 <script type="math/tex; mode=display">
 (\forall x)(\neg P(x,f(x))\lor(Q(x,g(x))\land\neg R(x,g(x))))</script><p>第五步：化为前束形，即将所有的全称谓词提到公式最前面，使母式中不存在任何量词，上式已满足前束形。</p>
 <p>第六步：化为 Skolem 标准形，即将母式化为合取式：</p>
@@ -245,7 +243,7 @@
 <ul class="pagination">
 	 
 				
-		<li class="prev"><a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+		<li class="prev"><a href="/2023/12/06/A-star%E6%90%9C%E7%B4%A2/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
@@ -313,7 +311,7 @@
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    <li><a href="/categories/math/">math<span>1</span></a></li>
+    <li><a href="/categories/AI/">AI<span>2</span></a></li>
   </li>
 
     </ul>
@@ -326,7 +324,7 @@
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/lecture-notes/">lecture notes<span>5</span></a></li>
+  <li><a href="/tags/lecture-notes/">lecture notes<span>6</span></a></li>
 
     </ul>
 	</div>

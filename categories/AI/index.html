@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>math | Jiahao Peng</title>
+  <title>AI | Jiahao Peng</title>
   <meta name="author" content="me">
   
   
@@ -24,7 +24,7 @@
   
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/css/themes/spacelab.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/themes/lumen.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
@@ -49,7 +49,7 @@
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
-  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 	<span class="sr-only">Toggle navigation</span>
@@ -96,8 +96,8 @@
       
 
 <!-- title -->
-<div class="page-header ">
-  <h1 class="archive-title-category title ">math</h1>
+<div class="page-header page-header-inverse ">
+  <h1 class="archive-title-category title title-inverse ">AI</h1>
 </div>
 
 <div class="row page">
@@ -117,7 +117,38 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2023-12-06 </div>
-			<div class="article-title"><a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" >鲁滨逊归结原理</a></div>
+			<div class="article-title"><a href="/2023/12/06/A-star%E6%90%9C%E7%B4%A2/" >A-star搜索</a></div>
+		</h3>
+	
+
+
+		     
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="01-启发式搜索"><a href="#01-启发式搜索" class="headerlink" title="01 启发式搜索"></a>01 启发式搜索</h2><p>能有助于简化搜索过程的信息称为启发信息，利用启发信息的搜索过程称为启发式搜索。</p>
+<p>求解问题中能利用的大多是非完备的启发信息，所谓非完备就是指，信息也许对搜索有正面影响的，但是我们无法得知它是否总能提供正面影响，不知道它是否会造成负面影响。就例如极值点导数为 0，这是一条完备的信息，因为它可被证明总是成立。造成这种结果的原因如下：</p>
+<ol>
+<li>求解问题系统不可能知道与实际问题有关的全部信息，因而无法知道该问题的全部状态空间，也不可能用一套算法来求解所以问题；</li>
+<li>有些问题在理论上虽然存在着求解算法，但是在工程实践中，这些算法不是效率太低，就是根本无法实现(就比如宽度优先搜索，它总能找到最优解，但是无法实现)。</li>
+</ol>
+<p>启发式搜索在搜索过程中根据启发信息评估各个节点的重要性，优先搜索重要的节点。<strong>估价函数</strong>的任务就是估计待搜索节点“有希望”的程度。估价函数 $f_n$ 表示从初始节点经过 $n$ 节点到达目的节点的路径的最小代价估计值，其一般形式为：</p>
+<script type="math/tex; mode=display">
+f(n)=g(n)+h(n)</script>
+	
+	</div>
+  <a type="button" href="/2023/12/06/A-star%E6%90%9C%E7%B4%A2/#more" class="btn btn-default more">Read More</a>
+</div>
+
+	       
+		     
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2023-12-06 </div>
+			<div class="article-title"><a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" title="这是一篇比较早的笔记，部分公式渲染不正确，目前还没找到解决方法，会影响阅读体验。">鲁滨逊归结原理</a></div>
 		</h3>
 	
 
@@ -182,15 +213,15 @@
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
+			<li><a href="/categories/AI/">AI<span>2</span></a></li>
+		
 			<li><a href="/categories/Software-Analysis-Testing-and-Verification/">Software Analysis, Testing and Verification<span>1</span></a></li>
 		
 			<li><a href="/categories/deep-learning/">deep learning<span>1</span></a></li>
 		
 			<li><a href="/categories/machine-learning/">machine learning<span>2</span></a></li>
 		
-			<li><a href="/categories/math/">math<span>1</span></a></li>
-		
-			<li><a href="/categories/solutions/">solutions&#34;<span>1</span></a></li>
+			<li><a href="/categories/solutions/">solutions<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -203,7 +234,7 @@
 		
 			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
-			<li><a href="/tags/lecture-notes/">lecture notes<span>5</span></a></li>
+			<li><a href="/tags/lecture-notes/">lecture notes<span>6</span></a></li>
 		
 		 
 		</ul>
@@ -225,15 +256,15 @@
       </li>
     
       <li>
-        <a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/" ><i class="fa fa-file-o"></i>隐马尔可夫模型</a>
+        <a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/"  title="这是一篇比较早的笔记，部分公式渲染不正确，目前还没找到解决方法，会影响阅读体验。" ><i class="fa fa-file-o"></i>隐马尔可夫模型</a>
       </li>
     
       <li>
-        <a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" ><i class="fa fa-file-o"></i>支持向量机</a>
+        <a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/"  title="这是一篇比较早的笔记，部分公式渲染不正确，目前还没找到解决方法，会影响阅读体验。" ><i class="fa fa-file-o"></i>支持向量机</a>
       </li>
     
       <li>
-        <a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" ><i class="fa fa-file-o"></i>鲁滨逊归结原理</a>
+        <a href="/2023/12/06/A-star%E6%90%9C%E7%B4%A2/" ><i class="fa fa-file-o"></i>A-star搜索</a>
       </li>
     
   </ul>

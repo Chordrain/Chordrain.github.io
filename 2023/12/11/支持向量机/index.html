@@ -6,7 +6,7 @@
   <title>支持向量机 | Jiahao Peng</title>
   <meta name="author" content="me">
   
-  <meta name="description" content="支持向量机（support vector machines, SVM）是一种二分类模型，它的基本模型是定义在特征空间上的间隔最大的线性分类器，间隔最大使它有别于感知机；SVM还包括核技巧，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。">
+  <meta name="description" content="这是一篇比较早的笔记，部分公式渲染不正确，目前还没找到解决方法，会影响阅读体验。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -26,7 +26,7 @@
   
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/css/themes/spacelab.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/themes/lumen.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
@@ -51,7 +51,7 @@
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
-  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 	<span class="sr-only">Toggle navigation</span>
@@ -99,8 +99,8 @@
 
 
 	
-		<div class="page-header ">		
-			<h1 class="title "> 支持向量机</h1>
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 支持向量机</h1>
 		</div>		
 	
 
@@ -118,6 +118,11 @@
 
 	<!-- content -->
 	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>这是一篇比较早的笔记，部分公式渲染不正确，目前还没找到解决方法，会影响阅读体验。</p>
+			
+		 </div> <!-- alert -->
 	  		
 
 	  <p><strong>支持向量机（support vector machines, SVM）</strong>是一种二分类模型，它的基本模型是定义在特征空间上的<strong>间隔最大的线性分类器</strong>，间隔最大使它有别于感知机；SVM还包括<strong>核技巧</strong>，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。</p>
@@ -149,17 +154,17 @@
 </ol>
 <p>接下来给出支持向量机优化问题的数学描述：</p>
 <ol>
-<li>目标：最小化 $||W||^2$</li>
+<li>目标：最小化 $\lVert W\rVert^2$</li>
 <li>限制条件：$y_i[W^TX_i+b]\ge1\quad(i=1\sim N)$</li>
 </ol>
 <p>对于上面这两个公式，相信很多人第一眼是懵的，因为按我们之前的描述，支持向量机算法就是去找一条使 $d$ 最大且位于正中间位置的直线，怎么数学公式看起来跟这个过程完全没关系呢？</p>
 <p>要搞清楚这两个公式，我们得先弄清楚两个事实：</p>
 <ol>
 <li>事实一：$W^TX+b=0$ 与 $aW^TX+ab=0\quad(a\in R^+)$ 表示的是同一个平面。</li>
-<li>事实二：向量 $X_0$ 到超平面 $W^TX+b=0$ 的距离是 $d=\frac{|W^TX_0+b|}{||W||}$。（不要慌，这其实就是高中学的点到平面的距离公式，以一维平面 $w_1x+w_2y+b=0$，也就是直线为例，点 $(x_0,y_0)$ 到这条直线的距离就是 $d=\frac{|w_1x_0+w_2y_0+b|}{\sqrt{w_1^2+w_2^2}}$，前面的那个公式只不是这个公式在高维情况下的推广）</li>
+<li>事实二：向量 $X_0$ 到超平面 $W^TX+b=0$ 的距离是 $d=\frac{|W^TX_0+b|}{\lVert W\rVert}$。（不要慌，这其实就是高中学的点到平面的距离公式，以一维平面 $w_1x+w_2y+b=0$，也就是直线为例，点 $(x_0,y_0)$ 到这条直线的距离就是 $d=\frac{|w_1x_0+w_2y_0+b|}{\sqrt{w_1^2+w_2^2}}$，前面的那个公式只不是这个公式在高维情况下的推广）</li>
 </ol>
 <p>基于事实二，我们知道，支持向量机要做的事情，就是在 $X_0$ 是支持向量的情况下，使 $d$ 最大。</p>
-<p>基于事实一，我们知道，我们可以找到一个正实数 $a$ 来缩放 $W$ 和 $b$，即 $(W,b)\rightarrow(aW,ab)$，使 $d$ 公式的分子 $|W^TX_0+b|=1$。这样的话，$d$ 的公式就变成了 $d=\frac{1}{||W||}$。看到这个公式，就能明白为什么支持向量机的优化目标是最小化 $||W||^2$ 了，因为最小化 $||W||^2$ 就是最大化 $d$。</p>
+<p>基于事实一，我们知道，我们可以找到一个正实数 $a$ 来缩放 $W$ 和 $b$，即 $(W,b)\rightarrow(aW,ab)$，使 $d$ 公式的分子 $|W^TX_0+b|=1$。这样的话，$d$ 的公式就变成了 $d=\frac{1}{\lVert W\rVert}$。看到这个公式，就能明白为什么支持向量机的优化目标是最小化 $\lVert W\rVert^2$ 了，因为最小化 $\lVert W\rVert^2$ 就是最大化 $d$。</p>
 <p>现在再来看限制条件，限制条件其实就是规定了，所有样本点到超平面的距离 $W^TX_i+b$，要么等于 $d$（支持向量），要么大于 $d$（非支持向量）。 至于为什么要再乘上一个 $y_i$，其实看<u>线性可分的定义</u>就知道了，乘上 $y_i$ 是为了与线性可分的定义相统一。</p>
 <blockquote>
 <p>补充：</p>
@@ -168,7 +173,7 @@
 </li>
 <li><p>对于任何线性可分样本集，一定能找到一个超平面分割所有样本点；反之，如果是线性不可分，那么将找不到任何一个能满足要求的 $W$ 和 $b$。</p>
 </li>
-<li><p>某些书上会将优化目标写成最小化 $\frac12||W||^2$，这其实没有任何问题，加上 $\frac12$ 只是为了求导方便。</p>
+<li><p>某些书上会将优化目标写成最小化 $\frac12\lVert W\rVert^2$，这其实没有任何问题，加上 $\frac12$ 只是为了求导方便。</p>
 </li>
 <li><p>支持向量机要解决的问题其实是一个凸优化问题，而且是一个二次规划问题，二次规划问题的特点是：</p>
 <ul>
@@ -182,7 +187,7 @@
 </blockquote>
 <h2 id="02-非线性模型"><a href="#02-非线性模型" class="headerlink" title="02 非线性模型"></a>02 非线性模型</h2><h3 id="2-1-优化目标"><a href="#2-1-优化目标" class="headerlink" title="2.1 优化目标"></a>2.1 优化目标</h3><p>之前已经讨论过，非线性模型不是线性可分的，也就是说找不到一个 $W$ 和 $b$，使之确定一个能完美分割所有样本点的超平面，即限制条件 $y_i[W^TX_i+b]\ge1\quad(i=1\sim N)$ 是不可满足的，原本的优化目标是无解的。SVM 处理非线性模型的方法其实不难理解，就是在线性模型的基础上引入了一个<strong>松弛变量（Slack Variable）</strong>，用 $\xi\ (\xi\ge0)$ 表示。新的优化目标如下：</p>
 <ol>
-<li>目标：最小化 $\frac12||W||^2+C\sum_{i=1}^N\xi_i$</li>
+<li>目标：最小化 $\frac12\lVert W\rVert^2+C\sum_{i=1}^N\xi_i$</li>
 <li>限制条件：<ol>
 <li>$y_i[W^TX_i+b]\ge1-\xi_i\quad(i=1\sim N)$</li>
 <li>$\xi_i\ge0$</li>
@@ -190,7 +195,7 @@
 </li>
 </ol>
 <p>可以发现，新的优化目标中，限制条件变成了 $y_i[W^TX_i+b]\ge1-\xi_i\quad(i=1\sim N)$，只要这个 $\xi_i$ 取得足够大，那么大于等于号右边就会无限小，那么限制条件就有了满足的可能；但同时，也不能允许 $\xi_i$ 无限大，不然就没有意义了，所以新的最小化目标函数的末尾还要加上 $\xi_i$。</p>
-<p>接下来要明确，在上面的式子中，哪些是已知的，哪些是要求解的参数。显然，$X$ 和 $y<em>i$ 是已知的，$W$、$b$ 以及 $\xi$ 是要求的，但是这里还有个 $C$，这个 $C$ 是什么？$C$ 是一个由人事先设定的参数，这种参数一般称为<strong>超参数（Hyperparameter）</strong>，作用是平衡 $\frac12||W||^2$ 和 $\sum</em>{i=1}^N\xi_i$ 的权重。至于 $C$ 具体取多少是没有定论的，一般是凭经验，选定一个区间，然后一个一个尝试。SVM 很方便的一点就是，它只有这一个参数需要人来设置，但是在神经网络里，要去一个一个尝试的参数可能有很多。</p>
+<p>接下来要明确，在上面的式子中，哪些是已知的，哪些是要求解的参数。显然，$X$和$y<em>{i}$是已知的，$W$、$b$以及$\xi$是要求的，但是这里还有个$C$，这个$C$是什么？$C$是一个由人事先设定的参数，这种参数一般称为<strong>超参数</strong>（<strong>Hyperparameter</strong>），作用是平衡$\frac{1}{2}\lVert\ W\rVert^{2}$和$\sum</em>{i=1}^{N}\xi_{i}$的权重。至于$C$具体取多少是没有定论的，一般是凭经验，选定一个区间，然后一个一个尝试。SVM很方便的一点就是，它只有这一个参数需要人来设置，但是在神经网络里，要去一个一个尝试的参数可能有很多。</p>
 <h3 id="2-2-高维映射"><a href="#2-2-高维映射" class="headerlink" title="2.2 高维映射"></a>2.2 高维映射</h3><p>虽然通过引入松弛变量，我们将非线性问题转换为了一个线性可分问题，但是还是存在一个问题，那就是求解目标的本质没有变，最后仍然是找出一条直线，来分割样本点，也就是说，即使一个样本集用肉眼看就能看出其能被一条简单的曲线分割，SVM 还是会找一条直线来分割样本点，如下图所示：</p>
 <p><img src="/img/支持向量机-05.png" alt=""></p>
 <p>这显然不是我们想要的。一些算法会很符合直觉地去找非直线来分割样本集，例如决策树是用矩形来分割，但是 SVM 的思想很精妙，它仍然是找直线，不过它不是在当前空间里去找，而是到高维空间里去找。它定义了一个<strong>高维映射</strong> $\phi(X)$，通过 $\phi$，能将 $X$ 这个低维向量转化成一个高维向量 $\phi(X)$。也就是说，也许在低维空间中，我们不容易去找一条直线能刚刚好分割所有样本点，那么我们就去高维空间中找，或许在高维空间中，我们就能找到样一条理想的直线了。</p>
@@ -225,7 +230,7 @@ W=\left[ \begin{array}{} -1 \\ -1 \\ -1 \\ -1 \\ 6 \end{array} \right]\quad b=1<
 K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,X_2)$ 其实计算的是 $\phi(X_1)$ 和 $\phi(X_2)$ 的内积，虽然 $\phi(X_1)$ 和 $\phi(X_2)$ 是无限维的，但是两者仍然能进行内积计算，得到的结果 $K(X_1,X_2)$ 是一个数。</p>
 <p>核函数的要求是：能将函数的形式最终拆成 $\phi(X_1)^T\phi(X_2)$ 的形式。常用的核函数有如下几个：</p>
 <ol>
-<li>高斯核：$K(X_1,X_2)=e^{-\frac{||X_1-X_2||^2}{2\sigma^2}}=\phi(X_1)^T\phi(X_2)$，$\sigma^2$ 是方差。</li>
+<li>高斯核：$K(X_1,X_2)=e^{-\frac{\lVert X_1-X_2\rVert^2}{2\sigma^2}}=\phi(X_1)^T\phi(X_2)$，$\sigma^2$ 是方差。</li>
 <li>多项式核：$K(X_1,X_2)=(X_1^TX_2+1)^d=\phi(X_1)^T\phi(X_2)$，$d$ 是多项式阶数。</li>
 </ol>
 <p>而能将核函数 $K(X_1,X_2)$ 拆成 $\phi(X_1)^T\phi(X_2)$ 的充要条件是：</p>
@@ -235,10 +240,10 @@ K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,
 </ol>
 <h3 id="2-4-原问题到对偶问题"><a href="#2-4-原问题到对偶问题" class="headerlink" title="2.4 原问题到对偶问题"></a>2.4 原问题到对偶问题</h3><p>现在我们有了核函数，那么我们要怎样利用核函数，来替代优化式 1 中的 $\phi(X)$ 呢？在这之前，请先阅读<a href="#7.3* 补充：优化理论">优化理论</a>相关的内容。在稍微了解了优化理论中的原问题和对偶问题后，我们要做的，就是<u>把 SVM 的优化问题从原问题转换成对偶问题</u>。</p>
 <p>首先，我们<u>把 SVM 的优化问题转换成原问题</u>：</p>
-<p>对于目标函数，$\frac12||W||^2+C\sum_{i=1}^N\xi_i$ 是一个<strong>凸函数</strong>。</p>
-<p>对于限制条件，$\xi<em>i\ge0$ 不满足原问题的限制条件形式，得先将大于等于号变成小于等于号，也就是变成 $\xi_i\le0$，那么，目标函数就也得变换一下，变成 $\frac12||W||^2-C\sum</em>{i=1}^N\xi_i$；同样，另一个限制条件也得变换一下，变成 $y_i[W^TX_i+b]\ge1+\xi_i\quad(i=1\sim N)$，但是这个不等式也不满足原问题的要求，必须将不等式右边变成 0，所以得到 $1+\xi_i-y_i[W^TX_i+b]\le0\quad(i=1\sim N)$。于是得到优化目标的原问题形式，新的优化目标：</p>
+<p>对于目标函数，$\frac12\lVert W\rVert^2+C\sum_{i=1}^N\xi_i$ 是一个<strong>凸函数</strong>。</p>
+<p>对于限制条件，$\xi<em>i\ge0$ 不满足原问题的限制条件形式，得先将大于等于号变成小于等于号，也就是变成 $\xi_i\le0$，那么，目标函数就也得变换一下，变成 $\frac12\lVert W\rVert^2-C\sum</em>{i=1}^N\xi_i$；同样，另一个限制条件也得变换一下，变成 $y_i[W^TX_i+b]\ge1+\xi_i\quad(i=1\sim N)$，但是这个不等式也不满足原问题的要求，必须将不等式右边变成 0，所以得到 $1+\xi_i-y_i[W^TX_i+b]\le0\quad(i=1\sim N)$。于是得到优化目标的原问题形式，新的优化目标：</p>
 <ol>
-<li>目标：最小化 $\frac12||W||^2-C\sum_{i=1}^N\xi_i$</li>
+<li>目标：最小化 $\frac12\lVert W\rVert^2-C\sum_{i=1}^N\xi_i$</li>
 <li>限制条件：<ol>
 <li>$1+\xi_i-y_i[W^T\phi(X_i)+b]\le0\quad(i=1\sim N)$</li>
 <li>$\xi_i\le0$</li>
@@ -247,7 +252,7 @@ K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,
 </ol>
 <p><u>将其转换为对偶问题</u>：</p>
 <ol>
-<li><p>目标：最大化 $\theta(\alpha,\beta)=\underset{(w,\xi<em>i,b)}{\inf}{\frac12||W||^2-C\sum</em>{i=1}^N\xi<em>i+\sum</em>{i=1}^{N}\alpha<em>i(1+\xi_i-y_i[W^T\phi(X_i)+b])+\sum</em>{i=1}^N\beta_i\xi_i}$</p>
+<li><p>目标：最大化 $\theta(\alpha,\beta)=\underset{(w,\xi<em>i,b)}{\inf}{\frac12\lVert W\rVert^2-C\sum</em>{i=1}^N\xi<em>i+\sum</em>{i=1}^{N}\alpha<em>i(1+\xi_i-y_i[W^T\phi(X_i)+b])+\sum</em>{i=1}^N\beta_i\xi_i}$</p>
 </li>
 <li><p>限制条件：</p>
 <ol>
@@ -259,7 +264,7 @@ K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,
 <p>解释一下这样变换的原因：</p>
 <ol>
 <li>原问题中的 $w$ 对应了原问题要求解的变量，有三个，分别是 $W$、$b$ 和 $\xi$，所以对偶问题中要遍历所有的 $w$，到这里就变成了遍历所有的 $W$、$b$ 和 $\xi$。</li>
-<li>根据对偶问题的定义，$L(\omega,\alpha,\beta)=f(\omega)+\sum<em>{i=1}^{K}\alpha_ig_i(\omega)+\sum</em>{i=1}^M\beta<em>ih_i(\omega)$，其中，$f(w)=\frac12||W||^2-C\sum</em>{i=1}^N\xi_i$，这一点是没有疑问的，关键是下面，千万不要以为这里的 $\alpha$ 和 $\beta$ 分别对应了上面的 $\alpha_i$ 和 $\beta_i$，不是这样的，在对偶问题中，$\alpha$ 管的是不等式条件，每个不等式条件要与 $\alpha$ 相乘，$\beta$ 管的是等式条件，每个等式条件要与 $\beta$ 相乘。但是在这里，SVM 原问题中的限制条件都是不等式，所以应该只有 $\alpha$，没有 $\beta$，只是说为了方便表示，这里仍然沿用 $\alpha_i$ 和 $\beta_i$，并且，由于 $\alpha$ 应该大于 0，所以到这里就变成了 $\alpha_i\ge0\quad(i=1\sim N)$，并且 $\beta_i\ge0\quad(i=1\sim N)$。其他部分就是照抄的关系了。</li>
+<li>根据对偶问题的定义，$L(\omega,\alpha,\beta)=f(\omega)+\sum<em>{i=1}^{K}\alpha_ig_i(\omega)+\sum</em>{i=1}^M\beta<em>ih_i(\omega)$，其中，$f(w)=\frac12\lVert W\rVert^2-C\sum</em>{i=1}^N\xi_i$，这一点是没有疑问的，关键是下面，千万不要以为这里的 $\alpha$ 和 $\beta$ 分别对应了上面的 $\alpha_i$ 和 $\beta_i$，不是这样的，在对偶问题中，$\alpha$ 管的是不等式条件，每个不等式条件要与 $\alpha$ 相乘，$\beta$ 管的是等式条件，每个等式条件要与 $\beta$ 相乘。但是在这里，SVM 原问题中的限制条件都是不等式，所以应该只有 $\alpha$，没有 $\beta$，只是说为了方便表示，这里仍然沿用 $\alpha_i$ 和 $\beta_i$，并且，由于 $\alpha$ 应该大于 0，所以到这里就变成了 $\alpha_i\ge0\quad(i=1\sim N)$，并且 $\beta_i\ge0\quad(i=1\sim N)$。其他部分就是照抄的关系了。</li>
 </ol>
 <p>接下来我们就来求一下 $L(W,\xi_i,b,\alpha)$ 的最小值：</p>
 <p>令偏导 $\frac{\partial L}{\partial W}=0$，$\frac{\partial L}{\partial \xi_i}=0$，$\frac{\partial L}{\partial b}=0$：</p>
@@ -268,10 +273,10 @@ K(X_1,X_2)=\phi(X_1)^T\phi(X_2)</script><p>则优化式 1 仍然可解。$K(X_1,
 &\frac{\partial L}{\partial W}=0\Rightarrow W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)&①\\
 &\frac{\partial L}{\partial \xi_i}=0\Rightarrow C=\beta_i+\alpha_i&②\\
 &\frac{\partial L}{\partial b}=0\Rightarrow \sum_{i=1}^N\alpha_iy_i=0&③
-\end{aligned}</script><p>接下来，我们要将上面得到的三个式子代回到 $L(W,\xi<em>i,b,\alpha)$ 中去，好消息是，将式 ② 和式 ③ 代入之后，式子中的大部分项就能被消掉了，得到 $\theta(\alpha,\beta)=\frac12||W||^2+\sum</em>{i=1}^N\alpha<em>i-\sum</em>{i=1}^N\alpha_iy_iW^T\phi(X_i)$，先来计算 $\frac12||W||^2$：</p>
+\end{aligned}</script><p>接下来，我们要将上面得到的三个式子代回到 $L(W,\xi<em>i,b,\alpha)$ 中去，好消息是，将式 1 和式 3 代入之后，式子中的大部分项就能被消掉了，得到 $\theta(\alpha,\beta)=\frac12\lVert W\rVert^2+\sum</em>{i=1}^N\alpha<em>i-\sum</em>{i=1}^N\alpha_iy_iW^T\phi(X_i)$，先来计算 $\frac12\lVert W\rVert^2$：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\frac12||W||^2&=\frac12W^TW\\
+\frac12\lVert W\rVert^2&=\frac12W^TW\\
 &=\frac12(\sum_{i=1}^N\alpha_iy_i\phi(X_i))^T(\sum_{j=1}^N\alpha_jy_j\phi(X_j))\\
 &=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j\phi(X_i)^T\phi(X_j)\\
 &=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
@@ -402,7 +407,7 @@ G=f(\omega^*)-\theta(\alpha^*,\beta^*)\ge0</script><p>$G$ 叫做原问题与对�
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-          <li class="next"><a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+          <li class="next"><a href="/2023/12/06/A-star%E6%90%9C%E7%B4%A2/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
         
 	
 </ul>
@@ -477,7 +482,7 @@ G=f(\omega^*)-\theta(\alpha^*,\beta^*)\ge0</script><p>$G$ 叫做原问题与对�
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/lecture-notes/">lecture notes<span>5</span></a></li>
+  <li><a href="/tags/lecture-notes/">lecture notes<span>6</span></a></li>
 
     </ul>
 	</div>
