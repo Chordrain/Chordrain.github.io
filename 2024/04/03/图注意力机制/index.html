@@ -3,26 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>A WSL Error Encountered When Installing Docker | Jiahao Peng</title>
+  <title>图注意力机制的原理 | Jiahao Peng</title>
   <meta name="author" content="me">
   
-  <meta name="description" content="This document explains the problems the author had installing Docker
-and how to solve them. You can find and download the installation
-package for Docker here.
-After installing Docker, an Unexpected WSL error was
-encountered, and the process was terminated. After conducting some
-online research, I discovered that this error message was indicating
-that I needed to enable the Hyper-V, Windows
-Subsystem for Linux and Virtual Machine
-Platform functions on my system. I opened the configuration
-panel and found that the latter two functions had been properly enabled,
-but the option for the first one was missing. It took me a some time to
-find the solution.">
+  <meta name="description" content="该篇笔记总结了图注意力网络（Graph Attantion
+Network）中的图注意力层的数学原理，参考的资料为 GAT 网络的原始论文.
+假设输入是一组节点特征，表示为 $h=\{\vec{h_1},\vec{h_2},\cdots,\vec{h_N}\},\vec{h_i}\in\mathbb{R}^F$，其中
+N 表示节点的个数，F 表示特征维数。GAL
+将会输出一组新的节点特征，并且这组特征的特征维数并不一定与原特征相同，设
+F′ 为 GAL
+输出的特征维数，则新的节点特征可表示为 $h^{\prime}=\{\vec{h_1^{\prime}},\vec{h_2^{\prime}},\cdots,\vec{h_N^{\prime}}\},\vec{h_i^{\prime}}\in\mathbb{R}^{F^{\prime}}$。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="A WSL Error Encountered When Installing Docker"/>
+  <meta property="og:title" content="图注意力机制的原理"/>
   <meta property="og:site_name" content="Jiahao Peng"/>
 
   
@@ -111,7 +106,7 @@ find the solution.">
 
 	
 		<div class="page-header page-header-inverse ">		
-			<h1 class="title title-inverse "> A WSL Error Encountered When Installing Docker</h1>
+			<h1 class="title title-inverse "> 图注意力机制的原理</h1>
 		</div>		
 	
 
@@ -131,40 +126,73 @@ find the solution.">
 	<div class="mypage">		
 	  		
 
-	  <p>This document explains the problems the author had installing Docker
-and how to solve them. You can find and download the installation
-package for Docker <a target="_blank" rel="noopener" href="https://www.docker.com/">here</a>.</p>
-<p>After installing Docker, an <code>Unexpected WSL error</code> was
-encountered, and the process was terminated. After conducting some
-online research, I discovered that this error message was indicating
-that I needed to enable the <strong>Hyper-V</strong>, <strong>Windows
-Subsystem for Linux</strong> and <strong>Virtual Machine
-Platform</strong> functions on my system. I opened the configuration
-panel and found that the latter two functions had been properly enabled,
-but the option for the first one was missing. It took me a some time to
-find the solution.</p>
+	  <p>该篇笔记总结了图注意力网络（Graph Attantion
+Network）中的图注意力层的数学原理，参考的资料为 GAT 网络的<a
+target="_blank" rel="noopener" href="https://arxiv.org/abs/1710.10903">原始论文</a>.</p>
+<p>假设输入是一组节点特征，表示为 <span
+class="math inline">$h=\{\vec{h_1},\vec{h_2},\cdots,\vec{h_N}\},\vec{h_i}\in\mathbb{R}^F$</span>，其中
+<span class="math inline"><em>N</em></span> 表示节点的个数，<span
+class="math inline"><em>F</em></span> 表示特征维数。GAL
+将会输出一组新的节点特征，并且这组特征的特征维数并不一定与原特征相同，设
+<span class="math inline"><em>F</em><sup>′</sup></span> 为 GAL
+输出的特征维数，则新的节点特征可表示为 <span
+class="math inline">$h^{\prime}=\{\vec{h_1^{\prime}},\vec{h_2^{\prime}},\cdots,\vec{h_N^{\prime}}\},\vec{h_i^{\prime}}\in\mathbb{R}^{F^{\prime}}$</span>。</p>
 <span id="more"></span>
-<p>To address the issue, it was necessary to create and run a file named
-<code>Hyper-V.bat</code> as administrator, which contains the following
-content:</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pushd</span> &quot;%~dp0&quot;</span><br><span class="line"><span class="built_in">dir</span> /b <span class="variable">%SystemRoot%</span>\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt</span><br><span class="line"><span class="keyword">for</span> /f <span class="variable">%%i</span> <span class="keyword">in</span> (&#x27;<span class="built_in">findstr</span> /i . hyper-v.txt <span class="number">2</span>^&gt;<span class="built_in">nul</span>&#x27;) <span class="keyword">do</span> dism /online /norestart /add-package:&quot;<span class="variable">%SystemRoot%</span>\servicing\Packages\<span class="variable">%%i</span>&quot;</span><br><span class="line"><span class="built_in">del</span> hyper-v.txt</span><br><span class="line">Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL</span><br></pre></td></tr></table></figure>
-<p>The program will then require you to restart your machine, at which
-point you will see that Hyper-V is properly enabled. But Docker still
-cannot run normally.</p>
-<p>After that, you need to install WSL2. To do this, run the following
-command:</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wsl --install	# may require VPN</span><br><span class="line">wsl --<span class="built_in">set</span>-default-version <span class="number">2</span>	# <span class="built_in">set</span> the default wsl version to wsl2</span><br><span class="line">wsl --update	# may <span class="keyword">not</span> be necessary</span><br></pre></td></tr></table></figure>
-<p>Finally, Docker can run without any problems after all this work.</p>
-<hr />
-<p>Off topic:</p>
-<p>When using the VSCode extension <code>Remote Containers</code> to set
-up containers, you might encounter the message “the container does not
-meet all the requirements of the VS Code Server”. This happens because
-VSCode has increased the minimum requirements for remote server build
-toolchain since version 1.86. To solve the problem, just downgrade your
-VSCode to a version below 1.86. You can download version 1.85.2 <a
-target="_blank" rel="noopener" href="https://update.code.visualstudio.com/1.85.2/win32-x64-archive/stable">here</a>.
-Besides, it is necessary to downgrade your extensions as well.</p>
+<p>为了把输入特征转换为高维特征，并且使高维特征具有足够高的表达原特征的能力，我们需要执行至少一个可学习的线性变换。考虑到这一点，我们将对每一个节点进行一次线性变换，即将每个节点的特征乘上一个<strong>共享</strong>的权重矩阵
+<span
+class="math inline"><em>W</em> ∈ ℝ<sup><em>F</em><sup>′</sup> × <em>F</em></sup></span>。然后我们会对每一个节点进行一次自注意力
+(<em>self-attention</em>) 操作，我们用 <span
+class="math inline"><em>a</em></span>
+表示这一操作，该操作将会计算得出节点 <span
+class="math inline"><em>i</em></span> 和节点 <span
+class="math inline"><em>j</em></span> 之间的注意力系数 (<em>attention
+coefficients</em>)： <span class="math display">$$
+e_{ij}=a(W\vec{h_i},W\vec{h_j})
+$$</span> 注意力系数 <span
+class="math inline"><em>e</em><sub><em>i</em><em>j</em></sub></span>
+表示了节点 <span class="math inline"><em>j</em></span> 的特征对于节点
+<span class="math inline"><em>i</em></span>
+的重要性。在自注意力机制最广泛应用的公式中，模型将会计算每个节点之间的注意力系数，导致结构信息被丢弃。我们通过执行掩码注意力机制
+(<em>masked attention</em>)
+来保留图的结构信息——我们只计算相邻节点之间的注意力系数。注意，这里的相邻节点指的是直接相邻
+(first-order)
+的节点，而不是连通的节点，并且一个节点本身也是其自己的相邻节点。为了能对注意力系数进行跨节点的比较，我们对它们进行归一化，用以衡量不同节点
+<span class="math inline"><em>j</em> ∈ 𝒩<sub><em>i</em></sub></span>
+对节点 <span class="math inline"><em>i</em></span> 的重要程度 (这里的
+<span class="math inline">𝒩<sub><em>i</em></sub></span> 表示节点 <span
+class="math inline"><em>i</em></span> 的邻居节点的编号)，归一化的过程由
+softmax 函数实现： <span class="math display">$$
+\alpha_{ij}=\operatorname{softmax}(e_{ij})=\frac{\operatorname{exp}(e_{ij})}{\sum_{k\in\mathcal{N}_i}\operatorname{exp}(e_{ik})}.
+$$</span> 在我们的实验中，注意力机制 <span
+class="math inline"><em>a</em></span>
+是一个单层的前馈神经网络，以一个权重向量 <span
+class="math inline">$\vec{\mathbf{a}}\in\mathbb{R}^{2F^\prime}$</span>​
+作为参数，使用 LeakyReLU 函数实现非线性变换 (negative slope 设置为
+0.2)。展开后，系数的计算可表示为： <span class="math display">$$
+\alpha_{ij}=\frac{\operatorname{exp}(\operatorname{LeakyReLU}(\vec{\mathbf{a}}^{T}[\mathbf{W}\vec{h_i}||\mathbf{W}\vec{h_j}]))}{\sum_{k\in\mathcal{N}_i}\operatorname{exp}(\operatorname{LeakyReLU}(\vec{\mathbf{a}}^{T}[\mathbf{W}\vec{h_i}||\mathbf{W}\vec{h_k}]))}
+$$</span> 其中，<span class="math inline">·<sup><em>T</em></sup></span>
+表示转置操作，<span class="math inline">||</span> 是矩阵拼接操作。</p>
+<p>一旦得到注意力系数，GAL
+就会使用它们来计算出各个特征对应的线性组合，作为节点最终的输出特征，整个过程如下左图所示
+(右图是多头注意力机制)：</p>
+<p><img src="/img/GAT-01.png" /></p>
+<p>输出特征 <span
+class="math inline"><em>h⃗</em><sub><em>i</em></sub><sup>′</sup></span>
+的计算公式如下： <span
+class="math display"><em>h⃗</em><sub><em>i</em></sub><sup>′</sup> = <em>σ</em>(∑<sub><em>j</em> ∈ 𝒩<sub><em>i</em></sub></sub><em>α</em><sub><em>i</em><em>j</em></sub><strong>W</strong><em>h⃗</em><sub><em>j</em></sub>)</span>
+其中，<span class="math inline"><em>σ</em></span>
+代表一种非线性变换。</p>
+<p>为了使整个自注意力过程更加稳定，我们引入了多头注意力 (<em>multi-head
+attention</em>)。具体来说，<span class="math inline"><em>K</em></span>
+个独立的注意力机制将分别执行上式的变换，随后，它们的结果将会被拼接起来，得到下面的输出特征表示：
+<span class="math display">$$
+\vec{h}_i^\prime=\overset{K}{\underset{k=1}{\|}}\sigma(\sum_{j\in\mathcal{N_i}}\alpha_{ij}^k\mathbf{W}^k\vec{h}_j)
+$$</span>
+特殊的，如果我们在输出层执行多头注意力，拼接过程将不再是显式的，我们会使用平均聚合
+(<em>averaging</em>)，然后施加一个非线性变换来得到最终输出： <span
+class="math display">$$
+\vec{h}_i^\prime=\sigma(\frac{1}{K}\sum_{k=1}^{K}\sum_{j\in\mathcal{N_i}}\alpha_{ij}^k\mathbf{W}^k\vec{h}_j)
+$$</span></p>
 	  
 	</div>
 
@@ -177,13 +205,13 @@ Besides, it is necessary to downgrade your extensions as well.</p>
 <ul class="pagination">
 	 
 				
-		<li class="prev"><a href="/2025/04/08/%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6-Self-attention/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+		<li class="prev"><a href="/2025/03/18/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-          <li class="next"><a href="/2025/04/07/Introduction-to-Program-Analysis/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+          <li class="next"><a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
         
 	
 </ul>
@@ -234,7 +262,7 @@ Besides, it is necessary to downgrade your extensions as well.</p>
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2025-04-07 
+	2024-04-03 
 	</div>
 	
 
@@ -245,7 +273,7 @@ Besides, it is necessary to downgrade your extensions as well.</p>
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    <li><a href="/categories/solutions/">solutions<span>1</span></a></li>
+    <li><a href="/categories/deep-learning/">deep learning<span>3</span></a></li>
   </li>
 
     </ul>

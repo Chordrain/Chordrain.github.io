@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>自注意力机制 Self-attention</title>
+      <link href="/2025/04/08/%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6-Self-attention/"/>
+      <url>/2025/04/08/%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6-Self-attention/</url>
+      
+        <content type="html"><![CDATA[<h2 id="复杂输入">01 复杂输入</h2><p>不论是在预测问题还是在影像处理上，我们都会假设输入的向量长度是一定的，但如果是不一定的呢？</p><p>比如说在翻译问题中，输入是句子，我们可以采用 one-hot encoding 或 wordembedding的方式将句子转换成向量，而句子是不定长的，也就是说输入的向量是不定长的，这就与我们之前所谈论的情况不一样了。</p><p>或者说更复杂一些，输入的向量不仅不定长，而且数量也不确定，如语音辨识，输入是很长一段语音，这段语音中包含了很多句子，机器需要把这些句子拆分出来，然后进行翻译，这种情况下，句子的数量和长度都不是确定的。</p><p>还有一些更复杂的数据结构，比如说图，例如社交网络、分子结构等，这些信息也可以看作是一组向量，所有这些情况就构成了更加复杂的输入(more sophisticated input)，那么我们要如何处理这些输入呢？</p><span id="more"></span><h2 id="输出是什么">02 输出是什么</h2><p>除了更加复杂的输入，输出也分很多种情况。</p><p>对于词性分析问题，它的目标是将一句话中的每个单词的词性进行分类，这个时候，每一个向量都有一个label；再比如语音辨识问题，机器需要把一段语音中的很多个 frame转换成对应词；还有图的例子，例如在一个社交网络中，机器需要对图中的人进行分类，这些都是输入与输出等长的例子，也就是<span class="math inline"><em>N</em> → <em>N</em></span> 的情况。</p><p>另一种情况是，对于一整个输入，机器只需要输出一个 label就好了，例如情感分析，输入是一个句子向量，机器需要对句子中所表露出的情感进行判断，究竟是正面还是负面；再比如语者辨认，根据输入的语音判断是哪个人讲的，这些都是<span class="math inline"><em>N</em> → 1</span> 的情况。</p><p>还有一种情况则更复杂，那就是输出不确定的情况。例如说翻译，输入的文本长度跟输出的文本长度并不存在必然联系，输出的长度应该由机器自己决定，这种情况下就变成了<spanclass="math inline"><em>N</em> → <em>N</em><sup>′</sup></span>。</p><h2 id="fcnn的缺陷">03 FCNN的缺陷</h2><p>在讨论完了所有输入和输出的情况之后，我们来看看 FCNN有什么缺点。在学过 FCNN 和 CNN 之后我们知道，FCNN 是 bias最小的神经网络，它几乎可以拟合出任何函数，但是这表明它就是无敌的吗？未必，我们来看看下面这个例子。</p><p><span class="math display">Please translate: I saw a saw.</span></p><p>在上面这个翻译任务中出现了两个相同的单词 <spanclass="math inline"><em>s</em><em>a</em><em>w</em></span>，显然这两个<span class="math inline"><em>s</em><em>a</em><em>w</em></span>的意思是不一样的，但对于 FCNN 来讲，它们没有任何差别，也就是说，FCNN无法考虑上下文的关系，当它处理同一个单词 <spanclass="math inline"><em>s</em><em>a</em><em>w</em></span>的时候，它并不会输出两个不同的答案。</p><p>那么难道 FCNN就无法处理这种情况了吗？当然是可以的，不过要改变一下方法。我们可以设置一个window，这个 window 包含了要翻译的词以及其前后的上下文，window越大，其包含的上下文信息就越多。如果我们要 FCNN考虑整个句子的长度，那么我们就必须开一个足够大的 window把整个句子都盖住。但正如前面所讨论的，输入的长度可能是不定的，如果要这么做，我们就必须提前调查一下所有句子中最长的句子的长度，然后把window的大小设置成这个长度才有可能盖住所有句子。然而这样做，不仅会使参数增多，使运算量增大，还容易overfitting。</p><p>那么到底有没有更好一点的做法呢？当然有，这就是接下来要讲的self-attention。</p><h2 id="自注意力机制-self-attention">04 自注意力机制 Self-Attention</h2><p>针对上面的问题，self-attention的做法是，将输入的向量转换成另一个向量，这些转换后的向量是考虑了上下文之后的向量，然后再将这些向量送给FCNN 就行了。</p><p><img src="/img/Self-attention-01.png" /></p><p>当然，self-attention 不止可以用一次，可能经过第一次 self-attention之后 FCNN 已经有了输出，然后我们再用一次 self-attention再转换一次，然后再交给另一个 FCNN 处理，最后得到结果。</p><p>现在我们已经知道 self-attention做的主要工作就是将一个向量转换成一个考虑了所有向量之后的向量，也就是如下图所示的过程：</p><p><img src="/img/Self-attention-02.png" /></p><p>上图中的 <spanclass="math inline"><em>b</em><sup><em>i</em></sup></span> 就是由下层的<span class="math inline"><em>a</em><sup><em>i</em></sup></span> 在经过self-attention 考虑了 <span class="math inline">$\sum_{i=1}^4a^i$</span>之后得到的结果，那么这一步具体要怎么做呢？</p><p>我们现在以 <span class="math inline"><em>b</em><sup>1</sup></span>为例讲述求解 <span class="math inline"><em>b</em></span>的过程。我们要做的是，在 <spanclass="math inline"><em>a</em><sup>1</sup> ∼ <em>a</em><sup>4</sup></span>整个序列中找出与 <span class="math inline"><em>a</em><sup>1</sup></span>有关的，能作为 <span class="math inline"><em>a</em><sup>1</sup></span>的 label的判断依据的向量，为此，我们需要给两个序列之间的关联性一个度量，取名叫<spanclass="math inline"><em>α</em></span>，那么接下来的问题就是如何计算<span class="math inline"><em>α</em></span>。</p><h2 id="相关性指数-α">05 相关性指数 α</h2><p><span class="math inline"><em>α</em></span> 的计算方式主要有两种：dotproduct 和 additive。</p><h3 id="dot-product">5.1 Dot-product</h3><p>Dot-product 是最常用的方法。它的做法是：</p><p>将两个向量输入，将两个向量分别乘上不同的矩阵 <spanclass="math inline"><em>W</em><sup><em>q</em></sup>, <em>W</em><sup><em>k</em></sup></span>，得到两个新向量<span class="math inline"><em>q</em></span> 和 <spanclass="math inline"><em>k</em></span>，再将这两个新向量进行点乘，得到的结果就是这两个向量的关联度<span class="math inline"><em>α</em></span>。Dot-product 的公式是：</p><p><spanclass="math display">Attention (<em>Q</em>,<em>K</em>,<em>V</em>) = softmax (<em>Q</em><em>K</em><sup><em>T</em></sup>)<em>V</em></span></p><blockquote><p>上面的公式已经是注意力机制的完整公式，只有 <spanclass="math inline"><em>Q</em><em>K</em><sup><em>T</em></sup></span>这一部分是 dot-product。</p></blockquote><h3 id="scaled-dot-product">5.2 Scaled dot-product</h3><p>Scaled dot-product 其实就是对 dot-product进行了放缩，最后除了个常量。这个常量记作 <spanclass="math inline"><em>d</em><sub><em>k</em></sub></span>，其值等于矩阵的维度。这样做的原因在论文中是这样解释的：</p><blockquote><p>We suspect that for large values of <spanclass="math inline"><em>d</em><sub><em>k</em></sub></span>, the dotproducts grow large in magnitude, pushing the softmax function intoregions where it has extremely small gradients. To counteract thiseffect, we scale the dot products by <spanclass="math inline">$1/\sqrt{d_k}$</span>.</p></blockquote><p>当运算的矩阵的维度过高时，可能会导致点乘的结果过大或过小，这样的话，后续将结果放进softmax 的时候会导致其分布到函数的两端 (softmax的函数图像的两端梯度都很小)，梯度比较小，可能会出现梯度消失的问题。除以<span class="math inline">$\sqrt{d_k}$</span>进行放缩，可以使结果分布到函数图像的中间。Scaled dot-product的公式是：</p><p><span class="math display">$$\operatorname{Attention}(Q,K,V)=\operatorname{softmax}(\frac{QK^T}{\sqrt{d_k}})V$$</span></p><blockquote><p>注意：上面的公式已经是注意力机制的完整公式，只有 <spanclass="math inline">$\frac{QK^T}{\sqrt{d_k}}$</span> 这一部分是 scaleddot-product。</p></blockquote><h3 id="additive">5.3 Additive</h3><p>Additive 的做法的第一步和 dot-product是一样的：将两个向量输入，将两个向量分别乘上不同的矩阵 <spanclass="math inline"><em>W</em><sup><em>q</em></sup>, <em>W</em><sup><em>k</em></sup></span>，得到两个新向量<span class="math inline"><em>q</em></span> 和 <spanclass="math inline"><em>k</em></span>。但是接下来不是要将它们做点乘，而是相加，经过一个activation function，再经过一个 transform，最终得到 <spanclass="math inline"><em>α</em></span>。</p><p>下面是这两种方法的图示：</p><p><img src="/img/Self-attention-03.png" /></p><h2 id="注意力-attention">06 注意力 Attention</h2><p>在知道了如何计算 <span class="math inline"><em>α</em></span>之后，我们选择使用 dot-product 方法，继续来看如何求解 <spanclass="math inline"><em>b</em><sup>1</sup></span>。</p><p>首先，根据 dot-product 的方法，这里我们要求 <spanclass="math inline"><em>a</em><sup>1</sup></span>和剩下向量的关系，所以我们应该先去求 <spanclass="math inline"><em>q</em><sup>1</sup></span>，这个值我们称为query。根据公式，<spanclass="math inline"><em>q</em><sup>1</sup> = <em>W</em><sup><em>q</em></sup><em>a</em><sup>1</sup></span>。</p><p>接下来，我们应该去求 <spanclass="math inline"><em>k</em></span>，也就是用 <spanclass="math inline"><em>W</em><sup><em>k</em></sup></span>去乘上剩下的所有向量。这个 <span class="math inline"><em>k</em></span>被我们称作是 key。</p><p>在求出 <span class="math inline"><em>q</em><sup>1</sup></span> 和<spanclass="math inline"><em>k</em><sup>2</sup>, <em>k</em><sup>3</sup>, <em>k</em><sup>4</sup></span>之后，将它们分别进行点乘，就能得到 <spanclass="math inline"><em>α</em><sub>1, 2</sub></span>，<spanclass="math inline"><em>α</em><sub>1, 3</sub></span>，<spanclass="math inline"><em>α</em><sub>1, 4</sub></span>，这个 <spanclass="math inline"><em>α</em></span> 也有一个名字，叫作 attentionscore。</p><p>但其实，我们还会用 <spanclass="math inline"><em>q</em><sup>1</sup></span> 去乘上自己得到 <spanclass="math inline"><em>α</em><sub>1, 1</sub></span>，这也很好理解，毕竟你要考虑<span class="math inline"><em>a</em><sup>1</sup></span>和其他向量的关系，也不能忘了 <spanclass="math inline"><em>a</em><sup>1</sup></span> 与自身的关联。</p><p>在算出所有的 <spanclass="math inline"><em>α</em><sub>1, <em>i</em></sub></span>之后，我们会将它们放进一个 soft-max 里进行转换得到 <spanclass="math inline"><em>α</em><sub>1, <em>i</em></sub><sup>′</sup></span>：</p><p><span class="math display">$$\alpha^\prime_{1,i}=\frac{\operatorname{exp}(\alpha_{1,i})}{\sum_j\operatorname{exp}(\alpha_{1,j})}$$</span></p><p>这一步其实是 normalization，至于为什么是soft-max，只能说这是先人尝试之后的结果，你当然也可以使用 ReLu之类的函数，但只不过说经过前人的尝试，soft-max 的效果最好。</p><blockquote><p>为什么一定要将 α 放进 softmax 或其他类似的函数里?这是因为，α 代表了key 和 query之间的相似性，注意力机制的本质是关注相似性高的，而忽略相似性低的。最后对所有信息进行整合时，我们其实是根据α 的大小进行加权聚合，相似性高的向量权重就大一点，所以我们需要将所有的 α放进 softmax 中，以此来得到权重。简单来讲，计算 α的目的就是为了得到权重，而后面计算出的 v 是每个向量的价值。</p></blockquote><p>在做完这些工作之后，我们就终于可以来计算 <spanclass="math inline"><em>b</em><sup>1</sup></span> 了。首先，我们需要将<spanclass="math inline"><em>a</em><sup>1</sup> ∼ <em>a</em><sup>4</sup></span>都乘上一个矩阵 <spanclass="math inline"><em>W</em><sup><em>v</em></sup></span>，得到 <spanclass="math inline"><em>v</em><sup>1</sup> ∼ <em>v</em><sup>4</sup></span>，然后根据下面的公式就能得到<span class="math inline"><em>b</em><sup>1</sup></span> 了：</p><p><spanclass="math display"><em>b</em><sup>1</sup> = ∑<sub><em>i</em></sub><em>α</em><sub>1, <em>i</em></sub><sup>′</sup><em>v</em><sup><em>i</em></sup></span></p><p>讲完了全部过程，我们再来回顾一下。很显然，如果 <spanclass="math inline"><em>a</em><sup>1</sup></span> 与其中某一个向量 <spanclass="math inline"><em>a</em><sup><em>i</em></sup></span>的关联度最大，那么 <spanclass="math inline"><em>α</em><sub>1, <em>i</em></sub><sup>′</sup></span>就会很大，这就会使得最终的 <spanclass="math inline"><em>b</em><sup>1</sup></span> 与 <spanclass="math inline"><em>v</em><sup><em>i</em></sup></span>更加接近，也就是对 <spanclass="math inline"><em>a</em><sup><em>i</em></sup></span> 的 attention最大，这也就得到了考虑了上下文的向量。</p><p>Self-attention 里其实并没有做太多的工作，它需要通过 dataset学习的其实仅仅只有三个参数：<spanclass="math inline"><em>W</em><sup><em>q</em></sup></span>，<spanclass="math inline"><em>W</em><sup><em>k</em></sup></span> 和 <spanclass="math inline"><em>W</em><sup><em>v</em></sup></span>。除此之外的所有参数都是人为设置好的。</p><p>如果你想知道以上所有过程的代码思路 (仅仅是思路)或者说矩阵运算的技巧，可以参考<ahref="https://www.bilibili.com/video/BV1Wv411h7kN?p=39">这个视频</a>。</p><h2 id="多头自注意力-multi-head-self-attention">07 多头自注意力Multi-head Self-attention</h2><p>Self-attention 其实还有很多变体，其中一个在今天应用非常广泛的模型就是multi-head self-attention。</p><p>Multi-head self-attention的想法是，事物与事物之间的关联性有时候是多方面的，当考虑不同的方面时，两个事物的关联性可能就是不同的，所以我们需要不止一种<span class="math inline"><em>α</em></span>。考虑多少种 <spanclass="math inline"><em>α</em></span>，就有多少个 head。</p><p>如果这样考虑的话，根据正常的 self-attention 的做法，原本只需要对每个<span class="math inline"><em>a</em><sup><em>i</em></sup></span> 计算<spanclass="math inline"><em>q</em><sup><em>i</em></sup>, <em>k</em><sup><em>i</em></sup>, <em>v</em><sup><em>i</em></sup></span>，现在则还需要针对每个<span class="math inline"><em>q</em><sup><em>i</em></sup></span> 计算<spanclass="math inline"><em>q</em><sup><em>i</em>, 1</sup>, <em>q</em><sup><em>i</em>, 2</sup>...</span>，也就是考虑多方面的关联性。那既然<span class="math inline"><em>q</em></span> 现在有多个，那么 <spanclass="math inline"><em>k</em></span> 和 <spanclass="math inline"><em>v</em></span>也肯定要有多个。那至于怎么进一步得到 <spanclass="math inline"><em>q</em><sup><em>i</em>, 1</sup>, <em>q</em><sup><em>i</em>, 2</sup>...<em>k</em><sup><em>i</em>, 1</sup>, <em>k</em><sup><em>i</em>, 2</sup>...<em>v</em><sup><em>i</em>, 1</sup>, <em>v</em><sup><em>i</em>, 2</sup>...</span>，其实是用更多的<spanclass="math inline"><em>W</em><sup><em>q</em></sup>, <em>W</em><sup><em>k</em></sup>, <em>W</em><sup><em>v</em></sup></span>来乘上原来的 <spanclass="math inline"><em>q</em>, <em>k</em>, <em>v</em></span>，也就是：</p><p><span class="math display">$$\begin{aligned}&amp; \boldsymbol{q}^{i, \mathbf{1}}=W^{q, 1} \boldsymbol{q}^i \\&amp; \boldsymbol{k}^{i, 2}=W^{k, 2} \boldsymbol{k}^i\\&amp; \boldsymbol{v}^{i, 2}=W^{v, 2} \boldsymbol{v}^i\end{aligned}$$</span></p><p>所以，其实 multi-head self-attention 要做的事情和 self-attention是一样的，只不过现在有多个 head，所以要每个 head 都做一遍独立的self-attention 而已，最后你能得到多个 <spanclass="math inline"><em>b</em><sup><em>i</em>, <em>j</em></sup></span>，那接下来你可能会把这些<span class="math inline"><em>b</em></span>都连接起来形成一个矩阵，然后将其乘上另一个矩阵 <spanclass="math inline"><em>W</em><sup><em>o</em></sup></span>，得到最终的<span class="math inline"><em>b</em><sup><em>i</em></sup></span>。</p><h2 id="位置编码-positional-encoding">08 位置编码 PositionalEncoding</h2><p>不知道你看到这里有没有发现 self-attention 的一个缺陷？Self-attention似乎只在考虑attention，也就是向量与向量之间的关联，却漏掉了一个很重要的信息 ——那就是“位置(position)”！例如某个向量是排在序列的最前面还是最后，它是完完全全没有考虑的，而位置信息很明显，在很多任务中都是很重要的，尤其是对于文字处理而言，比如说，动词出现在句首的概率比较低，那么如果一个词出现在句首，它可能是动词的概率就比较低。</p><p>所以怎么办呢？这就是 positional encoding这项技术的作用，它可以把向量的位置信息给“塞进去”。它给序列中的每一个位置都设定了一个vector，称为 <spanclass="math inline"><em>e</em><sup><em>i</em></sup></span>，不同的位置都有一个专属的<span class="math inline"><em>e</em></span>。我们要做的事情是，将这个<span class="math inline"><em>e</em><sup><em>i</em></sup></span> 加到<span class="math inline"><em>a</em><sup><em>i</em></sup></span>上面去，就结束了。没错，就这么简单。</p><p>那么这个 <span class="math inline"><em>e</em></span>是如何确定的呢？在 <em>Attention is All You Need</em> 论文中，<spanclass="math inline"><em>e</em></span> 是人为规定 (hand-crafted)的，他们是使用 sin、cos 这些神奇的函数来得到 <spanclass="math inline"><em>e</em></span>的，至于可不可以用其他函数，答案当然是可以，positional encoding目前还是一个尚待研究的问题，所以你用什么都是没问题的；当然，<spanclass="math inline"><em>e</em></span> 也可以是通过 data 学习出来的。</p><h2 id="self-attention-v.s.-cnn">09 Self-attention v.s. CNN</h2><p>Self-attention同样是可以用于处理图像的。我们知道图像信息也是向量，使用 self-attention我们就可以去考虑每个 pixel之间的关联度，让机器自己去筛选出一张图片中重要的信息。当今，使用self-attention处理图片已然不是什么很新鲜的事情，那么就会有一个问题：self-attention 和CNN 孰优孰劣？</p><p>其实，我们可以将 self-attention 当作是一个复杂版的 CNN，而 CNN 是self-attention 的简化版。我们知道，CNN 每次都只考虑一个 perceptive filed的信息；而 self-attention 则是通过 pixel 与每个 pixel之间的关联度，来自动筛选出值得关注的 filed，这就好像是在说self-attention 的 perceptive filed 是自己学习出来的。</p><p>在 <a href="https://arxiv.org/abs/1911.03584">On the Relationshipbetween Self-Attention and Convolutional Layers</a>这篇论文里，作者用数学方法讨论了 CNN 和self-attention，并且证明了只要参数设置正确，self-attention 完全可以变成CNN。也就是说，CNN 只是 self-attention 的一种特例。</p><p>那么究竟 CNN 和 self-attention谁更加好呢？显然通过我们上面的讨论，CNN 的 bias 比 self-attention更大，也就是 CNN的弹性更加小，能拟合出的函数更加少。而我们也知道，弹性大的网络在面对较小的数据量时很容易overfitting；弹性小的网络在面对更大的数据量的时候则很难再学到新的东西。也有学者对此做过专门研究，最后发现，当数据量较少时，CNN的准确率是能超过 self-attention 的，但当数据量到达 100M 级别的时候，CNN就被 self-attention 超过了。所以 CNN 和 self-attention到底谁更好是依你的数据量来定的。</p><h2 id="图中的自注意力机制">10 图中的自注意力机制</h2><p>Self-attention 也是可以用在 graph 上的，例如下面这张图：</p><p><img src="/img/Self-attention-04.png" /></p><p>当我们需要去给节点 1 做 label的时候，我们就可以去考虑它的邻居节点，然后使用 self-attention对其与邻居节点之间的关联性进行考量，而对于那些不与节点 1相连的节点则代表我们已经人为地帮机器排除了彼此的联系，所以就不需要机器再去考虑了。这其实就是GNN 的一种。</p><h2 id="注意力和自注意力">11 注意力和自注意力</h2><p>我们上面介绍的是 self-attention，注意：self-attention (自注意力机制)和 attention (注意力机制)是不一样的！我们可以用一个例子来说明注意力机制是什么。以淘宝搜索商品为例，淘宝要做的是，将我们输入的关键词与其数据库内的商品相关联，其本质其实和self-attention很像，都是找关联性强的，忽略关联性弱的，但不同的是，在这个例子中，我们的<span class="math inline"><em>q</em>, <em>k</em>, <em>v</em></span> 来自source (商品) 和 target (关键词)，它们位于 transfomer架构的两端；而在上面举的机器翻译的例子中，source 是输入的中文，target是要求解的英文翻译，它们位于 transfomer 的两端，但 <spanclass="math inline"><em>q</em>, <em>v</em>, <em>k</em></span> 只来自source。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> deep learning </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> technique </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>A WSL Error Encountered When Installing Docker</title>
       <link href="/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/"/>
       <url>/2025/04/07/A-WSL-Error-Encountered-When-installing-Docker/</url>
@@ -20,7 +45,7 @@
       
         <tags>
             
-            <tag> Docker </tag>
+            <tag> technique </tag>
             
         </tags>
       
@@ -79,6 +104,31 @@
     
     
     <entry>
+      <title>图注意力机制的原理</title>
+      <link href="/2024/04/03/%E5%9B%BE%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/"/>
+      <url>/2024/04/03/%E5%9B%BE%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</url>
+      
+        <content type="html"><![CDATA[<p>该篇笔记总结了图注意力网络（Graph AttantionNetwork）中的图注意力层的数学原理，参考的资料为 GAT 网络的<ahref="https://arxiv.org/abs/1710.10903">原始论文</a>.</p><p>假设输入是一组节点特征，表示为 <spanclass="math inline">$h=\{\vec{h_1},\vec{h_2},\cdots,\vec{h_N}\},\vec{h_i}\in\mathbb{R}^F$</span>，其中<span class="math inline"><em>N</em></span> 表示节点的个数，<spanclass="math inline"><em>F</em></span> 表示特征维数。GAL将会输出一组新的节点特征，并且这组特征的特征维数并不一定与原特征相同，设<span class="math inline"><em>F</em><sup>′</sup></span> 为 GAL输出的特征维数，则新的节点特征可表示为 <spanclass="math inline">$h^{\prime}=\{\vec{h_1^{\prime}},\vec{h_2^{\prime}},\cdots,\vec{h_N^{\prime}}\},\vec{h_i^{\prime}}\in\mathbb{R}^{F^{\prime}}$</span>。</p><span id="more"></span><p>为了把输入特征转换为高维特征，并且使高维特征具有足够高的表达原特征的能力，我们需要执行至少一个可学习的线性变换。考虑到这一点，我们将对每一个节点进行一次线性变换，即将每个节点的特征乘上一个<strong>共享</strong>的权重矩阵<spanclass="math inline"><em>W</em> ∈ ℝ<sup><em>F</em><sup>′</sup> × <em>F</em></sup></span>。然后我们会对每一个节点进行一次自注意力(<em>self-attention</em>) 操作，我们用 <spanclass="math inline"><em>a</em></span>表示这一操作，该操作将会计算得出节点 <spanclass="math inline"><em>i</em></span> 和节点 <spanclass="math inline"><em>j</em></span> 之间的注意力系数 (<em>attentioncoefficients</em>)： <span class="math display">$$e_{ij}=a(W\vec{h_i},W\vec{h_j})$$</span> 注意力系数 <spanclass="math inline"><em>e</em><sub><em>i</em><em>j</em></sub></span>表示了节点 <span class="math inline"><em>j</em></span> 的特征对于节点<span class="math inline"><em>i</em></span>的重要性。在自注意力机制最广泛应用的公式中，模型将会计算每个节点之间的注意力系数，导致结构信息被丢弃。我们通过执行掩码注意力机制(<em>masked attention</em>)来保留图的结构信息——我们只计算相邻节点之间的注意力系数。注意，这里的相邻节点指的是直接相邻(first-order)的节点，而不是连通的节点，并且一个节点本身也是其自己的相邻节点。为了能对注意力系数进行跨节点的比较，我们对它们进行归一化，用以衡量不同节点<span class="math inline"><em>j</em> ∈ 𝒩<sub><em>i</em></sub></span>对节点 <span class="math inline"><em>i</em></span> 的重要程度 (这里的<span class="math inline">𝒩<sub><em>i</em></sub></span> 表示节点 <spanclass="math inline"><em>i</em></span> 的邻居节点的编号)，归一化的过程由softmax 函数实现： <span class="math display">$$\alpha_{ij}=\operatorname{softmax}(e_{ij})=\frac{\operatorname{exp}(e_{ij})}{\sum_{k\in\mathcal{N}_i}\operatorname{exp}(e_{ik})}.$$</span> 在我们的实验中，注意力机制 <spanclass="math inline"><em>a</em></span>是一个单层的前馈神经网络，以一个权重向量 <spanclass="math inline">$\vec{\mathbf{a}}\in\mathbb{R}^{2F^\prime}$</span>​作为参数，使用 LeakyReLU 函数实现非线性变换 (negative slope 设置为0.2)。展开后，系数的计算可表示为： <span class="math display">$$\alpha_{ij}=\frac{\operatorname{exp}(\operatorname{LeakyReLU}(\vec{\mathbf{a}}^{T}[\mathbf{W}\vec{h_i}||\mathbf{W}\vec{h_j}]))}{\sum_{k\in\mathcal{N}_i}\operatorname{exp}(\operatorname{LeakyReLU}(\vec{\mathbf{a}}^{T}[\mathbf{W}\vec{h_i}||\mathbf{W}\vec{h_k}]))}$$</span> 其中，<span class="math inline">·<sup><em>T</em></sup></span>表示转置操作，<span class="math inline">||</span> 是矩阵拼接操作。</p><p>一旦得到注意力系数，GAL就会使用它们来计算出各个特征对应的线性组合，作为节点最终的输出特征，整个过程如下左图所示(右图是多头注意力机制)：</p><p><img src="/img/GAT-01.png" /></p><p>输出特征 <spanclass="math inline"><em>h⃗</em><sub><em>i</em></sub><sup>′</sup></span>的计算公式如下： <spanclass="math display"><em>h⃗</em><sub><em>i</em></sub><sup>′</sup> = <em>σ</em>(∑<sub><em>j</em> ∈ 𝒩<sub><em>i</em></sub></sub><em>α</em><sub><em>i</em><em>j</em></sub><strong>W</strong><em>h⃗</em><sub><em>j</em></sub>)</span>其中，<span class="math inline"><em>σ</em></span>代表一种非线性变换。</p><p>为了使整个自注意力过程更加稳定，我们引入了多头注意力 (<em>multi-headattention</em>)。具体来说，<span class="math inline"><em>K</em></span>个独立的注意力机制将分别执行上式的变换，随后，它们的结果将会被拼接起来，得到下面的输出特征表示：<span class="math display">$$\vec{h}_i^\prime=\overset{K}{\underset{k=1}{\|}}\sigma(\sum_{j\in\mathcal{N_i}}\alpha_{ij}^k\mathbf{W}^k\vec{h}_j)$$</span>特殊的，如果我们在输出层执行多头注意力，拼接过程将不再是显式的，我们会使用平均聚合(<em>averaging</em>)，然后施加一个非线性变换来得到最终输出： <spanclass="math display">$$\vec{h}_i^\prime=\sigma(\frac{1}{K}\sum_{k=1}^{K}\sum_{j\in\mathcal{N_i}}\alpha_{ij}^k\mathbf{W}^k\vec{h}_j)$$</span></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> deep learning </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> technique </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>隐马尔可夫模型</title>
       <link href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/"/>
       <url>/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/</url>
@@ -95,7 +145,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> technique </tag>
             
         </tags>
       
@@ -120,7 +170,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> technique </tag>
             
         </tags>
       
@@ -145,7 +195,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> technique </tag>
             
         </tags>
       
@@ -195,7 +245,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> technique </tag>
             
         </tags>
       
