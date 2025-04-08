@@ -125,152 +125,445 @@
 		 </div> <!-- alert -->
 	  		
 
-	  <p>隐马尔可夫模型 HMM（Hidden Markov Model）是一种统计模型，用来描述一个隐含未知量的马尔可夫过程（马尔可夫过程是一类随机过程，它的原始模型是马尔科夫链），它是结构最简单的动态贝叶斯网，是一种著名的有向图模型，主要用于时序数据建模，在语音识别、自然语言处理等领域有广泛应用，是一种<strong>生成式模型</strong>。</p>
+	  <p>隐马尔可夫模型 HMM（Hidden Markov
+Model）是一种统计模型，用来描述一个隐含未知量的马尔可夫过程（马尔可夫过程是一类随机过程，它的原始模型是马尔科夫链），它是结构最简单的动态贝叶斯网，是一种著名的有向图模型，主要用于时序数据建模，在语音识别、自然语言处理等领域有广泛应用，是一种<strong>生成式模型</strong>。</p>
 <span id="more"></span>
-<h2 id="01-马尔可夫模型"><a href="#01-马尔可夫模型" class="headerlink" title="01 马尔可夫模型"></a>01 马尔可夫模型</h2><p>在学习隐马尔可夫模型之前，我们先来了解一下它的前生——马尔可夫模型 MM（Markov Model）。</p>
+<h2 id="马尔可夫模型">01 马尔可夫模型</h2>
+<p>在学习隐马尔可夫模型之前，我们先来了解一下它的前生——马尔可夫模型
+MM（Markov Model）。</p>
 <p>我们用一个例子进行引入：天气的变化应该具有某种联系。晴天、多云和暴雨这三种天气之间的转换应该存在某种规律，下图中的箭头表示两种天气之间转换的概率：</p>
-<p><img src="/img/隐马尔可夫模型-01.png" alt=""></p>
+<p><img src="/img/隐马尔可夫模型-01.png" /></p>
 <p>于是我们能得到一个<strong>状态转移概率矩阵</strong>：</p>
-<p><img src="/img/隐马尔可夫模型-02.png" alt=""></p>
+<p><img src="/img/隐马尔可夫模型-02.png" /></p>
 <p>根据该矩阵，我们就能在知道今天天气的情况下，预测明天的天气。显然，这种预测是建立在==未来所处的状态仅与当前状态有关==的假设上的，即第二天的天气只取决于前一天的天气。这种假设就是<strong>马尔可夫假设</strong>，符合这种假设描述的随机过程，就被称为<strong>马尔可夫过程</strong>，其具有<strong>马尔可夫性</strong>，即<strong>无后效性</strong>。</p>
-<p>令 $q<em>t$ 表示在时刻 $t$ 系统所处的状态，令 $S_i$ 表示某一具体状态，则 $q_t=S_i$ 表示在某一时刻 $t$，系统处于状态 $S_i$，令 $P(q</em>{t+1}=S<em>i|q</em>{t}=S_j)$ 表示在前一时刻 $t$ 系统处于状态 $S_j$ 的情况下，下一时刻 $t+1$ 系统处于状态 $S_i$ 的概率。基于<strong>马尔可夫假设</strong>，则在马尔可夫模型中存在下列关系：</p>
-<script type="math/tex; mode=display">
-P(q_{t+1}=S_i|q_{t}=S_{j},q_{t-1}=S_{k},...)=P(q_{t+1}=S_i|q_{t}=S_j)</script><p>除了状态转移概率矩阵（用 $A$ 表示）之外，我们还需要知道所有状态的<strong>初始状态概率向量</strong> $\Pi$，设系统中一共有 $N$ 种状态，则 $\Pi$ 的长度为 $N$，$\Pi$ 中的每一个元素代表系统的初始状态为某一状态的概率，且有 $\sum_{i=1}^N\Pi_i=1$。</p>
-<p>假设我们想计算一下今天 $t=1$ 的天气状况，则我们可以得到：</p>
-<script type="math/tex; mode=display">
-P(q_1=S_{\text{sun}})=P(q_1=S_{\text{sun}}|q_0=\sum_{i=1}^{3}S_i)=\sum_{i=1}^{3}\Pi_{S_i}\times A_{S_i\rightarrow S_{\text{sun}}}</script><p>用文字形式表示就是：</p>
-<p><img src="/img/隐马尔可夫模型-03.png" alt=""></p>
-<h2 id="02-隐马尔可夫模型"><a href="#02-隐马尔可夫模型" class="headerlink" title="02 隐马尔可夫模型"></a>02 隐马尔可夫模型</h2><h3 id="2-1-概念"><a href="#2-1-概念" class="headerlink" title="2.1 概念"></a>2.1 概念</h3><p>而隐马尔可夫模型就比马尔可夫模型要复杂多了。我们还是用上面这个例子进行引入，但是这次我们漂流到了一个岛上，这里没有天气预报，只有一片海藻，海藻具有干燥、较干、较湿和湿润四种状态。现在我们没有直接的天气信息了，但是天气状况跟海藻的状态还是有一定联系的，虽然看不见天气状况，但其决定了海藻的状态，所以我们还是能从海藻的状态推知天气的状态。</p>
+<p>令 <span class="math inline"><em>q</em><sub><em>t</em></sub></span>
+表示在时刻 <span class="math inline"><em>t</em></span>
+系统所处的状态，令 <span
+class="math inline"><em>S</em><sub><em>i</em></sub></span>
+表示某一具体状态，则 <span
+class="math inline"><em>q</em><sub><em>t</em></sub> = <em>S</em><sub><em>i</em></sub></span>
+表示在某一时刻 <span class="math inline"><em>t</em></span>，系统处于状态
+<span class="math inline"><em>S</em><sub><em>i</em></sub></span>，令
+<span
+class="math inline"><em>P</em>(<em>q</em><sub><em>t</em> + 1</sub>=<em>S</em><sub><em>i</em></sub>|<em>q</em><sub><em>t</em></sub>=<em>S</em><sub><em>j</em></sub>)</span>
+表示在前一时刻 <span class="math inline"><em>t</em></span> 系统处于状态
+<span class="math inline"><em>S</em><sub><em>j</em></sub></span>
+的情况下，下一时刻 <span class="math inline"><em>t</em> + 1</span>
+系统处于状态 <span
+class="math inline"><em>S</em><sub><em>i</em></sub></span>
+的概率。基于<strong>马尔可夫假设</strong>，则在马尔可夫模型中存在下列关系：
+<span
+class="math display"><em>P</em>(<em>q</em><sub><em>t</em> + 1</sub>=<em>S</em><sub><em>i</em></sub>|<em>q</em><sub><em>t</em></sub>=<em>S</em><sub><em>j</em></sub>,<em>q</em><sub><em>t</em> − 1</sub>=<em>S</em><sub><em>k</em></sub>,...) = <em>P</em>(<em>q</em><sub><em>t</em> + 1</sub>=<em>S</em><sub><em>i</em></sub>|<em>q</em><sub><em>t</em></sub>=<em>S</em><sub><em>j</em></sub>)</span>
+除了状态转移概率矩阵（用 <span class="math inline"><em>A</em></span>
+表示）之外，我们还需要知道所有状态的<strong>初始状态概率向量</strong>
+<span class="math inline"><em>Π</em></span>，设系统中一共有 <span
+class="math inline"><em>N</em></span> 种状态，则 <span
+class="math inline"><em>Π</em></span> 的长度为 <span
+class="math inline"><em>N</em></span>，<span
+class="math inline"><em>Π</em></span>
+中的每一个元素代表系统的初始状态为某一状态的概率，且有 <span
+class="math inline">$\sum_{i=1}^N\Pi_i=1$</span>。</p>
+<p>假设我们想计算一下今天 <span
+class="math inline"><em>t</em> = 1</span> 的天气状况，则我们可以得到：
+<span class="math display">$$
+P(q_1=S_{\text{sun}})=P(q_1=S_{\text{sun}}|q_0=\sum_{i=1}^{3}S_i)=\sum_{i=1}^{3}\Pi_{S_i}\times
+A_{S_i\rightarrow S_{\text{sun}}}
+$$</span> 用文字形式表示就是：</p>
+<p><img src="/img/隐马尔可夫模型-03.png" /></p>
+<h2 id="隐马尔可夫模型">02 隐马尔可夫模型</h2>
+<h3 id="概念">2.1 概念</h3>
+<p>而隐马尔可夫模型就比马尔可夫模型要复杂多了。我们还是用上面这个例子进行引入，但是这次我们漂流到了一个岛上，这里没有天气预报，只有一片海藻，海藻具有干燥、较干、较湿和湿润四种状态。现在我们没有直接的天气信息了，但是天气状况跟海藻的状态还是有一定联系的，虽然看不见天气状况，但其决定了海藻的状态，所以我们还是能从海藻的状态推知天气的状态。</p>
 <p>在这个例子里，海藻是能看到的，那它就是<strong>观测状态</strong>；天气信息是看不到的，那它就是<strong>隐藏状态</strong>。其中，隐藏状态天气时是决定性因素，观测状态是被决定因素，由隐藏状态到观测状态，这就是<strong>隐马尔可夫模型</strong>。</p>
-<p><img src="/img/隐马尔可夫模型-04.png" alt=""></p>
-<p>如上图所示，观测状态（海藻的状态）有 4 个，而隐藏状态（天气）只有 3 个，说明观测状态与隐藏状态的数量并不是一一对应的，可以根据需要定义。我们可以画出更加抽象的隐马尔可夫模型的示意图：</p>
-<p><img src="/img/隐马尔可夫模型-05.png" alt=""></p>
-<p>图中，$Z_i$ 表示隐藏状态，$X_i$ 表示观测状态，隐藏状态决定了观测状态，所以箭头由 $Z$ 指向 $X$。并且，隐藏状态之间还可以相互转换，所以 $Z_i$ 和 $Z_j$ 之间也有箭头。根据马尔可夫假设，下一时刻的状态只取决于当前时刻的状态，所以，对于观测状态和隐藏状态来讲，都存在如下关系：</p>
-<script type="math/tex; mode=display">
+<p><img src="/img/隐马尔可夫模型-04.png" /></p>
+<p>如上图所示，观测状态（海藻的状态）有 4 个，而隐藏状态（天气）只有 3
+个，说明观测状态与隐藏状态的数量并不是一一对应的，可以根据需要定义。我们可以画出更加抽象的隐马尔可夫模型的示意图：</p>
+<p><img src="/img/隐马尔可夫模型-05.png" /></p>
+<p>图中，<span
+class="math inline"><em>Z</em><sub><em>i</em></sub></span>
+表示隐藏状态，<span
+class="math inline"><em>X</em><sub><em>i</em></sub></span>
+表示观测状态，隐藏状态决定了观测状态，所以箭头由 <span
+class="math inline"><em>Z</em></span> 指向 <span
+class="math inline"><em>X</em></span>。并且，隐藏状态之间还可以相互转换，所以
+<span class="math inline"><em>Z</em><sub><em>i</em></sub></span> 和
+<span class="math inline"><em>Z</em><sub><em>j</em></sub></span>
+之间也有箭头。根据马尔可夫假设，下一时刻的状态只取决于当前时刻的状态，所以，对于观测状态和隐藏状态来讲，都存在如下关系：
+<span class="math display">$$
 \begin{aligned}
-&P=(Z_t|Z_{t-1},X_{t-1},Z_{t-2},X_{t-2},...,Z_1,X_1)=P(Z_t|Z_{t-1})\\
-&P=(X_t|Z_{t},X_{t},Z_{t-1},X_{t-1},...,Z_1,X_1)=P(X_t|Z_t)\\
-\end{aligned}</script><h3 id="2-2-组成"><a href="#2-2-组成" class="headerlink" title="2.2 组成"></a>2.2 组成</h3><p>马尔可夫模型有两个组成部分——初始状态概率向量 $\Pi$ 和 状态转移概率矩阵 $A$。</p>
+&amp;P=(Z_t|Z_{t-1},X_{t-1},Z_{t-2},X_{t-2},...,Z_1,X_1)=P(Z_t|Z_{t-1})\\
+&amp;P=(X_t|Z_{t},X_{t},Z_{t-1},X_{t-1},...,Z_1,X_1)=P(X_t|Z_t)\\
+\end{aligned}
+$$</span></p>
+<h3 id="组成">2.2 组成</h3>
+<p>马尔可夫模型有两个组成部分——初始状态概率向量 <span
+class="math inline"><em>Π</em></span> 和 状态转移概率矩阵 <span
+class="math inline"><em>A</em></span>。</p>
 <p>而隐马尔可夫模型有则有三个组成部分：</p>
-<ol>
-<li>初始状态概率向量 $\Pi$</li>
-<li>状态转移概率矩阵 $A$</li>
-<li>观测状态概率矩阵 $B$</li>
+<ol type="1">
+<li>初始状态概率向量 <span class="math inline"><em>Π</em></span></li>
+<li>状态转移概率矩阵 <span class="math inline"><em>A</em></span></li>
+<li>观测状态概率矩阵 <span class="math inline"><em>B</em></span></li>
 </ol>
-<p>其中，$\Pi$ 是针对隐藏状态来说的，因为隐藏状态决定了观测状态；$A$ 矩阵是针对隐藏状态来说的，因为隐马尔可夫模型中进行状态转移的是隐藏状态；而 $B$ 是由隐藏状态到观测状态转移的概率矩阵，在上例中，矩阵 $B$ 可表示如下：</p>
-<p><img src="/img/隐马尔可夫模型-06.png" alt=""></p>
-<p>也就是说，由 $Z_i\rightarrow Z_j$ 的转换看矩阵 $A$，由 $Z_i\rightarrow X_i$ 的转换看矩阵 $B$。</p>
-<p>因此，隐马尔可夫模型 $\lambda$ 可以用三元符号表示：</p>
-<script type="math/tex; mode=display">
-\lambda(A,B,\Pi)</script><h3 id="2-3-求解目标"><a href="#2-3-求解目标" class="headerlink" title="2.3 求解目标"></a>2.3 求解目标</h3><p>HMM 的求解目标有三个：</p>
-<ol>
-<li>给定模型 $\lambda(A,B,\Pi)$ 及观测序列 $O={o_1,o_2,…,o_t}$，计算该观测序列出现的概率 $P(O|\lambda)$；</li>
-<li>给定观测序列 $O={o_1,o_2,…,o_t}$，求解参数 $(A,B,\Pi)$ 使得 $P(O|\lambda)$ 最大；</li>
-<li>已知模型 $\lambda(A,B,\Pi)$ 和观测序列 $O={o_1,o_2,…,o_t}$，求状态序列，使得 $P(I|O,\lambda)$ 最大。</li>
+<p>其中，<span class="math inline"><em>Π</em></span>
+是针对隐藏状态来说的，因为隐藏状态决定了观测状态；<span
+class="math inline"><em>A</em></span>
+矩阵是针对隐藏状态来说的，因为隐马尔可夫模型中进行状态转移的是隐藏状态；而
+<span class="math inline"><em>B</em></span>
+是由隐藏状态到观测状态转移的概率矩阵，在上例中，矩阵 <span
+class="math inline"><em>B</em></span> 可表示如下：</p>
+<p><img src="/img/隐马尔可夫模型-06.png" /></p>
+<p>也就是说，由 <span
+class="math inline"><em>Z</em><sub><em>i</em></sub> → <em>Z</em><sub><em>j</em></sub></span>
+的转换看矩阵 <span class="math inline"><em>A</em></span>，由 <span
+class="math inline"><em>Z</em><sub><em>i</em></sub> → <em>X</em><sub><em>i</em></sub></span>
+的转换看矩阵 <span class="math inline"><em>B</em></span>。</p>
+<p>因此，隐马尔可夫模型 <span class="math inline"><em>λ</em></span>
+可以用三元符号表示： <span
+class="math display"><em>λ</em>(<em>A</em>,<em>B</em>,<em>Π</em>)</span></p>
+<h3 id="求解目标">2.3 求解目标</h3>
+<p>HMM 的求解目标有三个：</p>
+<ol type="1">
+<li>给定模型 <span
+class="math inline"><em>λ</em>(<em>A</em>,<em>B</em>,<em>Π</em>)</span>
+及观测序列 <span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，计算该观测序列出现的概率
+<span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>；</li>
+<li>给定观测序列 <span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，求解参数
+<span class="math inline">(<em>A</em>,<em>B</em>,<em>Π</em>)</span> 使得
+<span class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+最大；</li>
+<li>已知模型 <span
+class="math inline"><em>λ</em>(<em>A</em>,<em>B</em>,<em>Π</em>)</span>
+和观测序列 <span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，求状态序列，使得
+<span
+class="math inline"><em>P</em>(<em>I</em>|<em>O</em>,<em>λ</em>)</span>
+最大。</li>
 </ol>
-<h2 id="03-暴力求解法"><a href="#03-暴力求解法" class="headerlink" title="03 暴力求解法"></a>03 暴力求解法</h2><p>我们要求的是在给定模型下观测序列出现的概率，那如果我们能把所有的隐藏序列都列出来，也就可以知道联合概率分布 $P(O,I|\lambda)$ 了（其中，$I$ 为 $O$ 对应的隐藏状态序列），再根据 $P(O|\lambda)=\sum_{I}P(O,I|\lambda)$，我们就能求得观测序列出现的概率。</p>
-<p>根据联合概率分布的公式：$P(X=x,Y=y)=P(X=x)P(Y=y|X=x)$，可得 $P(O,I|\lambda)$ 的求解方法：</p>
-<script type="math/tex; mode=display">
-P(O,I|\lambda)=P(I|\lambda)P(O|I,\lambda)</script><p>其中，$P(I|\lambda)$ 是在给定模型下，一个隐藏序列出现的概率，即 $P(I|\lambda)=P(i_1,i_2,…,i_n|\lambda)=P(i_1|\lambda)P(i_2|\lambda)…P(i_n|\lambda)$。那么怎么求 $P(i_n|\lambda)$？别忘了状态转移概率矩阵 $A$ 的存在，$A$ 所记录的不就是隐藏状态之间转换的概率吗？所以可得：</p>
-<script type="math/tex; mode=display">
-P(I|\lambda)=\pi_{i_1}a_{i_1i_2}a_{i_2i_3}...a_{i_{t-1}i_t}</script><p>接下来要求的就是 $P(O|I,\lambda)$，它的含义是：在给定模型下，当隐藏序列为 $I$ 时，观测序列为 $O$ 的概率。求解 $P(O|I,\lambda)$ 的方法和求解 $P(I|\lambda)$ 的方法是一样的，还记得观测状态概率矩阵 $B$ 吗？$B$ 记录的正是从隐藏序列到观测序列转换的概率，所以 $P(O|I,\lambda)$ 的计算方法如下：</p>
-<script type="math/tex; mode=display">
-P(O|I,\lambda)=b_{i_1o_1}b_{i_2o_2}...b_{i_to_t}</script><p>于是，我们只需要将上面两个式子乘在一起，就能得到 $P(O,I|\lambda)$ 了：</p>
-<script type="math/tex; mode=display">
-P(O,I|\lambda)=\pi_{i_1}a_{i_1i_2}b_{i_1o_1}a_{i_2i_3}b_{i_2o_2}...a_{i_{t-1}i_t}b_{i_to_t}</script><p>则观测序列 $O$ 出现的概率为：</p>
-<script type="math/tex; mode=display">
-P(O|\lambda)=\sum_{I}P(O,I|\lambda)=\sum_{i_1,i_2,...,i_T}\pi_{i_1}a_{i_1i_2}b_{i_1o_1}a_{i_2i_3}b_{i_2o_2}...a_{i_{t-1}i_T}b_{i_to_T}</script><p>解释一下上面的公式：我们要求的是在给定模型下，某一观测序列出现的概率。暴力求解的方法找出所有可能的隐藏序列，将由这些隐藏序列得到该观测序列的概率全部加起来，最终得到该观测序列的概率。假设隐藏状态数有 $N$ 个，我们需要遍历每一个隐藏序列，序列的长度为观测状态数 $T$，所以可能的隐藏序列有 $N^T$ 种，而对于每一个序列，都要遍历其 $T$ 个 $a_i$ 和 $b_i$，加起来就是 $2T$，计算时间复杂度时省去系数，则该算法的<strong>时间复杂度将达到 $O(TN^T)$</strong>。</p>
-<h2 id="04-前向算法"><a href="#04-前向算法" class="headerlink" title="04 前向算法"></a>04 前向算法</h2><h3 id="4-1-算法解析"><a href="#4-1-算法解析" class="headerlink" title="4.1 算法解析"></a>4.1 算法解析</h3><p>暴力求解法告诉我们隐马尔可夫模型的问题看上去是可解，但高昂的时间开销却是不可承受的。对此，有人提出了前向算法，该算法利用<strong>动态规划</strong>的思想来求解该问题，降低了时间复杂度。</p>
-<p>给定 $t$ 时刻的隐藏状态为 $q_i$（注意，这里的 $i$ 是指一种<u>具体</u>的隐藏状态，例如晴天、雨天等，是固定好的），观测序列为 $o_1,o_2,…o_n$ 的概率叫做<strong>前向概率</strong>，定义为：</p>
-<script type="math/tex; mode=display">
-\alpha_t(i)=P(o_1,o_2,...,o_t,S_t=q_i|\lambda)</script><p>换句话来讲，前向概率就是在给定某一观测序列的情况下，某一时刻的状态刚刚好为 $q_i$ 的概率。</p>
-<p>则，当 $t=T$ 时，$\alpha_T(i)=P(o_1,o_2,…,o_T,S_T=q_i|\lambda)$ 表示最后一个时刻，隐藏状态为状态 $q_i$ 并且得到观察序列为 $o_1,o_2,…,o_T$ 的概率。现在我们回来思考一下我们要解决的最原始的问题是什么，应该是 $P(O|\lambda)=P(o_1,o_2,…o_T|\lambda)$，而 $\alpha_T(i)$ 和它相比，末尾多了个 $S_T=q_i$，也就是说 $\alpha_T(i)$ 还要求最终的隐藏状态必须为 $q_i$，貌似和原本的问题相比有点画蛇添足，但仔细想想，如果我们能把所有最终可能的隐藏状态都拿过来，求 $\alpha_T(1)+\alpha_T(2)+···+\alpha_T(n)$，那不就大功告成了？所以现在的问题就变成了如何求解 $T$ 时刻的前向概率，这是一个动态规划的问题。</p>
-<p>在第一个时刻：$\alpha_{1}(i)=P(o_1,S_1=q_i|\lambda)$ 表示第一时刻的隐藏状态为 $q_i$，观测序列为 $o_1$ 的概率，其结果为（这里的 $b_i(o_1)$ 就表示由隐藏状态 $q_i$ 转换为观测状态 $o_1$ 的概率，是矩阵 $B$ 的元素）：</p>
-<script type="math/tex; mode=display">
-\alpha_{1}(i)=\pi_ib_{i}(o_1)</script><p>在第 $t$ 时刻，隐藏状态变成了 $q<em>j$（这里的 $q_j$ 不是具体状态，是任意状态都可以），$t+1$ 时刻隐藏状态变成了为 $q_i$，此时，隐藏状态由 $q_j$ 变成 $q_i$ 的概率可由矩阵 $A$ 得到，值为 $a</em>{ji}$，而 $q<em>j$ 可以是任何一种状态，我们都得考虑进去，所以我们得遍历一遍所有隐藏状态，然后相加，即 $\sum</em>{j}\alpha_t(j)$，所以有：</p>
-<script type="math/tex; mode=display">
-\alpha_{t+1}(i)=[\sum_{j}\alpha_t(j)a_{ij}]b_{i}(o_{t+1})</script><p>如果这个式子看上去还是太麻烦，我们可以拆开来看：$\alpha<em>t(j)$ 表示的是前一时刻隐藏状态为 $q_j$ 的概率，$a</em>{ij}$ 表示由隐藏状态 $q<em>j$ 转换为 $q_i$ 的概率，相乘就是前一时刻的隐藏状态恰好为 $q_j$，并且由 $q_j$ 能转换到 $q_i$ 的概率，由于得考虑全部 $q_j$ 的情况，所以得遍历求和；后面的 $b</em>{i}(o<em>{t+1})$ 则是由隐藏状态 $q_i$ 转换到观测状态 $o</em>{t+1}$ 的概率，将它与前一部分相乘，就得到了前一时刻的隐藏状态恰好为 $q<em>j$，并且由 $q_j$ 能转换到 $q_i$，又由 $q_i$ 得到 $o</em>{t+1}$ 的概率。</p>
-<p>则最终结果就是：</p>
-<script type="math/tex; mode=display">
-P(O|\lambda)=\sum_i\alpha_i(T)</script><p>计算一下前向算法的时间复杂度：一共要计算 $T$ 次 $\alpha$，每次计算 $\alpha$ 的时间复杂度为 $N^2$ （原因很简单，自己想），所以前向算法的<strong>时间复杂度为 $O(TN^2)$</strong>。显然，前向算法将暴力算法的时间复杂度从指数级降到了线性级别，极大提升了执行效率。</p>
-<h3 id="4-2-公式推导"><a href="#4-2-公式推导" class="headerlink" title="4.2 公式推导"></a>4.2 公式推导</h3><p>由上述过程，我们可以得到前向算法的递推式：</p>
-<ol>
+<h2 id="暴力求解法">03 暴力求解法</h2>
+<p>我们要求的是在给定模型下观测序列出现的概率，那如果我们能把所有的隐藏序列都列出来，也就可以知道联合概率分布
+<span
+class="math inline"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>
+了（其中，<span class="math inline"><em>I</em></span> 为 <span
+class="math inline"><em>O</em></span> 对应的隐藏状态序列），再根据 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>I</em></sub><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>，我们就能求得观测序列出现的概率。</p>
+<p>根据联合概率分布的公式：<span
+class="math inline"><em>P</em>(<em>X</em>=<em>x</em>,<em>Y</em>=<em>y</em>) = <em>P</em>(<em>X</em>=<em>x</em>)<em>P</em>(<em>Y</em>=<em>y</em>|<em>X</em>=<em>x</em>)</span>，可得
+<span
+class="math inline"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>
+的求解方法： <span
+class="math display"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>) = <em>P</em>(<em>I</em>|<em>λ</em>)<em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>
+其中，<span class="math inline"><em>P</em>(<em>I</em>|<em>λ</em>)</span>
+是在给定模型下，一个隐藏序列出现的概率，即 <span
+class="math inline"><em>P</em>(<em>I</em>|<em>λ</em>) = <em>P</em>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,...,<em>i</em><sub><em>n</em></sub>|<em>λ</em>) = <em>P</em>(<em>i</em><sub>1</sub>|<em>λ</em>)<em>P</em>(<em>i</em><sub>2</sub>|<em>λ</em>)...<em>P</em>(<em>i</em><sub><em>n</em></sub>|<em>λ</em>)</span>。那么怎么求
+<span
+class="math inline"><em>P</em>(<em>i</em><sub><em>n</em></sub>|<em>λ</em>)</span>？别忘了状态转移概率矩阵
+<span class="math inline"><em>A</em></span> 的存在，<span
+class="math inline"><em>A</em></span>
+所记录的不就是隐藏状态之间转换的概率吗？所以可得： <span
+class="math display"><em>P</em>(<em>I</em>|<em>λ</em>) = <em>π</em><sub><em>i</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>1</sub><em>i</em><sub>2</sub></sub><em>a</em><sub><em>i</em><sub>2</sub><em>i</em><sub>3</sub></sub>...<em>a</em><sub><em>i</em><sub><em>t</em> − 1</sub><em>i</em><sub><em>t</em></sub></sub></span>
+接下来要求的就是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>，它的含义是：在给定模型下，当隐藏序列为
+<span class="math inline"><em>I</em></span> 时，观测序列为 <span
+class="math inline"><em>O</em></span> 的概率。求解 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>
+的方法和求解 <span
+class="math inline"><em>P</em>(<em>I</em>|<em>λ</em>)</span>
+的方法是一样的，还记得观测状态概率矩阵 <span
+class="math inline"><em>B</em></span> 吗？<span
+class="math inline"><em>B</em></span>
+记录的正是从隐藏序列到观测序列转换的概率，所以 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>
+的计算方法如下： <span
+class="math display"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>) = <em>b</em><sub><em>i</em><sub>1</sub><em>o</em><sub>1</sub></sub><em>b</em><sub><em>i</em><sub>2</sub><em>o</em><sub>2</sub></sub>...<em>b</em><sub><em>i</em><sub><em>t</em></sub><em>o</em><sub><em>t</em></sub></sub></span>
+于是，我们只需要将上面两个式子乘在一起，就能得到 <span
+class="math inline"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>
+了： <span
+class="math display"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>) = <em>π</em><sub><em>i</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>1</sub><em>i</em><sub>2</sub></sub><em>b</em><sub><em>i</em><sub>1</sub><em>o</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>2</sub><em>i</em><sub>3</sub></sub><em>b</em><sub><em>i</em><sub>2</sub><em>o</em><sub>2</sub></sub>...<em>a</em><sub><em>i</em><sub><em>t</em> − 1</sub><em>i</em><sub><em>t</em></sub></sub><em>b</em><sub><em>i</em><sub><em>t</em></sub><em>o</em><sub><em>t</em></sub></sub></span>
+则观测序列 <span class="math inline"><em>O</em></span> 出现的概率为：
+<span
+class="math display"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>I</em></sub><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>) = ∑<sub><em>i</em><sub>1</sub>, <em>i</em><sub>2</sub>, ..., <em>i</em><sub><em>T</em></sub></sub><em>π</em><sub><em>i</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>1</sub><em>i</em><sub>2</sub></sub><em>b</em><sub><em>i</em><sub>1</sub><em>o</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>2</sub><em>i</em><sub>3</sub></sub><em>b</em><sub><em>i</em><sub>2</sub><em>o</em><sub>2</sub></sub>...<em>a</em><sub><em>i</em><sub><em>t</em> − 1</sub><em>i</em><sub><em>T</em></sub></sub><em>b</em><sub><em>i</em><sub><em>t</em></sub><em>o</em><sub><em>T</em></sub></sub></span>
+解释一下上面的公式：我们要求的是在给定模型下，某一观测序列出现的概率。暴力求解的方法找出所有可能的隐藏序列，将由这些隐藏序列得到该观测序列的概率全部加起来，最终得到该观测序列的概率。假设隐藏状态数有
+<span class="math inline"><em>N</em></span>
+个，我们需要遍历每一个隐藏序列，序列的长度为观测状态数 <span
+class="math inline"><em>T</em></span>，所以可能的隐藏序列有 <span
+class="math inline"><em>N</em><sup><em>T</em></sup></span>
+种，而对于每一个序列，都要遍历其 <span
+class="math inline"><em>T</em></span> 个 <span
+class="math inline"><em>a</em><sub><em>i</em></sub></span> 和 <span
+class="math inline"><em>b</em><sub><em>i</em></sub></span>，加起来就是
+<span
+class="math inline">2<em>T</em></span>，计算时间复杂度时省去系数，则该算法的<strong>时间复杂度将达到
+<span
+class="math inline"><em>O</em>(<em>T</em><em>N</em><sup><em>T</em></sup>)</span></strong>。</p>
+<h2 id="前向算法">04 前向算法</h2>
+<h3 id="算法解析">4.1 算法解析</h3>
+<p>暴力求解法告诉我们隐马尔可夫模型的问题看上去是可解，但高昂的时间开销却是不可承受的。对此，有人提出了前向算法，该算法利用<strong>动态规划</strong>的思想来求解该问题，降低了时间复杂度。</p>
+<p>给定 <span class="math inline"><em>t</em></span> 时刻的隐藏状态为
+<span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>（注意，这里的
+<span class="math inline"><em>i</em></span>
+是指一种<u>具体</u>的隐藏状态，例如晴天、雨天等，是固定好的），观测序列为
+<span
+class="math inline"><em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ...<em>o</em><sub><em>n</em></sub></span>
+的概率叫做<strong>前向概率</strong>，定义为： <span
+class="math display"><em>α</em><sub><em>t</em></sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...,<em>o</em><sub><em>t</em></sub>,<em>S</em><sub><em>t</em></sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>
+换句话来讲，前向概率就是在给定某一观测序列的情况下，某一时刻的状态刚刚好为
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率。</p>
+<p>则，当 <span class="math inline"><em>t</em> = <em>T</em></span>
+时，<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...,<em>o</em><sub><em>T</em></sub>,<em>S</em><sub><em>T</em></sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>
+表示最后一个时刻，隐藏状态为状态 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+并且得到观察序列为 <span
+class="math inline"><em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>T</em></sub></span>
+的概率。现在我们回来思考一下我们要解决的最原始的问题是什么，应该是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...<em>o</em><sub><em>T</em></sub>|<em>λ</em>)</span>，而
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>)</span>
+和它相比，末尾多了个 <span
+class="math inline"><em>S</em><sub><em>T</em></sub> = <em>q</em><sub><em>i</em></sub></span>，也就是说
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>)</span>
+还要求最终的隐藏状态必须为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>，貌似和原本的问题相比有点画蛇添足，但仔细想想，如果我们能把所有最终可能的隐藏状态都拿过来，求
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(1) + <em>α</em><sub><em>T</em></sub>(2) +  ·  ·  ·  + <em>α</em><sub><em>T</em></sub>(<em>n</em>)</span>，那不就大功告成了？所以现在的问题就变成了如何求解
+<span class="math inline"><em>T</em></span>
+时刻的前向概率，这是一个动态规划的问题。</p>
+<p>在第一个时刻：<span
+class="math inline"><em>α</em><sub>1</sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>S</em><sub>1</sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>
+表示第一时刻的隐藏状态为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>，观测序列为
+<span class="math inline"><em>o</em><sub>1</sub></span>
+的概率，其结果为（这里的 <span
+class="math inline"><em>b</em><sub><em>i</em></sub>(<em>o</em><sub>1</sub>)</span>
+就表示由隐藏状态 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+转换为观测状态 <span class="math inline"><em>o</em><sub>1</sub></span>
+的概率，是矩阵 <span class="math inline"><em>B</em></span> 的元素）：
+<span
+class="math display"><em>α</em><sub>1</sub>(<em>i</em>) = <em>π</em><sub><em>i</em></sub><em>b</em><sub><em>i</em></sub>(<em>o</em><sub>1</sub>)</span>
+在第 <span class="math inline"><em>t</em></span> 时刻，隐藏状态变成了
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span>（这里的
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span>
+不是具体状态，是任意状态都可以），<span
+class="math inline"><em>t</em> + 1</span> 时刻隐藏状态变成了为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>，此时，隐藏状态由
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span> 变成
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率可由矩阵 <span class="math inline"><em>A</em></span> 得到，值为
+<span
+class="math inline"><em>a</em><sub><em>j</em><em>i</em></sub></span>，而
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span>
+可以是任何一种状态，我们都得考虑进去，所以我们得遍历一遍所有隐藏状态，然后相加，即
+<span
+class="math inline">∑<sub><em>j</em></sub><em>α</em><sub><em>t</em></sub>(<em>j</em>)</span>，所以有：
+<span
+class="math display"><em>α</em><sub><em>t</em> + 1</sub>(<em>i</em>) = [∑<sub><em>j</em></sub><em>α</em><sub><em>t</em></sub>(<em>j</em>)<em>a</em><sub><em>i</em><em>j</em></sub>]<em>b</em><sub><em>i</em></sub>(<em>o</em><sub><em>t</em> + 1</sub>)</span>
+如果这个式子看上去还是太麻烦，我们可以拆开来看：<span
+class="math inline"><em>α</em><sub><em>t</em></sub>(<em>j</em>)</span>
+表示的是前一时刻隐藏状态为 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 的概率，<span
+class="math inline"><em>a</em><sub><em>i</em><em>j</em></sub></span>
+表示由隐藏状态 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 转换为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率，相乘就是前一时刻的隐藏状态恰好为 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span>，并且由 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 能转换到
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率，由于得考虑全部 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span>
+的情况，所以得遍历求和；后面的 <span
+class="math inline"><em>b</em><sub><em>i</em></sub>(<em>o</em><sub><em>t</em> + 1</sub>)</span>
+则是由隐藏状态 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+转换到观测状态 <span
+class="math inline"><em>o</em><sub><em>t</em> + 1</sub></span>
+的概率，将它与前一部分相乘，就得到了前一时刻的隐藏状态恰好为 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span>，并且由 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 能转换到
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>，又由
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span> 得到
+<span class="math inline"><em>o</em><sub><em>t</em> + 1</sub></span>
+的概率。</p>
+<p>则最终结果就是： <span
+class="math display"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>i</em></sub><em>α</em><sub><em>i</em></sub>(<em>T</em>)</span>
+计算一下前向算法的时间复杂度：一共要计算 <span
+class="math inline"><em>T</em></span> 次 <span
+class="math inline"><em>α</em></span>，每次计算 <span
+class="math inline"><em>α</em></span> 的时间复杂度为 <span
+class="math inline"><em>N</em><sup>2</sup></span>
+（原因很简单，自己想），所以前向算法的<strong>时间复杂度为 <span
+class="math inline"><em>O</em>(<em>T</em><em>N</em><sup>2</sup>)</span></strong>。显然，前向算法将暴力算法的时间复杂度从指数级降到了线性级别，极大提升了执行效率。</p>
+<h3 id="公式推导">4.2 公式推导</h3>
+<p>由上述过程，我们可以得到前向算法的递推式：</p>
+<ol type="1">
 <li>初值：</li>
 </ol>
-<script type="math/tex; mode=display">
-\alpha_1(i)=\pi_ib_i(o_1)，i=1,2,...,N</script><ol>
+<p><span
+class="math display"><em>α</em><sub>1</sub>(<em>i</em>) = <em>π</em><sub><em>i</em></sub><em>b</em><sub><em>i</em></sub>(<em>o</em><sub>1</sub>)，<em>i</em> = 1, 2, ..., <em>N</em></span></p>
+<ol start="2" type="1">
 <li>递推：</li>
 </ol>
-<script type="math/tex; mode=display">
-\alpha_{t+1}(i)=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})，i=1,2,...,N</script><ol>
+<p><span class="math display">$$
+\alpha_{t+1}(i)=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})，i=1,2,...,N
+$$</span></p>
+<ol start="3" type="1">
 <li>终止：</li>
 </ol>
-<script type="math/tex; mode=display">
-P(O|\lambda)=\sum_{i=1}^N\alpha_T(i)</script><p>接下来，我们对每一个公式进行推导。</p>
-<p>首先，我们要求解的目标是 $P(O|\lambda)=\sum_{I}P(I,O|\lambda)$，而 $\alpha_T(i)=P(O,S_T=q_i|\lambda)$，所以对于终止公式有：</p>
-<script type="math/tex; mode=display">
+<p><span class="math display">$$
+P(O|\lambda)=\sum_{i=1}^N\alpha_T(i)
+$$</span></p>
+<p>接下来，我们对每一个公式进行推导。</p>
+<p>首先，我们要求解的目标是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>I</em></sub><em>P</em>(<em>I</em>,<em>O</em>|<em>λ</em>)</span>，而
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>) = <em>P</em>(<em>O</em>,<em>S</em><sub><em>T</em></sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>，所以对于终止公式有：
+<span class="math display">$$
 \begin{aligned}
-P(O|\lambda)&=\sum_{I}P(I,O|\lambda)\\
-&=\sum_{i=1}^NP(o_1,o_2,...,o_T,S_T=q_i|\lambda)\\
-&=\sum_{i=1}^N\alpha_T(i)
-\end{aligned}</script><p>对于递推公式则有：</p>
-<script type="math/tex; mode=display">
+P(O|\lambda)&amp;=\sum_{I}P(I,O|\lambda)\\
+&amp;=\sum_{i=1}^NP(o_1,o_2,...,o_T,S_T=q_i|\lambda)\\
+&amp;=\sum_{i=1}^N\alpha_T(i)
+\end{aligned}
+$$</span> 对于递推公式则有： <span class="math display">$$
 \begin{aligned}
-\alpha_{t+1}(i)&=P(o_1,o_2,...,o_{t+1},S_{t+1}=q_i|\lambda)\\
-&=P(S_{t+1}=q_i|\lambda)P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
-&=[\sum_{j=1}^NP(S_{t+1}=q_i,S_t=q_j|\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
-&=[\sum_{j=1}^NP(S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
-&=[\sum_{j=1}^NP(o_1,...,o_t,S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
-&=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})
-\end{aligned}</script><p>对于初值有：</p>
-<script type="math/tex; mode=display">
+\alpha_{t+1}(i)&amp;=P(o_1,o_2,...,o_{t+1},S_{t+1}=q_i|\lambda)\\
+&amp;=P(S_{t+1}=q_i|\lambda)P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^NP(S_{t+1}=q_i,S_t=q_j|\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^NP(S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^NP(o_1,...,o_t,S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})
+\end{aligned}
+$$</span></p>
+<p>对于初值有： <span class="math display">$$
 \begin{aligned}
-\alpha_1(i)&=P(o_1,S_1=q_i|\lambda)\\
-&=P(S_1=q_i|\lambda)P(o_1|S_1=q_i,\lambda)\\
-&=\pi_1b_i(o_1)
-\end{aligned}</script><h2 id="05-后向算法"><a href="#05-后向算法" class="headerlink" title="05 后向算法"></a>05 后向算法</h2><p>后向算法比前向算法稍微复杂一点，这一节着重讲解后向算法初值、递推和终止公式的推导。</p>
-<p>给定隐马尔可夫模型，定义在时刻 $t$ 状态为 $q<em>i$ 的条件下，从 $t+1$ 到 $T$ 的部分观测序列为 $o</em>{t+1},o<em>{t+2},…,o</em>{T}$ 的概率称为<strong>后向概率</strong>，记作：</p>
-<script type="math/tex; mode=display">
-\beta_t(i)=P(o_{t+1},o_{t+2},...,o_T|S_t=q_i,\lambda)</script><p>观察后向概率的公式和定义，我们可以用另一种方法描述后向概率：当前时刻为 $T$，也就是终止时刻，前 $T-t$ 个时刻的观测序列为 $o<em>{t+1},o</em>{t+2},…,o_{T}$，且 $t$ 时刻隐藏状态恰好为 $q_i$ 的概率。可以发现，后向概率是以终止时刻为起点，倒退回去考虑的，与前向概率正好相反，所以递推的起点是 $\beta_T(i)=P(\emptyset|S_T=q_i,\lambda)$，可以发现，当 $t=T$ 时，已不存在后续观测序列，所以我们规定 $\beta_T(i)=1$。</p>
-<p>我们要求解的是 $P(O|\lambda)=P(o_1,o_2,…o_T|\lambda)$，后向算法递推的终点是序列的起始点，也就是 $t=1$，而 $\beta_1(i)=P(o_2,o_3,…,o_T|S_t=q_i,\lambda)$，这之间又要怎么转换？这就是后向算法比前向算法复杂的点，它并不像前向算法那样容易推导。首先，我们使用全概率公式和条件概率公式对 $P(O|\lambda)$ 进行变换：</p>
-<script type="math/tex; mode=display">
+\alpha_1(i)&amp;=P(o_1,S_1=q_i|\lambda)\\
+&amp;=P(S_1=q_i|\lambda)P(o_1|S_1=q_i,\lambda)\\
+&amp;=\pi_1b_i(o_1)
+\end{aligned}
+$$</span></p>
+<h2 id="后向算法">05 后向算法</h2>
+<p>后向算法比前向算法稍微复杂一点，这一节着重讲解后向算法初值、递推和终止公式的推导。</p>
+<p>给定隐马尔可夫模型，定义在时刻 <span
+class="math inline"><em>t</em></span> 状态为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span> 的条件下，从
+<span class="math inline"><em>t</em> + 1</span> 到 <span
+class="math inline"><em>T</em></span> 的部分观测序列为 <span
+class="math inline"><em>o</em><sub><em>t</em> + 1</sub>, <em>o</em><sub><em>t</em> + 2</sub>, ..., <em>o</em><sub><em>T</em></sub></span>
+的概率称为<strong>后向概率</strong>，记作： <span
+class="math display"><em>β</em><sub><em>t</em></sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub><em>t</em> + 1</sub>,<em>o</em><sub><em>t</em> + 2</sub>,...,<em>o</em><sub><em>T</em></sub>|<em>S</em><sub><em>t</em></sub>=<em>q</em><sub><em>i</em></sub>,<em>λ</em>)</span>
+观察后向概率的公式和定义，我们可以用另一种方法描述后向概率：当前时刻为
+<span class="math inline"><em>T</em></span>，也就是终止时刻，前 <span
+class="math inline"><em>T</em> − <em>t</em></span> 个时刻的观测序列为
+<span
+class="math inline"><em>o</em><sub><em>t</em> + 1</sub>, <em>o</em><sub><em>t</em> + 2</sub>, ..., <em>o</em><sub><em>T</em></sub></span>，且
+<span class="math inline"><em>t</em></span> 时刻隐藏状态恰好为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率。可以发现，后向概率是以终止时刻为起点，倒退回去考虑的，与前向概率正好相反，所以递推的起点是
+<span
+class="math inline"><em>β</em><sub><em>T</em></sub>(<em>i</em>) = <em>P</em>(∅|<em>S</em><sub><em>T</em></sub>=<em>q</em><sub><em>i</em></sub>,<em>λ</em>)</span>，可以发现，当
+<span class="math inline"><em>t</em> = <em>T</em></span>
+时，已不存在后续观测序列，所以我们规定 <span
+class="math inline"><em>β</em><sub><em>T</em></sub>(<em>i</em>) = 1</span>。</p>
+<p>我们要求解的是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...<em>o</em><sub><em>T</em></sub>|<em>λ</em>)</span>，后向算法递推的终点是序列的起始点，也就是
+<span class="math inline"><em>t</em> = 1</span>，而 <span
+class="math inline"><em>β</em><sub>1</sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>2</sub>,<em>o</em><sub>3</sub>,...,<em>o</em><sub><em>T</em></sub>|<em>S</em><sub><em>t</em></sub>=<em>q</em><sub><em>i</em></sub>,<em>λ</em>)</span>，这之间又要怎么转换？这就是后向算法比前向算法复杂的点，它并不像前向算法那样容易推导。首先，我们使用全概率公式和条件概率公式对
+<span class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+进行变换： <span class="math display">$$
 \begin{aligned}
-P(O|\lambda)&=\sum_{i=1}^{N}P(o_1,o_2,...,o_T,S_1=q_i|\lambda)\\
-&=\sum_{i=1}^{N}P(o_1,o_2,...,o_T|S_1=q_i,\lambda)P(S_1=q_i|\lambda)\\
-&=\sum_{i=1}^{N}P(o_1|o_2,...,o_T,S_1=q_i,\lambda)P(o_2,...,o_T|S_1=q_i,\lambda)\pi_i\\
-&=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i
-\end{aligned}</script><p>经过上面的推导，我们就能发现 $P(O|\lambda)$ 和 $\beta<em>1(i)$ 的联系。下一个要解决的就是 $\beta_t(i)$ 的推导了，首先令 $\beta</em>{t+1}(j)=P(o<em>{t+2},o</em>{t+3},…o<em>T|S</em>{t+1}=q_j,\lambda)$，其推导过程如下：</p>
-<script type="math/tex; mode=display">
+P(O|\lambda)&amp;=\sum_{i=1}^{N}P(o_1,o_2,...,o_T,S_1=q_i|\lambda)\\
+&amp;=\sum_{i=1}^{N}P(o_1,o_2,...,o_T|S_1=q_i,\lambda)P(S_1=q_i|\lambda)\\
+&amp;=\sum_{i=1}^{N}P(o_1|o_2,...,o_T,S_1=q_i,\lambda)P(o_2,...,o_T|S_1=q_i,\lambda)\pi_i\\
+&amp;=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i
+\end{aligned}
+$$</span> 经过上面的推导，我们就能发现 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span> 和 <span
+class="math inline"><em>β</em><sub>1</sub>(<em>i</em>)</span>
+的联系。下一个要解决的就是 <span
+class="math inline"><em>β</em><sub><em>t</em></sub>(<em>i</em>)</span>
+的推导了，首先令 <span
+class="math inline"><em>β</em><sub><em>t</em> + 1</sub>(<em>j</em>) = <em>P</em>(<em>o</em><sub><em>t</em> + 2</sub>,<em>o</em><sub><em>t</em> + 3</sub>,...<em>o</em><sub><em>T</em></sub>|<em>S</em><sub><em>t</em> + 1</sub>=<em>q</em><sub><em>j</em></sub>,<em>λ</em>)</span>，其推导过程如下：
+<span class="math display">$$
 \begin{aligned}
-\beta_t(i)&=P(o_{t+1},o_{t+2},...,o_T|S_t=q_i,\lambda)\\
-&=\sum_{j=1}^{N}P(o_{t+1},o_{t+2},...,o_T,S_{t+1}=q_j|S_t=q_i,\lambda)\\
-&=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_t=q_i,S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
-&=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
-&=\sum_{j=1}^{N}P(o_{t+1}|o_{t+2},...,o_T,S_{t+1}=q_j,\lambda)P(o_{t+2},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
-&=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}
-\end{aligned}</script><p>至此，我们就得到后向算法中的初值、递推和终止公式：</p>
-<ol>
+\beta_t(i)&amp;=P(o_{t+1},o_{t+2},...,o_T|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1},o_{t+2},...,o_T,S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_t=q_i,S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1}|o_{t+2},...,o_T,S_{t+1}=q_j,\lambda)P(o_{t+2},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}
+\end{aligned}
+$$</span> 至此，我们就得到后向算法中的初值、递推和终止公式：</p>
+<ol type="1">
 <li>初值：</li>
 </ol>
-<script type="math/tex; mode=display">
-\beta_T(i)=1</script><ol>
+<p><span
+class="math display"><em>β</em><sub><em>T</em></sub>(<em>i</em>) = 1</span></p>
+<ol start="2" type="1">
 <li>递推：</li>
 </ol>
-<script type="math/tex; mode=display">
-\beta_t(i)=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}</script><ol>
+<p><span class="math display">$$
+\beta_t(i)=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}
+$$</span></p>
+<ol start="3" type="1">
 <li>终止：</li>
 </ol>
-<script type="math/tex; mode=display">
-P(O|\lambda)=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i</script><h2 id="06-Baum-Welch-算法"><a href="#06-Baum-Welch-算法" class="headerlink" title="06 Baum-Welch 算法"></a>06 Baum-Welch 算法</h2><p>讨论完了如何求解 $P(O|\lambda)$，下一步我们就要考虑最难的一个问题——如何求解 HMM 的参数，即 $A$，$B$，$\Pi$。</p>
-<p>如果是不加任何限制地考虑这个问题，那其实是很简单的。根据<strong>大数定理</strong>：在试验次数足够多的情况下，频数就等于概率。要想得到 $A$ 和 $B$，只需要对数据进行统计，计算每种状态出现的频数就行了，于是就有：</p>
-<script type="math/tex; mode=display">
+<p><span class="math display">$$
+P(O|\lambda)=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i
+$$</span></p>
+<h2 id="baum-welch-算法">06 Baum-Welch 算法</h2>
+<p>讨论完了如何求解 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>，下一步我们就要考虑最难的一个问题——如何求解
+HMM 的参数，即 <span class="math inline"><em>A</em></span>，<span
+class="math inline"><em>B</em></span>，<span
+class="math inline"><em>Π</em></span>。</p>
+<p>如果是不加任何限制地考虑这个问题，那其实是很简单的。根据<strong>大数定理</strong>：在试验次数足够多的情况下，频数就等于概率。要想得到
+<span class="math inline"><em>A</em></span> 和 <span
+class="math inline"><em>B</em></span>，只需要对数据进行统计，计算每种状态出现的频数就行了，于是就有：
+<span class="math display">$$
 \begin{aligned}
-&\hat{a}_{ij}=\frac{A_{ij}}{\sum_{j=1}^{N}A_{ij}}&,i=1,2,...,N,j=1,2,...,N\\
-&\hat{b}_{j}(k)=\frac{B_{jk}}{\sum_{k=1}^{M}B_{jk}}&,j=1,2,...,N,k=1,2,...,M\\
-\end{aligned}</script><p>解释一下取值范围：$A$ 是状态转移概率矩阵，这是隐藏状态和隐藏状态之间转移的概率，所以 $i$ 和 $j$ 的最大值都是隐藏状态的数量 $N$；而 $B$ 是生成观测状态概率矩阵，这是隐藏状态到观测状态之间转移的概率，令 $j$ 代表隐藏状态，其最大值就是隐藏状态的数量 $N$，$k$ 代表观测状态，其最大值就是观测状态的数量 $M$，我们之前讲到过，HMM 中的隐藏状态和观测状态数量不一定要相同，所以 $N$ 不一定等于 $M$。</p>
-<p>至于 $\Pi$ 也很简单，根据往期数据计算就行了。所以如果只是像这样单纯地求解 HMM 的参数，只要有数据，那就几乎是没有难度的。但我们来考虑一下求解目标中的第二个：给定观测序列 $O={o_1,o_2,…,o_t}$，求解参数 $(A,B,\Pi)$ 使得 $P(O|\lambda)$ 最大。这要怎么做？</p>
-<p>之前的讨论是在所有数据均有的情况下进行的，也就是隐藏状态序列 $I$ 和观测状态序列 $O$ 均已知的情况下，但现在只有观测序列 $O$，要我们求最优的参数 $(A,B,\Pi)$，使 $P(O|\lambda)$ 最大。也就是说 $I$ 被隐藏了，这相当于是一个含隐变量的参数估计问题，需要 EM 算法来解决。</p>
-<p>EM 算法应用到 HMM 中时通常被称为 Baum-Welch 算法，Baum-Welch 算法是 EM 算法的一个特例。</p>
+&amp;\hat{a}_{ij}=\frac{A_{ij}}{\sum_{j=1}^{N}A_{ij}}&amp;,i=1,2,...,N,j=1,2,...,N\\
+&amp;\hat{b}_{j}(k)=\frac{B_{jk}}{\sum_{k=1}^{M}B_{jk}}&amp;,j=1,2,...,N,k=1,2,...,M\\
+\end{aligned}
+$$</span> 解释一下取值范围：<span class="math inline"><em>A</em></span>
+是状态转移概率矩阵，这是隐藏状态和隐藏状态之间转移的概率，所以 <span
+class="math inline"><em>i</em></span> 和 <span
+class="math inline"><em>j</em></span> 的最大值都是隐藏状态的数量 <span
+class="math inline"><em>N</em></span>；而 <span
+class="math inline"><em>B</em></span>
+是生成观测状态概率矩阵，这是隐藏状态到观测状态之间转移的概率，令 <span
+class="math inline"><em>j</em></span>
+代表隐藏状态，其最大值就是隐藏状态的数量 <span
+class="math inline"><em>N</em></span>，<span
+class="math inline"><em>k</em></span>
+代表观测状态，其最大值就是观测状态的数量 <span
+class="math inline"><em>M</em></span>，我们之前讲到过，HMM
+中的隐藏状态和观测状态数量不一定要相同，所以 <span
+class="math inline"><em>N</em></span> 不一定等于 <span
+class="math inline"><em>M</em></span>。</p>
+<p>至于 <span class="math inline"><em>Π</em></span>
+也很简单，根据往期数据计算就行了。所以如果只是像这样单纯地求解 HMM
+的参数，只要有数据，那就几乎是没有难度的。但我们来考虑一下求解目标中的第二个：给定观测序列
+<span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，求解参数
+<span class="math inline">(<em>A</em>,<em>B</em>,<em>Π</em>)</span> 使得
+<span class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+最大。这要怎么做？</p>
+<p>之前的讨论是在所有数据均有的情况下进行的，也就是隐藏状态序列 <span
+class="math inline"><em>I</em></span> 和观测状态序列 <span
+class="math inline"><em>O</em></span> 均已知的情况下，但现在只有观测序列
+<span class="math inline"><em>O</em></span>，要我们求最优的参数 <span
+class="math inline">(<em>A</em>,<em>B</em>,<em>Π</em>)</span>，使 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+最大。也就是说 <span class="math inline"><em>I</em></span>
+被隐藏了，这相当于是一个含隐变量的参数估计问题，需要 EM 算法来解决。</p>
+<p>EM 算法应用到 HMM 中时通常被称为 Baum-Welch 算法，Baum-Welch 算法是
+EM 算法的一个特例。</p>
 	  
 	</div>
 
@@ -375,7 +668,7 @@ P(O|\lambda)=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i</script><h2 id="06-Baum-Welch-�
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#01-%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 马尔可夫模型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#02-%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 隐马尔可夫模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-1-%E6%A6%82%E5%BF%B5"><span class="toc-article-text">2.1 概念</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-2-%E7%BB%84%E6%88%90"><span class="toc-article-text">2.2 组成</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-3-%E6%B1%82%E8%A7%A3%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.3 求解目标</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#03-%E6%9A%B4%E5%8A%9B%E6%B1%82%E8%A7%A3%E6%B3%95"><span class="toc-article-text">03 暴力求解法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#04-%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">04 前向算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-1-%E7%AE%97%E6%B3%95%E8%A7%A3%E6%9E%90"><span class="toc-article-text">4.1 算法解析</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-2-%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="toc-article-text">4.2 公式推导</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#05-%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">05 后向算法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#06-Baum-Welch-%E7%AE%97%E6%B3%95"><span class="toc-article-text">06 Baum-Welch 算法</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 马尔可夫模型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 隐马尔可夫模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-article-text">2.1 概念</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BB%84%E6%88%90"><span class="toc-article-text">2.2 组成</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B1%82%E8%A7%A3%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.3 求解目标</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9A%B4%E5%8A%9B%E6%B1%82%E8%A7%A3%E6%B3%95"><span class="toc-article-text">03 暴力求解法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">04 前向算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E8%A7%A3%E6%9E%90"><span class="toc-article-text">4.1 算法解析</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="toc-article-text">4.2 公式推导</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">05 后向算法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#baum-welch-%E7%AE%97%E6%B3%95"><span class="toc-article-text">06 Baum-Welch 算法</span></a></li></ol>
 		</div>
 	
 	</div>

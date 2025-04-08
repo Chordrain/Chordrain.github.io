@@ -125,84 +125,199 @@
 		 </div> <!-- alert -->
 	  		
 
-	  <h2 id="1-归结推理"><a href="#1-归结推理" class="headerlink" title="1 归结推理"></a>1 归结推理</h2><p>反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。</p>
-<p>定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当 $(P_1\land P_2\land …\land P_n)\land\neg Q$ 是不可满足的。</p>
+	  <h2 id="归结推理">1 归结推理</h2>
+<p>反证法：<span
+class="math inline"><em>P</em> ⇒ <em>Q</em></span>，当且仅当 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em> ⇔ <em>F</em></span>，即
+<span class="math inline"><em>Q</em></span> 为 <span
+class="math inline"><em>P</em></span> 的逻辑结论，当且仅当 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em></span> 是不可满足的。</p>
+<p>定理：<span class="math inline"><em>Q</em></span> 为 <span
+class="math inline"><em>P</em><sub>1</sub></span>，<span
+class="math inline"><em>P</em><sub>2</sub></span>，……，<span
+class="math inline"><em>P</em><sub><em>n</em></sub></span>
+的逻辑结论，当且仅当 <span
+class="math inline">(<em>P</em><sub>1</sub>∧<em>P</em><sub>2</sub>∧…∧<em>P</em><sub><em>n</em></sub>) ∧ ¬<em>Q</em></span>
+是不可满足的。</p>
 <p>归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：</p>
-<ol>
-<li>欲证明 $P⇒Q$</li>
-<li>化为反命题 $P\land¬Q$</li>
+<ol type="1">
+<li>欲证明 <span class="math inline"><em>P</em> ⇒ <em>Q</em></span></li>
+<li>化为反命题 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em></span></li>
 <li>化成子句集</li>
 <li>证明子句集不可满足(鲁滨逊归结原理)</li>
 </ol>
 <span id="more"></span>
-<h2 id="2-子句集"><a href="#2-子句集" class="headerlink" title="2 子句集"></a>2 子句集</h2><p>什么是子句？如何将谓词公式化为子句集？</p>
-<p>我们称一个不能再分割的命题为<strong>原子谓词公式</strong>，将原子谓词公式及其否定形式称为<strong>文字</strong>，而<strong>子句</strong>就是任何文字的<u>析取式</u>，任何文字本身也是子句。<strong>空子句</strong>是一个不包含任何文字的子句，它永远为假，不可满足，通常表示为 $NIL$，虽然听上去没什么用，但它却是归结推理中最重要的子句，之后你会知道为什么。以上就是子句的概念，而子句集就是由子句构成的集合。</p>
-<p>以下面这道题为例讲解如何将一个谓词公式化为子句集：</p>
-<script type="math/tex; mode=display">
-(\forall x)((\forall y)P(x,y)\rightarrow\neg(\forall y)(Q(x,y)\rightarrow R(x,y)))</script><p>第一步：消去谓词公式中的 $\rightarrow$ 和 $\leftrightarrow$，得到：</p>
-<script type="math/tex; mode=display">
-(\forall x)(\neg(\forall y)P(x,y)\lor\neg(\forall y)(\neg Q(x,y)\lor R(x,y)))</script><p>第二步：将否定符号 $\neg$ 移到紧靠谓词的位置上：</p>
-<script type="math/tex; mode=display">
-(\forall x)((\exists y)\neg P(x,y)\lor(\exists y)(Q(x,y)\land\neg R(x,y)))</script><p>第三步：变量标准化，将重复的变量名换掉：</p>
-<script type="math/tex; mode=display">
-(\forall x)((\exists y)\neg P(x,y)\lor(\exists z)(Q(x,z)\land\neg R(x,z)))</script><p>第四步：消去存在量词，要用到 Skolem 函数，令 $y=f(x)$，$z=g(x)$：</p>
-<script type="math/tex; mode=display">
-(\forall x)(\neg P(x,f(x))\lor(Q(x,g(x))\land\neg R(x,g(x))))</script><p>第五步：化为前束形，即将所有的全称谓词提到公式最前面，使母式中不存在任何量词，上式已满足前束形。</p>
-<p>第六步：化为 Skolem 标准形，即将母式化为合取式：</p>
-<script type="math/tex; mode=display">
-(\forall x)((\neg P(x,f(x))\lor Q(x,g(x))\land(\neg P(x,f(x))\lor\neg R(x,g(x))))</script><p>第七步：略去全称量词：</p>
-<script type="math/tex; mode=display">
-(\neg P(x,f(x))\lor Q(x,g(x))\land(\neg P(x,f(x))\lor\neg R(x,g(x)))</script><p>第八步：把和取词看作分隔符，把整体化为集合：</p>
-<script type="math/tex; mode=display">
-\{\neg P(x,f(x))\lor Q(x,g(x)),\neg P(x,f(x))\lor\neg R(x,g(x))\}</script><p>第九步：子句变量标准化，即将不同的子句中的变量名字区分开，用不同的符号表示：</p>
-<script type="math/tex; mode=display">
-\{\neg P(x,f(x))\lor Q(x,g(x)),\neg P(y,f(y))\lor\neg R(y,g(y))\}</script><p>以上，就得到了谓词公式的子句集。</p>
-<h2 id="3-鲁滨逊归结原理"><a href="#3-鲁滨逊归结原理" class="headerlink" title="3 鲁滨逊归结原理"></a>3 鲁滨逊归结原理</h2><p>子句集中的各子句是合取关系，所以只要有一个不可满足，则整个子句集不可满足。所以，我们需要去找一个空子句，假如子句集中存在空子句，那就肯定不可满足。但是子句集中直接出现空子句的情况是很少的，那么如何找到空子句？这就是鲁滨逊归结原理要解决的问题，根据鲁滨逊归结原理对子句集进行归结，如果最终归结出一个空子句，则说明该子句集不可满足，进一步说明原命题不可满足。</p>
-<p>鲁滨逊归结原理（也称消解原理）的基本思路是：检查子句集 $\text{S}$ 中是否包含空子句，若包含，则 $\text{S}$ 不可满足；若不包含，在 $\text{S}$ 中选择合适的子句进行归结，一旦归结出空子句，就说明 $\text{S}$ 是不可满足的。</p>
-<p>归结的定义：设 $C<em>1$ 和 $C_2$ 是子句集中的任意两个子句，如果 $C_1$ 中的文字 $L_1$ 与 $C_2$ 中的文字 $L_2$ 互补，那么从 $C_1$ 和 $C_2$ 中分别消去 $L_1$ 和 $L_2$，并将两个子句中余下的部分<strong>析取</strong>，构成一个新子句 $C</em>{12}$。</p>
-<hr>
-<p>例题：设 $C_1=\neg P\lor Q$，$C_2=\neg Q\lor R$，$C_3=P$，请对 ${C_1,C_2,C_3}$ 进行归结。</p>
-<p>$C<em>{1}$ 和 $C</em>{2}$ 中存在互补子句 $Q$ 和 $\neg Q$，所以消去这两个子句集，并将余下子句析取，得到 $C<em>{12}=\neg P\lor R$；$C</em>{12}$ 和 $C<em>{3}$ 中存在互补子句 $\neg P$ 和 $P$，所以消去这两个子句集，并将余下子句析取，得到 $C</em>{123}=R$。所以 $C_{123}$ 就是该子句集归结的结果。</p>
-<hr>
-<p>定理：归结式 $C<em>{12}$ 是其亲本子句 $C_1$ 和 $C_2$ 的逻辑结论，即，如果 $C_1$ 和 $C_2$ 为真，则 $C</em>{12}$ 也为真。</p>
-<p>上述定理有一条推论：设 $C<em>1$ 和 $C_2$ 是子句集 $\text S$ 中的两个子句集，$C</em>{12}$ 是它们的归结式，若用 $C<em>{12}$ 代替 $C_1$ 和 $C_2$ 后得到新子句集 $\text{S}_1$，则由 $\text{S}_1$ 不可满足性可推出 $\text{S}$ 的不可满足性。但是注意，这条推论不能证明若 $\text{S}$ 是不可满足的，则 $\text{S}_1$ 也不可满足，所以还有另一条推论：设 $C_1$ 和 $C_2$ 是子句集 $\text S$ 中的两个子句集，$C</em>{12}$ 是它们的归结式，若 $C_{12}$ 加入原子句集 $\text{S}$，得到新子句集 $\text{S}_2$，则 $\text S$ 和 $\text S_2$ 在不可满足性上是<u>等价</u>的，即若 $\text{S}$ 是不可满足的，则 $\text{S}_2$ 也不可满足，反之亦然。不过我们的目的只是为了证明原子句集不可满足，也就是归结出一个空子句，所以上述两个推论均可用。</p>
-<h2 id="4-归结反演"><a href="#4-归结反演" class="headerlink" title="4 归结反演"></a>4 归结反演</h2><p>应用鲁滨逊归结原理证明定理的过程称为<strong>归结反演</strong>。它总共分为以下四个步骤：</p>
-<ol>
-<li>将已知前提表示为谓词公式 $F$；</li>
-<li>将待证明的结论表示为谓词公式 $Q$，并否定得到 $\neg Q$；</li>
-<li>把谓词公式集 ${F,\neg Q}$ 化为子句集 $\text S$；</li>
-<li>应用归结原理对子句集 $\text S$ 中的子句进行归结，并把每次归结得到的归结式都并入到 $\text S$ 中。如此反复进行，若出现了空子句，则停止归结，此时就证明了 $Q$ 为真。</li>
+<h2 id="子句集">2 子句集</h2>
+<p>什么是子句？如何将谓词公式化为子句集？</p>
+<p>我们称一个不能再分割的命题为<strong>原子谓词公式</strong>，将原子谓词公式及其否定形式称为<strong>文字</strong>，而<strong>子句</strong>就是任何文字的<u>析取式</u>，任何文字本身也是子句。<strong>空子句</strong>是一个不包含任何文字的子句，它永远为假，不可满足，通常表示为
+<span
+class="math inline"><em>N</em><em>I</em><em>L</em></span>，虽然听上去没什么用，但它却是归结推理中最重要的子句，之后你会知道为什么。以上就是子句的概念，而子句集就是由子句构成的集合。</p>
+<p>以下面这道题为例讲解如何将一个谓词公式化为子句集： <span
+class="math display">(∀<em>x</em>)((∀<em>y</em>)<em>P</em>(<em>x</em>,<em>y</em>)→¬(∀<em>y</em>)(<em>Q</em>(<em>x</em>,<em>y</em>)→<em>R</em>(<em>x</em>,<em>y</em>)))</span>
+第一步：消去谓词公式中的 <span class="math inline">→</span> 和 <span
+class="math inline">↔︎</span>，得到： <span
+class="math display">(∀<em>x</em>)(¬(∀<em>y</em>)<em>P</em>(<em>x</em>,<em>y</em>)∨¬(∀<em>y</em>)(¬<em>Q</em>(<em>x</em>,<em>y</em>)∨<em>R</em>(<em>x</em>,<em>y</em>)))</span>
+第二步：将否定符号 <span class="math inline">¬</span>
+移到紧靠谓词的位置上： <span
+class="math display">(∀<em>x</em>)((∃<em>y</em>)¬<em>P</em>(<em>x</em>,<em>y</em>)∨(∃<em>y</em>)(<em>Q</em>(<em>x</em>,<em>y</em>)∧¬<em>R</em>(<em>x</em>,<em>y</em>)))</span>
+第三步：变量标准化，将重复的变量名换掉： <span
+class="math display">(∀<em>x</em>)((∃<em>y</em>)¬<em>P</em>(<em>x</em>,<em>y</em>)∨(∃<em>z</em>)(<em>Q</em>(<em>x</em>,<em>z</em>)∧¬<em>R</em>(<em>x</em>,<em>z</em>)))</span>
+第四步：消去存在量词，要用到 Skolem 函数，令 <span
+class="math inline"><em>y</em> = <em>f</em>(<em>x</em>)</span>，<span
+class="math inline"><em>z</em> = <em>g</em>(<em>x</em>)</span>： <span
+class="math display">(∀<em>x</em>)(¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨(<em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>))∧¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>))))</span>
+第五步：化为前束形，即将所有的全称谓词提到公式最前面，使母式中不存在任何量词，上式已满足前束形。</p>
+<p>第六步：化为 Skolem 标准形，即将母式化为合取式： <span
+class="math display">(∀<em>x</em>)((¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨<em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>))∧(¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>))))</span>
+第七步：略去全称量词： <span
+class="math display">(¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ <em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>)) ∧ (¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>)))</span>
+第八步：把和取词看作分隔符，把整体化为集合： <span
+class="math display">{¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ <em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>)), ¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ ¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>))}</span></p>
+<p>第九步：子句变量标准化，即将不同的子句中的变量名字区分开，用不同的符号表示：
+<span
+class="math display">{¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ <em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>)), ¬<em>P</em>(<em>y</em>,<em>f</em>(<em>y</em>)) ∨ ¬<em>R</em>(<em>y</em>,<em>g</em>(<em>y</em>))}</span>
+以上，就得到了谓词公式的子句集。</p>
+<h2 id="鲁滨逊归结原理">3 鲁滨逊归结原理</h2>
+<p>子句集中的各子句是合取关系，所以只要有一个不可满足，则整个子句集不可满足。所以，我们需要去找一个空子句，假如子句集中存在空子句，那就肯定不可满足。但是子句集中直接出现空子句的情况是很少的，那么如何找到空子句？这就是鲁滨逊归结原理要解决的问题，根据鲁滨逊归结原理对子句集进行归结，如果最终归结出一个空子句，则说明该子句集不可满足，进一步说明原命题不可满足。</p>
+<p>鲁滨逊归结原理（也称消解原理）的基本思路是：检查子句集 <span
+class="math inline">S</span> 中是否包含空子句，若包含，则 <span
+class="math inline">S</span> 不可满足；若不包含，在 <span
+class="math inline">S</span>
+中选择合适的子句进行归结，一旦归结出空子句，就说明 <span
+class="math inline">S</span> 是不可满足的。</p>
+<p>归结的定义：设 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span>
+是子句集中的任意两个子句，如果 <span
+class="math inline"><em>C</em><sub>1</sub></span> 中的文字 <span
+class="math inline"><em>L</em><sub>1</sub></span> 与 <span
+class="math inline"><em>C</em><sub>2</sub></span> 中的文字 <span
+class="math inline"><em>L</em><sub>2</sub></span> 互补，那么从 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 中分别消去 <span
+class="math inline"><em>L</em><sub>1</sub></span> 和 <span
+class="math inline"><em>L</em><sub>2</sub></span>，并将两个子句中余下的部分<strong>析取</strong>，构成一个新子句
+<span class="math inline"><em>C</em><sub>12</sub></span>。</p>
+<hr />
+<p>例题：设 <span
+class="math inline"><em>C</em><sub>1</sub> = ¬<em>P</em> ∨ <em>Q</em></span>，<span
+class="math inline"><em>C</em><sub>2</sub> = ¬<em>Q</em> ∨ <em>R</em></span>，<span
+class="math inline"><em>C</em><sub>3</sub> = <em>P</em></span>，请对
+<span
+class="math inline">{<em>C</em><sub>1</sub>, <em>C</em><sub>2</sub>, <em>C</em><sub>3</sub>}</span>
+进行归结。</p>
+<p><span class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 中存在互补子句 <span
+class="math inline"><em>Q</em></span> 和 <span
+class="math inline">¬<em>Q</em></span>，所以消去这两个子句集，并将余下子句析取，得到
+<span
+class="math inline"><em>C</em><sub>12</sub> = ¬<em>P</em> ∨ <em>R</em></span>；<span
+class="math inline"><em>C</em><sub>12</sub></span> 和 <span
+class="math inline"><em>C</em><sub>3</sub></span> 中存在互补子句 <span
+class="math inline">¬<em>P</em></span> 和 <span
+class="math inline"><em>P</em></span>，所以消去这两个子句集，并将余下子句析取，得到
+<span
+class="math inline"><em>C</em><sub>123</sub> = <em>R</em></span>。所以
+<span class="math inline"><em>C</em><sub>123</sub></span>
+就是该子句集归结的结果。</p>
+<hr />
+<p>定理：归结式 <span class="math inline"><em>C</em><sub>12</sub></span>
+是其亲本子句 <span class="math inline"><em>C</em><sub>1</sub></span> 和
+<span class="math inline"><em>C</em><sub>2</sub></span>
+的逻辑结论，即，如果 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 为真，则 <span
+class="math inline"><em>C</em><sub>12</sub></span> 也为真。</p>
+<p>上述定理有一条推论：设 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 是子句集 <span
+class="math inline">$\text S$</span> 中的两个子句集，<span
+class="math inline"><em>C</em><sub>12</sub></span> 是它们的归结式，若用
+<span class="math inline"><em>C</em><sub>12</sub></span> 代替 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 后得到新子句集 <span
+class="math inline">S<sub>1</sub></span>，则由 <span
+class="math inline">S<sub>1</sub></span> 不可满足性可推出 <span
+class="math inline">S</span> 的不可满足性。但是注意，这条推论不能证明若
+<span class="math inline">S</span> 是不可满足的，则 <span
+class="math inline">S<sub>1</sub></span>
+也不可满足，所以还有另一条推论：设 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 是子句集 <span
+class="math inline">$\text S$</span> 中的两个子句集，<span
+class="math inline"><em>C</em><sub>12</sub></span> 是它们的归结式，若
+<span class="math inline"><em>C</em><sub>12</sub></span> 加入原子句集
+<span class="math inline">S</span>，得到新子句集 <span
+class="math inline">S<sub>2</sub></span>，则 <span
+class="math inline">$\text S$</span> 和 <span class="math inline">$\text
+S_2$</span> 在不可满足性上是<u>等价</u>的，即若 <span
+class="math inline">S</span> 是不可满足的，则 <span
+class="math inline">S<sub>2</sub></span>
+也不可满足，反之亦然。不过我们的目的只是为了证明原子句集不可满足，也就是归结出一个空子句，所以上述两个推论均可用。</p>
+<h2 id="归结反演">4 归结反演</h2>
+<p>应用鲁滨逊归结原理证明定理的过程称为<strong>归结反演</strong>。它总共分为以下四个步骤：</p>
+<ol type="1">
+<li>将已知前提表示为谓词公式 <span
+class="math inline"><em>F</em></span>；</li>
+<li>将待证明的结论表示为谓词公式 <span
+class="math inline"><em>Q</em></span>，并否定得到 <span
+class="math inline">¬<em>Q</em></span>；</li>
+<li>把谓词公式集 <span
+class="math inline">{<em>F</em>, ¬<em>Q</em>}</span> 化为子句集 <span
+class="math inline">$\text S$</span>；</li>
+<li>应用归结原理对子句集 <span class="math inline">$\text S$</span>
+中的子句进行归结，并把每次归结得到的归结式都并入到 <span
+class="math inline">$\text S$</span>
+中。如此反复进行，若出现了空子句，则停止归结，此时就证明了 <span
+class="math inline"><em>Q</em></span> 为真。</li>
 </ol>
-<hr>
-<p>例题：某公司招聘工作人员，A，B，C 三人面试，经面试后公司表示如下想法：</p>
+<hr />
+<p>例题：某公司招聘工作人员，A，B，C
+三人面试，经面试后公司表示如下想法：</p>
 <ul>
 <li>三人中至少录取一人；</li>
 <li>如果录取 A 而不录取 B，则一定录取 C；</li>
 <li>如果录取 B，则一定录取 C。</li>
 </ul>
 <p>求证：公司一定录取 C。</p>
-<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 $P(x)$ 表示录取 $x$。于是可得如下前提：</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 <span
+class="math inline"><em>P</em>(<em>x</em>)</span> 表示录取 <span
+class="math inline"><em>x</em></span>。于是可得如下前提：</p>
 <ul>
-<li>$P(A)\lor P(B)\lor P(C)$</li>
-<li>$P(A)\land\neg P(B)\rightarrow P(C)$</li>
-<li>$P(B)\rightarrow P(C)$</li>
+<li><span
+class="math inline"><em>P</em>(<em>A</em>) ∨ <em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline"><em>P</em>(<em>A</em>) ∧ ¬<em>P</em>(<em>B</em>) → <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline"><em>P</em>(<em>B</em>) → <em>P</em>(<em>C</em>)</span></li>
 </ul>
-<p>第二步，将待证明的结论表示为谓词公式，并将其否定：$\neg P(C)$。</p>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：<span
+class="math inline">¬<em>P</em>(<em>C</em>)</span>。</p>
 <p>第三步，将上述谓词公式化为子句集：</p>
-<ol>
-<li>$P(A)\lor P(B)\lor P(C)$</li>
-<li>$\neg P(A)\lor P(B)\lor P(C)$</li>
-<li>$\neg P(B)\lor P(C)$</li>
-<li>$\neg P(C)$</li>
+<ol type="1">
+<li><span
+class="math inline"><em>P</em>(<em>A</em>) ∨ <em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline">¬<em>P</em>(<em>A</em>) ∨ <em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline">¬<em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span class="math inline">¬<em>P</em>(<em>C</em>)</span></li>
 </ol>
 <p>第四步，应用归结原理进行归结：</p>
-<ol>
-<li>$P(B)\lor P(C)\quad 归结(1)和(2)$</li>
-<li>$P(C)\quad\quad\quad\quad\ \ 归结(3)和(5)$</li>
-<li>$NIL\quad\quad\quad\quad\ \ \ 归结(4)和(6)$</li>
+<ol start="5" type="1">
+<li><span
+class="math inline"><em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)  <em>归</em><em>结</em>(1)<em>和</em>(2)</span></li>
+<li><span
+class="math inline"><em>P</em>(<em>C</em>)          <em>归</em><em>结</em>(3)<em>和</em>(5)</span></li>
+<li><span
+class="math inline"><em>N</em><em>I</em><em>L</em>           <em>归</em><em>结</em>(4)<em>和</em>(6)</span></li>
 </ol>
-<p>由于归结出了空子句，所以成功证明了 $\neg P(C)$ 为假，因此原命题 $P(C)$ 为真，公司一定录取 C。</p>
-<hr>
+<p>由于归结出了空子句，所以成功证明了 <span
+class="math inline">¬<em>P</em>(<em>C</em>)</span> 为假，因此原命题
+<span class="math inline"><em>P</em>(<em>C</em>)</span>
+为真，公司一定录取 C。</p>
+<hr />
 <p>例题：已知：</p>
 <ul>
 <li>任何人的兄弟不是女性；</li>
@@ -210,27 +325,51 @@
 <li>Mary 是 Bill 的姐妹。</li>
 </ul>
 <p>求证：Mary 不是 Tom 的兄弟。</p>
-<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 $brother(x,y)$ 表示录取 $x$ 是 $y$ 的兄弟，设 $sister(x,y)$ 表示录取 $x$ 是 $y$ 的姐妹，设 $woman(x)$ 表示录取 $x$ 是女性。于是可得如下前提：</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 <span
+class="math inline"><em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)</span>
+表示录取 <span class="math inline"><em>x</em></span> 是 <span
+class="math inline"><em>y</em></span> 的兄弟，设 <span
+class="math inline"><em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)</span>
+表示录取 <span class="math inline"><em>x</em></span> 是 <span
+class="math inline"><em>y</em></span> 的姐妹，设 <span
+class="math inline"><em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>)</span>
+表示录取 <span class="math inline"><em>x</em></span>
+是女性。于是可得如下前提：</p>
 <ul>
-<li>$(\forall x)(\forall y)(brother(x,y)\rightarrow\neg woman(x))$</li>
-<li>$(\forall x)(\forall y)(sister(x,y)\rightarrow woman(x))$</li>
-<li>$sister(Mary,Bill)$</li>
+<li><span
+class="math inline">(∀<em>x</em>)(∀<em>y</em>)(<em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)→¬<em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>))</span></li>
+<li><span
+class="math inline">(∀<em>x</em>)(∀<em>y</em>)(<em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)→<em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>))</span></li>
+<li><span
+class="math inline"><em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>B</em><em>i</em><em>l</em><em>l</em>)</span></li>
 </ul>
-<p>第二步，将待证明的结论表示为谓词公式，并将其否定：$brother(Mary,Tom)$。</p>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：<span
+class="math inline"><em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span>。</p>
 <p>第三步，将上述谓词公式化为子句集：</p>
-<ol>
-<li>$C_1=\neg brother(x,y)\lor\neg woman(x)$</li>
-<li>$C_2=\neg sister(x,y)\lor woman(x)$</li>
-<li>$C_3=sister(Mary,Bill)$</li>
-<li>$C_4=brother(Mary,Tom)$</li>
+<ol type="1">
+<li><span
+class="math inline"><em>C</em><sub>1</sub> = ¬<em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>) ∨ ¬<em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>2</sub> = ¬<em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>) ∨ <em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>3</sub> = <em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>B</em><em>i</em><em>l</em><em>l</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>4</sub> = <em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span></li>
 </ol>
 <p>第四步，应用归结原理进行归结：</p>
-<ol>
-<li>$C_{23}=woman(Mary)$</li>
-<li>$C_{123}=\neg borther(Mary,y)$</li>
-<li>$C_{1234}=NIL$</li>
+<ol type="1">
+<li><span
+class="math inline"><em>C</em><sub>23</sub> = <em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>M</em><em>a</em><em>r</em><em>y</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>123</sub> = ¬<em>b</em><em>o</em><em>r</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>y</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>1234</sub> = <em>N</em><em>I</em><em>L</em></span></li>
 </ol>
-<p>由于归结出了空子句，所以成功证明了 $brother(Mary,Tom)$ 为假，因此原命题 $\neg brother(Mary,Tom)$ 为真，Mary 不是 Tom 的兄弟。</p>
+<p>由于归结出了空子句，所以成功证明了 <span
+class="math inline"><em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span>
+为假，因此原命题 <span
+class="math inline">¬<em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span>
+为真，Mary 不是 Tom 的兄弟。</p>
 	  
 	</div>
 
@@ -335,7 +474,7 @@
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-%E5%BD%92%E7%BB%93%E6%8E%A8%E7%90%86"><span class="toc-article-text">1 归结推理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-%E5%AD%90%E5%8F%A5%E9%9B%86"><span class="toc-article-text">2 子句集</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86"><span class="toc-article-text">3 鲁滨逊归结原理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-%E5%BD%92%E7%BB%93%E5%8F%8D%E6%BC%94"><span class="toc-article-text">4 归结反演</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BD%92%E7%BB%93%E6%8E%A8%E7%90%86"><span class="toc-article-text">1 归结推理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AD%90%E5%8F%A5%E9%9B%86"><span class="toc-article-text">2 子句集</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86"><span class="toc-article-text">3 鲁滨逊归结原理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BD%92%E7%BB%93%E5%8F%8D%E6%BC%94"><span class="toc-article-text">4 归结反演</span></a></li></ol>
 		</div>
 	
 	</div>

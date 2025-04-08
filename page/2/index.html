@@ -134,12 +134,25 @@
   <div class="row">
 	
 	
-		<h2 id="1-归结推理"><a href="#1-归结推理" class="headerlink" title="1 归结推理"></a>1 归结推理</h2><p>反证法：$P\Rightarrow Q$，当且仅当 $P\land\neg Q\Leftrightarrow F$，即 $Q$ 为 $P$ 的逻辑结论，当且仅当 $P\land\neg Q$ 是不可满足的。</p>
-<p>定理：$Q$ 为 $P_1$，$P_2$，……，$P_n$ 的逻辑结论，当且仅当 $(P_1\land P_2\land …\land P_n)\land\neg Q$ 是不可满足的。</p>
+		<h2 id="归结推理">1 归结推理</h2>
+<p>反证法：<span
+class="math inline"><em>P</em> ⇒ <em>Q</em></span>，当且仅当 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em> ⇔ <em>F</em></span>，即
+<span class="math inline"><em>Q</em></span> 为 <span
+class="math inline"><em>P</em></span> 的逻辑结论，当且仅当 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em></span> 是不可满足的。</p>
+<p>定理：<span class="math inline"><em>Q</em></span> 为 <span
+class="math inline"><em>P</em><sub>1</sub></span>，<span
+class="math inline"><em>P</em><sub>2</sub></span>，……，<span
+class="math inline"><em>P</em><sub><em>n</em></sub></span>
+的逻辑结论，当且仅当 <span
+class="math inline">(<em>P</em><sub>1</sub>∧<em>P</em><sub>2</sub>∧…∧<em>P</em><sub><em>n</em></sub>) ∧ ¬<em>Q</em></span>
+是不可满足的。</p>
 <p>归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：</p>
-<ol>
-<li>欲证明 $P⇒Q$</li>
-<li>化为反命题 $P\land¬Q$</li>
+<ol type="1">
+<li>欲证明 <span class="math inline"><em>P</em> ⇒ <em>Q</em></span></li>
+<li>化为反命题 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em></span></li>
 <li>化成子句集</li>
 <li>证明子句集不可满足(鲁滨逊归结原理)</li>
 </ol>
@@ -167,11 +180,27 @@
   <div class="row">
 	
 	
-		<h2 id="01-Seq2seq"><a href="#01-Seq2seq" class="headerlink" title="01 Seq2seq"></a>01 Seq2seq</h2><p>Transformer 是一个 sequence-to-sequence model，我们一般简写作 seq2seq。seq2seq 的意思是指，输入是一个 sequence，输出也是一个 sequence，并且两个 sequence 的长度不一定，这里的长度不一定的意思是指：1. 输入的长度不一定；2. 输出的长度由机器自己决定；3. 输入和输出的长度并不存在必然关系。</p>
-<p>比较典型的 seq2seq 的例子有语音识别、文字翻译、语音翻译等，还有例如 text-to-speech (文字转语音) 的 model 也是一种 seq2seq，甚至是聊天机器人 chatbot，也是 seq2seq。</p>
-<p>其实，seq2seq 在 NLP 方面的应用是很广泛的，很多你认为可能跟 seq2seq 无关的任务也可以转换成 seq2seq。NLP 的本质其实是 question answering (QA)，而只要能想象成 QA，就基本上都能用 seq2seq 解决。</p>
-<p>Seq2seq 还可以用于解决 multi-label classification，multi-label 是将一个东西分到多个类别里的任务，并且一个东西可能属于不止一个类别，而 seq2seq 的输出长度是机器自己决定的，也就是机器觉得有几个输出就几个输出，也就是机器觉得这个东西属于哪几个类别那就是哪几个类别，所以 seq2seq 也可以硬解 multi-label classification。</p>
-<p>除此以外，就连图像识别问题也可以用 seq2seq，但是这里就不展开了。至少至此，我们已经知道了 seq2seq 是一个强大的 model，那么它究竟是怎么做到的，接下来我们就要开始研究了。</p>
+		<h2 id="seq2seq">01 Seq2seq</h2>
+<p>Transformer 是一个 sequence-to-sequence model，我们一般简写作
+seq2seq。seq2seq 的意思是指，输入是一个 sequence，输出也是一个
+sequence，并且两个 sequence 的长度不一定，这里的长度不一定的意思是指：1.
+输入的长度不一定；2. 输出的长度由机器自己决定；3.
+输入和输出的长度并不存在必然关系。</p>
+<p>比较典型的 seq2seq 的例子有语音识别、文字翻译、语音翻译等，还有例如
+text-to-speech (文字转语音) 的 model 也是一种 seq2seq，甚至是聊天机器人
+chatbot，也是 seq2seq。</p>
+<p>其实，seq2seq 在 NLP 方面的应用是很广泛的，很多你认为可能跟 seq2seq
+无关的任务也可以转换成 seq2seq。NLP 的本质其实是 question answering
+(QA)，而只要能想象成 QA，就基本上都能用 seq2seq 解决。</p>
+<p>Seq2seq 还可以用于解决 multi-label classification，multi-label
+是将一个东西分到多个类别里的任务，并且一个东西可能属于不止一个类别，而
+seq2seq
+的输出长度是机器自己决定的，也就是机器觉得有几个输出就几个输出，也就是机器觉得这个东西属于哪几个类别那就是哪几个类别，所以
+seq2seq 也可以硬解 multi-label classification。</p>
+<p>除此以外，就连图像识别问题也可以用
+seq2seq，但是这里就不展开了。至少至此，我们已经知道了 seq2seq
+是一个强大的
+model，那么它究竟是怎么做到的，接下来我们就要开始研究了。</p>
 	
 	</div>
   <a type="button" href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/#more" class="btn btn-default more">Read More</a>
@@ -251,9 +280,9 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/lecture-notes/">lecture notes<span>6</span></a></li>
-		
 			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/lecture-notes/">lecture notes<span>6</span></a></li>
 		
 		 
 		</ul>
