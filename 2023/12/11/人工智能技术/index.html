@@ -1,0 +1,1857 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>人工智能技术杂谈 | Jiahao Peng</title>
+  <meta name="author" content="me">
+  
+  <meta name="description" content="本科期间学了机器学习以及人工智能的课程，但是笔记零零碎碎，不够单独组成合辑，遂整合到一起，仅作留档，没什么逻辑。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="人工智能技术杂谈"/>
+  <meta property="og:site_name" content="Jiahao Peng"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Jiahao Peng" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/bootstrap.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+  <![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  
+  
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">Jiahao Peng</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+    <div class="content">
+      
+
+
+	
+		<div class="page-header ">		
+			<h1 class="title "> 人工智能技术杂谈</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>本科期间学了机器学习以及人工智能的课程，但是笔记零零碎碎，不够单独组成合辑，遂整合到一起，仅作留档，没什么逻辑。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>本文档内容包括支持向量机、隐马尔可夫模型、鲁滨逊归结原理和A*搜索。</p>
+<h2 id="支持向量机">支持向量机</h2>
+<p><strong>支持向量机（support vector machines,
+SVM）</strong>是一种二分类模型，它的基本模型是定义在特征空间上的<strong>间隔最大的线性分类器</strong>，间隔最大使它有别于感知机；SVM还包括<strong>核技巧</strong>，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。</p>
+<span id="more"></span>
+<h3 id="线性模型">01 线性模型</h3>
+<h4 id="算法思路">1.1 算法思路</h4>
+<p>假设训练样本在空间中的分布如下左图分布，圆圈和星星分别代表两类不同类别的数据，那么我们能找出一条直线，将两者分割开，我们就称这样的训练样本集为一个<strong>线性可分（Linear
+Separable）样本集</strong>，这样的模型就被称为<strong>线性模型</strong>；同理，倘若我们找不到这样一条直线，将两者完全分离开，如下右图所示，则称这样的训练样本集为一个<strong>线性不可分（Non-Linear
+Separable）样本集</strong>，这样的模型就被称为<strong>非线性模型</strong>。</p>
+<p><img src="/img/支持向量机-01.png" /></p>
+<p><strong>支持向量机</strong>算法的思路大致是这样的：首先讨论如何在线性可分的训练样本集上找一条直线将样本分开，然后想办法将这样的方法推广到线性不可分的训练样本集上。所以，我们首先讨论第一部分：如何找到一条直线将线性可分训练样本集分开。</p>
+<p>对于一个训练样本集，可以证明：<u>只要存在一条直线可以将样本集分开，就肯定存在无数条直线能将该样本集分开</u>（如下图所示）。既然如此，支持向量机提出的第一个问题就是：哪条直线是最好的？</p>
+<p><img src="/img/支持向量机-02.png" /></p>
+<p>通过直觉来判断，我们也可以感受出上图中的红色直线应该是最好的，问题是为什么？要解答这个问题，我们就必须定义一种性能指标（Performace
+Measure），来评估每一条直线的好坏。</p>
+<p>为了给出这个性能指标，支持向量机做的事情是，将上面的红线向左右两边平行移动，直到这条线碰到一个或几个样本点为止（如下图中两条虚线所示）：</p>
+<p><img src="/img/支持向量机-03.png" /></p>
+<p>然后，支持向量机给出了这个性能指标的定义，就是上图中两条虚线的距离（Gap），用
+<span class="math inline"><em>d</em></span>
+表示。而性能最好的那条线，就是能使 <span
+class="math inline"><em>d</em></span>
+最大的那条线。但是这样还不完善，要知道，能使 <span
+class="math inline"><em>d</em></span>
+最大的线也不唯一，将上图中的实线左右移动，作一条平行线，只要平行线不越过两条虚线所界定的范围，<span
+class="math inline"><em>d</em></span>
+就是不变的，所以还得给出另一个限制条件：直线必须位于两根平行线的正中间，也就是使上图中的实线与左右两根平行虚线的距离分别为
+<span class="math inline">$\frac d2$</span>。</p>
+<p><img src="/img/支持向量机-04.png" /></p>
+<h4 id="数学描述">1.2 数学描述</h4>
+<p>既然性能指标已经确定了，下一个问题就是如何描述这个优化过程了。在描述优化过程之前，我们还是先得给出一些定义，首先，我们将上面的
+<span class="math inline"><em>d</em></span>
+称为<strong>间隔（Margin）</strong>，将虚线穿过的向量称为<strong>支持向量（Support
+Vectors）</strong>。通过上面对支持向量机算法的简单描述，我们可以发现，支持向量机找到的最优直线，只与支持向量有关，与其他向量无关，这就是为什么支持向量机也能用在小样本的数据上。</p>
+<p>先给出线性模型的数学描述：</p>
+<ol type="1">
+<li><p>定义训练数据及标签为 <span
+class="math inline">(<em>X</em><sub>1</sub>,<em>y</em><sub>1</sub>)、(<em>X</em><sub>2</sub>,<em>y</em><sub>2</sub>)...(<em>X</em><sub><em>n</em></sub>,<em>y</em><sub><em>n</em></sub>)</span>，其中，<span
+class="math inline"><em>X</em></span>
+是样本的特征，在上面给出的例子里，每个样本的特征是二维的，也就是说 <span
+class="math inline">$X=\left[ \begin{array}{} x_1 \\ x_2
+\end{array}\right]$</span> ，分别对应 x 轴和 y 轴；而 <span
+class="math inline"><em>y</em></span>
+是标签，在上面这个二分类问题里，标签只有两种，所以 <span
+class="math inline"><em>y</em> ∈ { − 1, 1}</span>。</p></li>
+<li><p>我们定义一个线性模型为 <span
+class="math inline">(<em>W</em>,<em>b</em>)</span>，其中 <span
+class="math inline"><em>W</em></span> 是一个向量，其维数与特征向量 <span
+class="math inline"><em>X</em></span> 一致，<span
+class="math inline"><em>b</em></span>
+是一个常数，一个线性模型确定一个<strong>超平面（Hyperplane）</strong>，所谓超平面就是指划分空间的平面，超平面在二维空间里表现为我们上面所说的那条划分样本点的直线，而在更高的维度里就是一个平面，故称之为超平面。超平面由
+<span class="math inline"><em>W</em></span> 和 <span
+class="math inline"><em>b</em></span> 确定，其方程为 <span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>X</em> + <em>b</em> = 0</span>。机器学习的目标，就是通过所有样本的特征
+<span class="math inline"><em>X</em></span> 来找到一个 <span
+class="math inline"><em>W</em></span> 和 <span
+class="math inline"><em>b</em></span>，使能够确定一个超平面能划分所有的样本点。</p></li>
+<li><p>一个训练集线性可分是指：对于 <span
+class="math inline">{(<em>X</em><sub><em>i</em></sub>,<em>y</em><sub><em>i</em></sub>)}<sub><em>i</em> = 1 ∼ <em>N</em></sub></span>，<span
+class="math inline">$\exist(W,b)$</span>，使 <span
+class="math inline">∀<em>i</em> = 1 ∼ <em>N</em></span>，有：</p>
+<ol type="1">
+<li>若 <span
+class="math inline"><em>y</em><sub><em>i</em></sub> =  + 1</span>，则
+<span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub> + <em>b</em> ≥ 0</span>；</li>
+<li>若 <span
+class="math inline"><em>y</em><sub><em>i</em></sub> =  − 1</span>，则
+<span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub> + <em>b</em> &lt; 0</span>。</li>
+</ol>
+<p>当然，上述线性可分的定义是不唯一的，将 <span
+class="math inline">≥</span> 和 <span class="math inline">&lt;</span>
+换个位置也是一样。对于上面的定义，我们可以发现，凡是线性可分问题，一定存在
+<span
+class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub>+<em>b</em>] ≥ 0</span>。</p></li>
+</ol>
+<p>接下来给出支持向量机优化问题的数学描述：</p>
+<ol type="1">
+<li>目标：最小化 <span
+class="math inline">∥<em>W</em>∥<sup>2</sup></span></li>
+<li>限制条件：<span
+class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub>+<em>b</em>] ≥ 1  (<em>i</em>=1∼<em>N</em>)</span></li>
+</ol>
+<p>对于上面这两个公式，相信很多人第一眼是懵的，因为按我们之前的描述，支持向量机算法就是去找一条使
+<span class="math inline"><em>d</em></span>
+最大且位于正中间位置的直线，怎么数学公式看起来跟这个过程完全没关系呢？</p>
+<p>要搞清楚这两个公式，我们得先弄清楚两个事实：</p>
+<ol type="1">
+<li>事实一：<span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>X</em> + <em>b</em> = 0</span>
+与 <span
+class="math inline"><em>a</em><em>W</em><sup><em>T</em></sup><em>X</em> + <em>a</em><em>b</em> = 0  (<em>a</em>∈<em>R</em><sup>+</sup>)</span>
+表示的是同一个平面。</li>
+<li>事实二：向量 <span class="math inline"><em>X</em><sub>0</sub></span>
+到超平面 <span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>X</em> + <em>b</em> = 0</span>
+的距离是 <span class="math inline">$d=\frac{|W^TX_0+b|}{\lVert
+W\rVert}$</span>。（不要慌，这其实就是高中学的点到平面的距离公式，以一维平面
+<span
+class="math inline"><em>w</em><sub>1</sub><em>x</em> + <em>w</em><sub>2</sub><em>y</em> + <em>b</em> = 0</span>，也就是直线为例，点
+<span
+class="math inline">(<em>x</em><sub>0</sub>,<em>y</em><sub>0</sub>)</span>
+到这条直线的距离就是 <span
+class="math inline">$d=\frac{|w_1x_0+w_2y_0+b|}{\sqrt{w_1^2+w_2^2}}$</span>，前面的那个公式只不是这个公式在高维情况下的推广）</li>
+</ol>
+<p>基于事实二，我们知道，支持向量机要做的事情，就是在 <span
+class="math inline"><em>X</em><sub>0</sub></span> 是支持向量的情况下，使
+<span class="math inline"><em>d</em></span> 最大。</p>
+<p>基于事实一，我们知道，我们可以找到一个正实数 <span
+class="math inline"><em>a</em></span> 来缩放 <span
+class="math inline"><em>W</em></span> 和 <span
+class="math inline"><em>b</em></span>，即 <span
+class="math inline">(<em>W</em>,<em>b</em>) → (<em>a</em><em>W</em>,<em>a</em><em>b</em>)</span>，使
+<span class="math inline"><em>d</em></span> 公式的分子 <span
+class="math inline">|<em>W</em><sup><em>T</em></sup><em>X</em><sub>0</sub>+<em>b</em>| = 1</span>。这样的话，<span
+class="math inline"><em>d</em></span> 的公式就变成了 <span
+class="math inline">$d=\frac{1}{\lVert
+W\rVert}$</span>。看到这个公式，就能明白为什么支持向量机的优化目标是最小化
+<span class="math inline">∥<em>W</em>∥<sup>2</sup></span> 了，因为最小化
+<span class="math inline">∥<em>W</em>∥<sup>2</sup></span> 就是最大化
+<span class="math inline"><em>d</em></span>。</p>
+<p>现在再来看限制条件，限制条件其实就是规定了，所有样本点到超平面的距离
+<span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub> + <em>b</em></span>，要么等于
+<span class="math inline"><em>d</em></span>（支持向量），要么大于 <span
+class="math inline"><em>d</em></span>（非支持向量）。
+至于为什么要再乘上一个 <span
+class="math inline"><em>y</em><sub><em>i</em></sub></span>，其实看<u>线性可分的定义</u>就知道了，乘上
+<span class="math inline"><em>y</em><sub><em>i</em></sub></span>
+是为了与线性可分的定义相统一。</p>
+<blockquote>
+<p>补充：</p>
+<ul>
+<li><p>为什么一定要使 <span
+class="math inline">|<em>W</em><sup><em>T</em></sup><em>X</em><sub>0</sub>+<em>b</em>| = 1</span>，
+<span
+class="math inline">|<em>W</em><sup><em>T</em></sup><em>X</em><sub>0</sub>+<em>b</em>| = 2</span>
+可不可以？可以，等于 1 还是等于 2 或是其他值都没有任何关系，这只取决于
+<span class="math inline"><em>a</em></span> 的大小，而 <span
+class="math inline"><em>a</em></span> 并不改变超平面。</p></li>
+<li><p>对于任何线性可分样本集，一定能找到一个超平面分割所有样本点；反之，如果是线性不可分，那么将找不到任何一个能满足要求的
+<span class="math inline"><em>W</em></span> 和 <span
+class="math inline"><em>b</em></span>。</p></li>
+<li><p>某些书上会将优化目标写成最小化 <span
+class="math inline">$\frac12\lVert
+W\rVert^2$</span>，这其实没有任何问题，加上 <span
+class="math inline">$\frac12$</span> 只是为了求导方便。</p></li>
+<li><p>支持向量机要解决的问题其实是一个凸优化问题，而且是一个二次规划问题，二次规划问题的特点是：</p>
+<ul>
+<li>目标函数（Objective Function）是二次项；</li>
+<li>限制条件是一次项。</li>
+</ul>
+<p>对于凸优化问题，要么无解，要么只有一个解。凸优化问题是计算机领域研究最多的问题，因为凸优化问题要么无解，要么只要能找到一个解，那便是它唯一的解。所以只要证明一个问题是凸优化问题，那么我们只要找到一个局部极值，也便找到了它的全局极值，我们便可认定这个问题已经被解决了。</p>
+<p>非凸问题的目标函数图像是一条包含很多局部极值的曲线，会使得机器很容易落入局部最优解的陷阱。支持向量机算法优美的地方就在于，它将求解目标化成了一个凸优化问题。</p></li>
+</ul>
+</blockquote>
+<h3 id="非线性模型">02 非线性模型</h3>
+<h4 id="优化目标">2.1 优化目标</h4>
+<p>之前已经讨论过，非线性模型不是线性可分的，也就是说找不到一个 <span
+class="math inline"><em>W</em></span> 和 <span
+class="math inline"><em>b</em></span>，使之确定一个能完美分割所有样本点的超平面，即限制条件
+<span
+class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub>+<em>b</em>] ≥ 1  (<em>i</em>=1∼<em>N</em>)</span>
+是不可满足的，原本的优化目标是无解的。SVM
+处理非线性模型的方法其实不难理解，就是在线性模型的基础上引入了一个<strong>松弛变量（Slack
+Variable）</strong>，用 <span
+class="math inline"><em>ξ</em> (<em>ξ</em>≥0)</span>
+表示。新的优化目标如下：</p>
+<ol type="1">
+<li>目标：最小化 <span class="math inline">$\frac12\lVert
+W\rVert^2+C\sum_{i=1}^N\xi_i$</span></li>
+<li>限制条件：
+<ol type="1">
+<li><span
+class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub>+<em>b</em>] ≥ 1 − <em>ξ</em><sub><em>i</em></sub>  (<em>i</em>=1∼<em>N</em>)</span></li>
+<li><span
+class="math inline"><em>ξ</em><sub><em>i</em></sub> ≥ 0</span></li>
+</ol></li>
+</ol>
+<p>可以发现，新的优化目标中，限制条件变成了 <span
+class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub>+<em>b</em>] ≥ 1 − <em>ξ</em><sub><em>i</em></sub>  (<em>i</em>=1∼<em>N</em>)</span>，只要这个
+<span class="math inline"><em>ξ</em><sub><em>i</em></sub></span>
+取得足够大，那么大于等于号右边就会无限小，那么限制条件就有了满足的可能；但同时，也不能允许
+<span class="math inline"><em>ξ</em><sub><em>i</em></sub></span>
+无限大，不然就没有意义了，所以新的最小化目标函数的末尾还要加上 <span
+class="math inline"><em>ξ</em><sub><em>i</em></sub></span>。</p>
+<p>接下来要明确，在上面的式子中，哪些是已知的，哪些是要求解的参数。显然，<span
+class="math inline"><em>X</em></span>和<span
+class="math inline"><em>y</em><sub><em>i</em></sub></span>是已知的，<span
+class="math inline"><em>W</em></span>、<span
+class="math inline"><em>b</em></span>以及<span
+class="math inline"><em>ξ</em></span>是要求的，但是这里还有个<span
+class="math inline"><em>C</em></span>，这个<span
+class="math inline"><em>C</em></span>是什么？<span
+class="math inline"><em>C</em></span>是一个由人事先设定的参数，这种参数一般称为<strong>超参数</strong>（<strong>Hyperparameter</strong>），作用是平衡<span
+class="math inline">$\frac{1}{2}\lVert\ W\rVert^{2}$</span>和<span
+class="math inline">$\sum_{i=1}^{N}\xi_{i}$</span>的权重。至于<span
+class="math inline"><em>C</em></span>具体取多少是没有定论的，一般是凭经验，选定一个区间，然后一个一个尝试。SVM很方便的一点就是，它只有这一个参数需要人来设置，但是在神经网络里，要去一个一个尝试的参数可能有很多。</p>
+<h4 id="高维映射">2.2 高维映射</h4>
+<p>虽然通过引入松弛变量，我们将非线性问题转换为了一个线性可分问题，但是还是存在一个问题，那就是求解目标的本质没有变，最后仍然是找出一条直线，来分割样本点，也就是说，即使一个样本集用肉眼看就能看出其能被一条简单的曲线分割，SVM
+还是会找一条直线来分割样本点，如下图所示：</p>
+<p><img src="/img/支持向量机-05.png" /></p>
+<p>这显然不是我们想要的。一些算法会很符合直觉地去找非直线来分割样本集，例如决策树是用矩形来分割，但是
+SVM
+的思想很精妙，它仍然是找直线，不过它不是在当前空间里去找，而是到高维空间里去找。它定义了一个<strong>高维映射</strong>
+<span class="math inline"><em>ϕ</em>(<em>X</em>)</span>，通过 <span
+class="math inline"><em>ϕ</em></span>，能将 <span
+class="math inline"><em>X</em></span> 这个低维向量转化成一个高维向量
+<span
+class="math inline"><em>ϕ</em>(<em>X</em>)</span>。也就是说，也许在低维空间中，我们不容易去找一条直线能刚刚好分割所有样本点，那么我们就去高维空间中找，或许在高维空间中，我们就能找到样一条理想的直线了。</p>
+<p>接下来我们用异或问题的例子，来具体解释这个过程为什么有效。异或问题是二维空间下最简单的非线性问题，其在二维空间中存在如下样本点分布：</p>
+<p><img src="/img/支持向量机-06.png" /></p>
+<p>我们先将图中四个样本点表示为 <span
+class="math inline"><em>X</em><sub>1</sub></span>、<span
+class="math inline"><em>X</em><sub>2</sub></span>、<span
+class="math inline"><em>X</em><sub>3</sub></span> 和 <span
+class="math inline"><em>X</em><sub>4</sub></span>，并且 <span
+class="math inline"><em>X</em><sub>1</sub></span> 和 <span
+class="math inline"><em>X</em><sub>2</sub></span> 属于一个类别 <span
+class="math inline"><em>C</em><sub>1</sub></span>，<span
+class="math inline"><em>X</em><sub>3</sub></span> 和 <span
+class="math inline"><em>X</em><sub>4</sub></span> 属于一个类别 <span
+class="math inline"><em>C</em><sub>2</sub></span>，有： <span
+class="math display">$$
+\begin{aligned}
+&amp;X_1=\left[ \begin{array}{} 0 \\ 0 \end{array} \right]\quad
+X_2=\left[ \begin{array}{} 1 \\ 1 \end{array} \right]\quad\in C_1\\
+&amp;X_3=\left[ \begin{array}{} 1 \\ 0 \end{array} \right]\quad
+X_4=\left[ \begin{array}{} 0 \\ 1 \end{array} \right]\quad\in C_2\\
+\end{aligned}
+$$</span> 定义高维映射函数为： <span class="math display">$$
+\phi(X):\quad X=\left[ \begin{array}{} a \\ b \end{array}
+\right]\overset{\phi}{\longrightarrow}\phi(X)=\left[ \begin{array}{} a^2
+\\ b^2 \\ a \\ b \\ ab \end{array} \right]
+$$</span> 则经过映射，四个样本点将变为： <span class="math display">$$
+\begin{aligned}
+&amp;\phi(X_1)=\left[ \begin{array}{} 0 \\ 0 \\ 0 \\ 0 \end{array}
+\right]\quad \phi(X_2)=\left[ \begin{array}{} 1 \\ 1 \\ 1 \\ 1
+\end{array} \right]\quad\in C_1\\
+&amp;\phi(X_3)=\left[ \begin{array}{} 1 \\ 0 \\ 1 \\ 0 \\ 0 \end{array}
+\right]\quad \phi(X_4)=\left[ \begin{array}{} 0 \\ 1 \\ 0 \\ 1 \\ 0
+\end{array} \right]\quad\in C_2\\
+\end{aligned}
+$$</span> 现在，<span class="math inline"><em>X</em></span>
+变成了五维向量，则 <span class="math inline"><em>W</em></span>
+也要变成五维向量，<span class="math inline"><em>b</em></span>
+仍然为常量，求解的目标就变成在五维空间中找一个超平面来分割四个样本点了。能做到分割的超平面不唯一，这里举一个例子：
+<span class="math display">$$
+W=\left[ \begin{array}{} -1 \\ -1 \\ -1 \\ -1 \\ 6 \end{array}
+\right]\quad b=1
+$$</span> 将样本点代入超平面的方程： <span class="math display">$$
+\begin{aligned}
+&amp;W^T\phi(X_1)+b=1&gt;0\\
+&amp;W^T\phi(X_2)+b=3&gt;0\\
+&amp;W^T\phi(X_3)+b=-1&lt;0\\
+&amp;W^T\phi(X_4)+b=-1&lt;0\\
+\end{aligned}
+$$</span> 如上，该超平面刚刚好把 <span
+class="math inline"><em>X</em><sub>1</sub></span>、<span
+class="math inline"><em>X</em><sub>2</sub></span> 与 <span
+class="math inline"><em>X</em><sub>3</sub></span>、<span
+class="math inline"><em>X</em><sub>4</sub></span>
+分开了。也就是说，在低维空间中线性不可分的样本集，可能在高维空间中就是线性可分的，这也就是我们要去升维的原因。关于这一点也有很多人研究过，它们的结论是，对于任何线性不可分的样本集，特征空间的维数越高，其被线性分割的概率也越大；若维数趋近无穷大，那么其被线性分割的概率将达到
+1.</p>
+<h4 id="核函数">2.3 核函数</h4>
+<p>在引入了高维映射之后，优化式 1 就变成了 <span
+class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub><em>i</em></sub>)+<em>b</em>] ≥ 1 − <em>ξ</em><sub><em>i</em></sub>  (<em>i</em>=1∼<em>N</em>)</span>，虽然看起来只有
+<span class="math inline"><em>X</em><sub><em>i</em></sub></span>
+发生了变化，但不要忘记 <span class="math inline"><em>W</em></span>
+也跟着一起升维了。那么现在面临的问题就是：<u>如何选取 <span
+class="math inline"><em>ϕ</em></span></u> ？SVM 的回答是：无限维。</p>
+<p>将特征空间增长到无限维，线性不可分问题就绝对可以变成线性可分。但是问题在于，当
+<span class="math inline"><em>ϕ</em>(<em>X</em>)</span>
+变成无限维，<span class="math inline"><em>W</em></span>
+也要变成无限维，那这个问题就没有办法做了。这也是 SVM
+巧妙的另一个地方，它在将特征空间映射到无限维的同时，又采用有限维的手段。</p>
+<p>SVM 的意思是：我们可以不知道无限维映射 <span
+class="math inline"><em>ϕ</em>(<em>X</em>)</span>
+的显式表达，我们只要知道一个<strong>核函数（Kernel Function）</strong>：
+<span
+class="math display"><em>K</em>(<em>X</em><sub>1</sub>,<em>X</em><sub>2</sub>) = <em>ϕ</em>(<em>X</em><sub>1</sub>)<sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub>2</sub>)</span>
+则优化式 1 仍然可解。<span
+class="math inline"><em>K</em>(<em>X</em><sub>1</sub>,<em>X</em><sub>2</sub>)</span>
+其实计算的是 <span
+class="math inline"><em>ϕ</em>(<em>X</em><sub>1</sub>)</span> 和 <span
+class="math inline"><em>ϕ</em>(<em>X</em><sub>2</sub>)</span>
+的内积，虽然 <span
+class="math inline"><em>ϕ</em>(<em>X</em><sub>1</sub>)</span> 和 <span
+class="math inline"><em>ϕ</em>(<em>X</em><sub>2</sub>)</span>
+是无限维的，但是两者仍然能进行内积计算，得到的结果 <span
+class="math inline"><em>K</em>(<em>X</em><sub>1</sub>,<em>X</em><sub>2</sub>)</span>
+是一个数。</p>
+<p>核函数的要求是：能将函数的形式最终拆成 <span
+class="math inline"><em>ϕ</em>(<em>X</em><sub>1</sub>)<sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub>2</sub>)</span>
+的形式。常用的核函数有如下几个：</p>
+<ol type="1">
+<li>高斯核：<span class="math inline">$K(X_1,X_2)=e^{-\frac{\lVert
+X_1-X_2\rVert^2}{2\sigma^2}}=\phi(X_1)^T\phi(X_2)$</span>，<span
+class="math inline"><em>σ</em><sup>2</sup></span> 是方差。</li>
+<li>多项式核：<span
+class="math inline"><em>K</em>(<em>X</em><sub>1</sub>,<em>X</em><sub>2</sub>) = (<em>X</em><sub>1</sub><sup><em>T</em></sup><em>X</em><sub>2</sub>+1)<sup><em>d</em></sup> = <em>ϕ</em>(<em>X</em><sub>1</sub>)<sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub>2</sub>)</span>，<span
+class="math inline"><em>d</em></span> 是多项式阶数。</li>
+</ol>
+<p>而能将核函数 <span
+class="math inline"><em>K</em>(<em>X</em><sub>1</sub>,<em>X</em><sub>2</sub>)</span>
+拆成 <span
+class="math inline"><em>ϕ</em>(<em>X</em><sub>1</sub>)<sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub>2</sub>)</span>
+的充要条件是：</p>
+<ol type="1">
+<li><span
+class="math inline"><em>K</em>(<em>X</em><sub>1</sub>,<em>X</em><sub>2</sub>) = <em>K</em>(<em>X</em><sub>2</sub>,<em>X</em><sub>1</sub>)</span>，即交换性；</li>
+<li><span
+class="math inline">∀<em>C</em><sub><em>i</em></sub>, <em>X</em><sub><em>i</em></sub> (<em>i</em>=1∼<em>N</em>)</span>，有
+<span
+class="math inline">$\sum_{i=1}^{N}\sum_{j=1}^{N}C_iC_jK(X_i,X_j)\ge0$</span>，即半正定性，也就是说，我们选取的核函数，必须要对任意选定的常数
+<span class="math inline"><em>C</em></span> 和向量 <span
+class="math inline"><em>X</em></span> 都满足该式；</li>
+</ol>
+<h4 id="原问题到对偶问题">2.4 原问题到对偶问题</h4>
+<p>现在我们有了核函数，那么我们要怎样利用核函数，来替代优化式 1 中的
+<span class="math inline"><em>ϕ</em>(<em>X</em>)</span>
+呢？在这之前，请先阅读<a
+href="#7.3*%20补充：优化理论">优化理论</a>相关的内容。在稍微了解了优化理论中的原问题和对偶问题后，我们要做的，就是<u>把
+SVM 的优化问题从原问题转换成对偶问题</u>。</p>
+<p>首先，我们<u>把 SVM 的优化问题转换成原问题</u>：</p>
+<p>对于目标函数，<span class="math inline">$\frac12\lVert
+W\rVert^2+C\sum_{i=1}^N\xi_i$</span> 是一个<strong>凸函数</strong>。</p>
+<p>对于限制条件，<span
+class="math inline"><em>ξ</em><sub><em>i</em></sub> ≥ 0</span>
+不满足原问题的限制条件形式，得先将大于等于号变成小于等于号，也就是变成
+<span
+class="math inline"><em>ξ</em><sub><em>i</em></sub> ≤ 0</span>，那么，目标函数就也得变换一下，变成
+<span class="math inline">$\frac12\lVert
+W\rVert^2-C\sum_{i=1}^N\xi_i$</span>；同样，另一个限制条件也得变换一下，变成
+<span
+class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub>+<em>b</em>] ≥ 1 + <em>ξ</em><sub><em>i</em></sub>  (<em>i</em>=1∼<em>N</em>)</span>，但是这个不等式也不满足原问题的要求，必须将不等式右边变成
+0，所以得到 <span
+class="math inline">1 + <em>ξ</em><sub><em>i</em></sub> − <em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>X</em><sub><em>i</em></sub>+<em>b</em>] ≤ 0  (<em>i</em>=1∼<em>N</em>)</span>。于是得到优化目标的原问题形式，新的优化目标：</p>
+<ol type="1">
+<li>目标：最小化 <span class="math inline">$\frac12\lVert
+W\rVert^2-C\sum_{i=1}^N\xi_i$</span></li>
+<li>限制条件：
+<ol type="1">
+<li><span
+class="math inline">1 + <em>ξ</em><sub><em>i</em></sub> − <em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub><em>i</em></sub>)+<em>b</em>] ≤ 0  (<em>i</em>=1∼<em>N</em>)</span></li>
+<li><span
+class="math inline"><em>ξ</em><sub><em>i</em></sub> ≤ 0</span></li>
+</ol></li>
+</ol>
+<p><u>将其转换为对偶问题</u>：</p>
+<ol type="1">
+<li><p>目标：最大化 <span
+class="math inline">$\theta(\alpha,\beta)=\underset{(w,\xi_i,b)}{\inf}\{\frac12\lVert
+W\rVert^2-C\sum_{i=1}^N\xi_i+\sum_{i=1}^{N}\alpha_i(1+\xi_i-y_i[W^T\phi(X_i)+b])+\sum_{i=1}^N\beta_i\xi_i\}$</span></p></li>
+<li><p>限制条件：</p>
+<ol type="1">
+<li><span
+class="math inline"><em>α</em><sub><em>i</em></sub> ≥ 0  (<em>i</em>=1∼<em>N</em>)</span></li>
+<li><span
+class="math inline"><em>β</em><sub><em>i</em></sub> ≥ 0  (<em>i</em>=1∼<em>N</em>)</span></li>
+</ol></li>
+</ol>
+<p>解释一下这样变换的原因：</p>
+<ol type="1">
+<li>原问题中的 <span class="math inline"><em>w</em></span>
+对应了原问题要求解的变量，有三个，分别是 <span
+class="math inline"><em>W</em></span>、<span
+class="math inline"><em>b</em></span> 和 <span
+class="math inline"><em>ξ</em></span>，所以对偶问题中要遍历所有的 <span
+class="math inline"><em>w</em></span>，到这里就变成了遍历所有的 <span
+class="math inline"><em>W</em></span>、<span
+class="math inline"><em>b</em></span> 和 <span
+class="math inline"><em>ξ</em></span>。</li>
+<li>根据对偶问题的定义，<span
+class="math inline">$L(\omega,\alpha,\beta)=f(\omega)+\sum_{i=1}^{K}\alpha_ig_i(\omega)+\sum_{i=1}^M\beta_ih_i(\omega)$</span>，其中，<span
+class="math inline">$f(w)=\frac12\lVert
+W\rVert^2-C\sum_{i=1}^N\xi_i$</span>，这一点是没有疑问的，关键是下面，千万不要以为这里的
+<span class="math inline"><em>α</em></span> 和 <span
+class="math inline"><em>β</em></span> 分别对应了上面的 <span
+class="math inline"><em>α</em><sub><em>i</em></sub></span> 和 <span
+class="math inline"><em>β</em><sub><em>i</em></sub></span>，不是这样的，在对偶问题中，<span
+class="math inline"><em>α</em></span>
+管的是不等式条件，每个不等式条件要与 <span
+class="math inline"><em>α</em></span> 相乘，<span
+class="math inline"><em>β</em></span> 管的是等式条件，每个等式条件要与
+<span class="math inline"><em>β</em></span> 相乘。但是在这里，SVM
+原问题中的限制条件都是不等式，所以应该只有 <span
+class="math inline"><em>α</em></span>，没有 <span
+class="math inline"><em>β</em></span>，只是说为了方便表示，这里仍然沿用
+<span class="math inline"><em>α</em><sub><em>i</em></sub></span> 和
+<span
+class="math inline"><em>β</em><sub><em>i</em></sub></span>，并且，由于
+<span class="math inline"><em>α</em></span> 应该大于
+0，所以到这里就变成了 <span
+class="math inline"><em>α</em><sub><em>i</em></sub> ≥ 0  (<em>i</em>=1∼<em>N</em>)</span>，并且
+<span
+class="math inline"><em>β</em><sub><em>i</em></sub> ≥ 0  (<em>i</em>=1∼<em>N</em>)</span>。其他部分就是照抄的关系了。</li>
+</ol>
+<p>接下来我们就来求一下 <span
+class="math inline"><em>L</em>(<em>W</em>,<em>ξ</em><sub><em>i</em></sub>,<em>b</em>,<em>α</em>)</span>
+的最小值：</p>
+<p>令偏导 <span class="math inline">$\frac{\partial L}{\partial
+W}=0$</span>，<span class="math inline">$\frac{\partial L}{\partial
+\xi_i}=0$</span>，<span class="math inline">$\frac{\partial L}{\partial
+b}=0$</span>： <span class="math display">$$
+\begin{aligned}
+&amp;\frac{\partial L}{\partial W}=0\Rightarrow
+W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)&amp;①\\
+&amp;\frac{\partial L}{\partial \xi_i}=0\Rightarrow
+C=\beta_i+\alpha_i&amp;②\\
+&amp;\frac{\partial L}{\partial b}=0\Rightarrow
+\sum_{i=1}^N\alpha_iy_i=0&amp;③
+\end{aligned}
+$$</span> 接下来，我们要将上面得到的三个式子代回到 <span
+class="math inline"><em>L</em>(<em>W</em>,<em>ξ</em><sub><em>i</em></sub>,<em>b</em>,<em>α</em>)</span>
+中去，好消息是，将式 1 和式 3
+代入之后，式子中的大部分项就能被消掉了，得到 <span
+class="math inline">$\theta(\alpha,\beta)=\frac12\lVert
+W\rVert^2+\sum_{i=1}^N\alpha_i-\sum_{i=1}^N\alpha_iy_iW^T\phi(X_i)$</span>，先来计算
+<span class="math inline">$\frac12\lVert W\rVert^2$</span>： <span
+class="math display">$$
+\begin{aligned}
+\frac12\lVert W\rVert^2&amp;=\frac12W^TW\\
+&amp;=\frac12(\sum_{i=1}^N\alpha_iy_i\phi(X_i))^T(\sum_{j=1}^N\alpha_jy_j\phi(X_j))\\
+&amp;=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j\phi(X_i)^T\phi(X_j)\\
+&amp;=\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
+\end{aligned}
+$$</span> 一件惊喜的事情：上式的最终化简结果里出现了核函数！接下来化简
+<span
+class="math inline">$-\sum_{i=1}^N\alpha_iy_iW^T\phi(X_i)$</span>：
+<span class="math display">$$
+\begin{aligned}
+-\sum_{i=1}^N\alpha_iy_iW^T\phi(X_i)&amp;=-\sum_{i=1}^N\alpha_iy_i(\sum_{j=1}^N\alpha_jy_j\phi(X_j))^T\phi(X_i)\\
+&amp;=-\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j\phi(X_j)^T\phi(X_i)\\
+&amp;=-\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
+\end{aligned}
+$$</span> 所以，最后会得到： <span class="math display">$$
+\theta(\alpha,\beta)=\sum_{i=1}^{N}\alpha_i-\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)
+$$</span> 经过这样一系列的推导，最终问题的形式会变成：</p>
+<ol type="1">
+<li><p>目标：最大化 <span
+class="math inline">$\theta(\alpha)=\sum_{i=1}^{N}\alpha_i-\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)$</span></p></li>
+<li><p>限制条件：</p>
+<ol type="1">
+<li><span
+class="math inline">0 ≤ <em>α</em><sub><em>i</em></sub> ≤ <em>C</em>  (<em>i</em>=1∼<em>N</em>)</span></li>
+<li><span class="math inline">$\sum_{i=1}^N\alpha_iy_i=0$</span></li>
+</ol></li>
+</ol>
+<p>解释一下限制条件：根据之前求的偏导我们得到了 <span
+class="math inline"><em>β</em><sub><em>i</em></sub> + <em>α</em><sub><em>i</em></sub> = <em>C</em></span>，由于之前的限制条件规定了
+<span class="math inline"><em>β</em><sub><em>i</em></sub> ≥ 0</span>
+以及 <span
+class="math inline"><em>α</em><sub><em>i</em></sub> ≥ 0</span>，所以我们可以直接把这两个条件合并成一个条件，即
+<span
+class="math inline">0 ≤ <em>α</em><sub><em>i</em></sub> ≤ <em>C</em>  (<em>i</em>=1∼<em>N</em>)</span>，那么为什么要合并呢？因为我们现在的目标函数中只剩下了
+<span class="math inline"><em>α</em><sub><em>i</em></sub></span> 和
+<span
+class="math inline"><em>α</em><sub><em>j</em></sub></span>，已经不存在
+<span class="math inline"><em>β</em></span>
+了；而第二个限制条件则是直接照抄的令 <span
+class="math inline">$\frac{\partial L}{\partial b}=0$</span>
+得到的结果。</p>
+<p>在这个对偶问题中，目标函数仍然是一个<strong>凸函数</strong>。并且，其中未知的参数只有
+<span class="math inline"><em>α</em><sub><em>i</em></sub></span> 和
+<span
+class="math inline"><em>α</em><sub><em>j</em></sub></span>，核函数是已经确定的了。由于是一个凸优化问题，所以它应该是很容易求解的。有一种凸优化问题求解算法叫做
+<strong>SMO
+算法</strong>，在这里不再展开叙述，感兴趣的同学自行了解。总之，我们只需要知道，这个问题是有解的。</p>
+<p>但是到这里还没结束，我们现在已经将 SVM
+的优化问题从原问题转换成了对偶问题，将 <span
+class="math inline"><em>ϕ</em>(<em>X</em><sub><em>i</em></sub>)</span>
+用核函数进行了替换，但是还有一个问题：<u>对偶问题是求解 <span
+class="math inline"><em>α</em><sub><em>i</em></sub></span> 和 <span
+class="math inline"><em>α</em><sub><em>j</em></sub></span>，而我们要的是
+<span class="math inline"><em>W</em></span> 和 <span
+class="math inline"><em>b</em></span>，如何在这两者之间进行转换？</u></p>
+<p>这里又体现了 SVM 的精妙之处，我们并不需要知道 <span
+class="math inline"><em>W</em></span>
+具体长什么样，根据我们之前求偏导的结果，我们知道 <span
+class="math inline">$W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)$</span>，同时我们也知道，最后分类的方法是，对于测试样本
+<span class="math inline"><em>X</em></span>，若：</p>
+<ol type="1">
+<li><span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em>) + <em>b</em> ≥ 0</span>，则
+<span class="math inline"><em>y</em> =  + 1</span></li>
+<li><span
+class="math inline"><em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em>) + <em>b</em> &lt; 0</span>，则
+<span class="math inline"><em>y</em> =  − 1</span></li>
+</ol>
+<p>我们将 <span
+class="math inline">$W=\sum_{i=1}^N\alpha_iy_i\phi(X_i)$</span>
+代入到不等式左边的式子中，就会得到： <span class="math display">$$
+\begin{aligned}
+W^T\phi(X)+b&amp;=\sum_{i=1}^N[\alpha_iy_i\phi(X_i)]^T\phi(X)+b\\
+&amp;=\sum_{i=1}^N\alpha_iy_i\phi(X_i)^T\phi(X)+b\\
+&amp;=\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b
+\end{aligned}
+$$</span> 所以说，我们并不需要知道 <span
+class="math inline"><em>W</em></span>
+的具体值，我们只需要有核函数，就能对样本进行分类。现在的关键问题是：<u><span
+class="math inline"><em>b</em></span> 是多少</u>？<span
+class="math inline"><em>b</em></span>
+的求解并不简单，需要用到优化理论中的 <strong>KKT 条件</strong>。</p>
+<p>根据 KKT 条件，当原问题和对偶问题满足强对偶定理时，<span
+class="math inline">∀<em>i</em> = 1 ∼ <em>K</em></span>，要么 <span
+class="math inline"><em>β</em><sub><em>i</em></sub><sup>*</sup> = 0</span>，要么
+<span
+class="math inline"><em>h</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) = 0</span>；要么
+<span
+class="math inline"><em>α</em><sub><em>i</em></sub><sup>*</sup> = 0</span>，要么
+<span
+class="math inline"><em>g</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) = 0</span>，而在这个问题中，<span
+class="math inline"><em>g</em>(<em>W</em>) = 1 + <em>ξ</em><sub><em>i</em></sub> − <em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub><em>i</em></sub>)+<em>b</em>]</span>，所以，要么
+<span
+class="math inline"><em>α</em><sub><em>i</em></sub> = 0</span>，要么
+<span
+class="math inline"><em>g</em>(<em>W</em>) = 1 + <em>ξ</em><sub><em>i</em></sub> − <em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub><em>i</em></sub>)+<em>b</em>] = 0</span>.
+现在，我们取一个 <span
+class="math inline"><em>α</em><sub><em>i</em></sub></span>，使之 <span
+class="math inline">0 &lt; <em>α</em><sub><em>i</em></sub> &lt; <em>C</em></span>（这是肯定能满足的，原因见限制条件），则根据
+KKT 条件，肯定有 <span
+class="math inline">1 + <em>ξ</em><sub><em>i</em></sub> − <em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub><em>i</em></sub>)+<em>b</em>] = 0</span>。又因为
+<span
+class="math inline"><em>β</em><sub><em>i</em></sub> + <em>α</em><sub><em>i</em></sub> = <em>C</em></span>，根据
+KKT 条件，所以 <span
+class="math inline"><em>β</em><sub><em>i</em></sub> ≠ 0</span>，<span
+class="math inline"><em>h</em>(<em>W</em>) = <em>ξ</em><sub><em>i</em></sub> = 0</span>.
+将 <span class="math inline"><em>ξ</em><sub><em>i</em></sub> = 0</span>
+代入前式，就有： <span class="math display">$$
+\begin{aligned}
+&amp;1-y_i[W^T\phi(X_i)+b]=0\\
+&amp;\Downarrow\text{to rearrange the terms}\\
+&amp;b=\frac{1-y_iW^T\phi(X_i)}{y_i}\\
+&amp;\Downarrow\text{to substitute
+}W^T\phi(X)=\sum_{i=1}^N\alpha_iy_iK(X_i,X)\text{ into it}\\
+&amp;b=\frac{1-y_i\sum_{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}
+\end{aligned}
+$$</span> 于是，就连 <span class="math inline"><em>b</em></span>
+我们也知道了。在现实中，我们一般会遍历所有 <span
+class="math inline"><em>α</em><sub><em>i</em></sub> ∉ {0, <em>C</em>}</span>（在上面的讨论中我们只取了一个
+<span class="math inline"><em>α</em></span>），然后计算 <span
+class="math inline"><em>b</em></span>，最后取 <span
+class="math inline"><em>b</em></span>
+的平均值，这样能使结果更加精确。</p>
+<h4 id="算法流程总结">2.5 算法流程总结</h4>
+<h5 id="训练流程">训练流程</h5>
+<ol type="1">
+<li>输入：<span
+class="math inline">{(<em>X</em><sub><em>i</em></sub>,<em>y</em><sub><em>i</em></sub>)}  <em>i</em> = 1 ∼ <em>N</em></span></li>
+<li>求解优化问题（SMO 算法）：
+<ol type="1">
+<li>最大化 <span
+class="math inline">$\theta(\alpha)=\sum_{i=1}^{N}\alpha_i-\frac12\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(X_i,X_j)$</span></li>
+<li>限制条件：
+<ol type="1">
+<li><span
+class="math inline">0 ≤ <em>α</em><sub><em>i</em></sub> ≤ <em>C</em>  (<em>i</em>=1∼<em>N</em>)</span></li>
+<li><span class="math inline">$\sum_{i=1}^N\alpha_iy_i=0$</span></li>
+</ol></li>
+</ol></li>
+<li>通过上一步计算出来的 <span
+class="math inline"><em>α</em><sub><em>i</em></sub></span> 来计算 <span
+class="math inline"><em>b</em></span>：<span
+class="math inline">$b=\frac{1-y_i\sum_{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}$</span></li>
+</ol>
+<h5 id="测试流程">测试流程</h5>
+<ol type="1">
+<li>输入测试样本 <span class="math inline"><em>X</em></span></li>
+<li>分类：
+<ol type="1">
+<li>若 <span
+class="math inline">$\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b\ge0$</span>，则
+<span class="math inline"><em>y</em> =  + 1</span></li>
+<li>若 <span
+class="math inline">$\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b\lt0$</span>，则
+<span class="math inline"><em>y</em> =  − 1</span></li>
+</ol></li>
+</ol>
+<blockquote>
+<p>可以发现，最终训练流程和测试流程中完全不需要用到无限维的 <span
+class="math inline"><em>ϕ</em>(<em>X</em>)</span>，只需要使用核函数就行了。这也就是
+SVM 用有限维手段来处理无限维问题的方法。</p>
+</blockquote>
+<h3 id="补充优化理论">03* 补充：优化理论</h3>
+<p>在优化领域中，在优化理论中，<strong>原问题（Prime
+Problem）</strong>和<strong>对偶问题（Dual
+Problem）</strong>是一对相关的数学问题。</p>
+<p>原问题的定义如下：</p>
+<ol type="1">
+<li>目标：最小化 <span
+class="math inline"><em>f</em>(<em>ω</em>)</span></li>
+<li>限制条件：
+<ol type="1">
+<li><span
+class="math inline"><em>g</em><sub><em>i</em></sub>(<em>ω</em>) ≤ 0  (<em>i</em>=1∼<em>K</em>)</span></li>
+<li><span
+class="math inline"><em>h</em><sub><em>i</em></sub>(<em>ω</em>) = 0  (<em>i</em>=1∼<em>M</em>)</span></li>
+</ol></li>
+</ol>
+<p>原问题是非常普适化的，虽然上面展示的是最小化问题，但只需要在 <span
+class="math inline"><em>f</em>(<em>ω</em>)</span>
+前加一个负号，立马就变成了最大化问题；同样地，在 <span
+class="math inline"><em>g</em><sub><em>i</em></sub>(<em>ω</em>) ≤ 0</span>
+中加一个负号，也就变成了 <span
+class="math inline"> − <em>g</em><sub><em>i</em></sub>(<em>ω</em>) ≥ 0</span>；而在式
+2 的左边减去一个常数 <span
+class="math inline"><em>C</em></span>，就立马变成了 <span
+class="math inline"><em>h</em><sub><em>i</em></sub>(<em>ω</em>) − <em>C</em> = 0</span>，这样就可以把等式右边的
+0 变成任意常数 <span class="math inline"><em>C</em></span>。</p>
+<p>对偶问题是从原问题派生出来的一个新问题，对偶问题首先定义了一个函数：
+<span class="math display">$$
+\begin{aligned}
+L(\omega,\alpha,\beta)&amp;=f(\omega)+\sum_{i=1}^{K}\alpha_ig_i(\omega)+\sum_{i=1}^M\beta_ih_i(\omega)\quad&amp;①\\
+&amp;=f(\omega)+\alpha^Tg(\omega)+\beta^Th(\omega)\quad&amp;②
+\end{aligned}
+$$</span> 上式中，<span class="math inline"><em>α</em></span> 和 <span
+class="math inline"><em>β</em></span> 是两个和 <span
+class="math inline"><em>ω</em></span>
+维数一样的向量，并且分别乘上了不等式的限制条件和等式的限制条件。式 ①
+是该式的代数形式，式 ②
+是该式的矩阵形式。有了这个函数，我们就可以给出对偶问题的定义了：</p>
+<ol type="1">
+<li>目标：最大化 <span
+class="math inline">$\theta(\alpha,\beta)=\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$</span></li>
+<li>限制条件：<span
+class="math inline"><em>α</em><sub><em>i</em></sub> ≥ 0  (<em>i</em>=1∼<em>K</em>)</span></li>
+</ol>
+<p>解释一下这里的目标函数，<span class="math inline">inf </span>
+就是求最小值的意思，下面的 <span class="math inline"><em>ω</em></span>
+是指，遍历所有每个 <span class="math inline"><em>ω</em></span> 对应的
+<span
+class="math inline"><em>L</em>(<em>ω</em>,<em>α</em>,<em>β</em>)</span>
+，所以 <span
+class="math inline">$\underset{\omega}{\inf}\{L(\omega,\alpha,\beta)\}$</span>
+就是指，求所有 <span class="math inline"><em>ω</em></span> 对应的 <span
+class="math inline"><em>L</em>(<em>ω</em>,<em>α</em>,<em>β</em>)</span>
+中，<span
+class="math inline"><em>L</em>(<em>ω</em>,<em>α</em>,<em>β</em>)</span>
+最小的取值。而通过 <span
+class="math inline"><em>θ</em>(<em>α</em>,<em>β</em>)</span>
+可以看出，<span class="math inline"><em>α</em></span> 和 <span
+class="math inline"><em>β</em></span> 是固定的，也就是说，我们每确定一组
+<span class="math inline"><em>α</em></span> 和 <span
+class="math inline"><em>β</em></span>，就去求一次 <span
+class="math inline"><em>L</em>(<em>ω</em>,<em>α</em>,<em>β</em>)</span>
+的最小值，所以 <span class="math inline"><em>θ</em></span> 是只和 <span
+class="math inline"><em>α</em></span> 和 <span
+class="math inline"><em>β</em></span> 有关的函数。而我们的目标又是最大化
+<span
+class="math inline"><em>θ</em>(<em>α</em>,<em>β</em>)</span>，所以，实质上我们就是要使
+<span
+class="math inline"><em>L</em>(<em>ω</em>,<em>α</em>,<em>β</em>)</span>
+的最小值最大化。而对偶问题的限制条件很简单，只要求每个 <span
+class="math inline"><em>α</em><sub><em>i</em></sub></span> 大于 0
+即可。</p>
+<p>接下来我们就来介绍一下原问题和对偶问题的关系，有一条定理是这样的：</p>
+<blockquote>
+<p>如果 <span class="math inline"><em>ω</em><sup>*</sup></span>
+是原问题的解，而 <span class="math inline"><em>α</em><sup>*</sup></span>
+和 <span class="math inline"><em>β</em><sup>*</sup></span>
+是对偶问题的解，则有 <span
+class="math inline"><em>f</em>(<em>ω</em><sup>*</sup>) ≥ <em>θ</em>(<em>α</em><sup>*</sup>,<em>β</em><sup>*</sup>)</span>。</p>
+</blockquote>
+<p>这条定理的证明如下：</p>
+<p>由于 <span class="math inline"><em>α</em><sup>*</sup></span> 和 <span
+class="math inline"><em>β</em><sup>*</sup></span>
+是对偶问题的解，则下式肯定成立： <span class="math display">$$
+\theta(\alpha^*,\beta^*)=\underset{\omega}{\inf}\{L(\omega,\alpha^*,\beta^*\}\le
+L(\omega^*,\alpha^*,\beta^*)
+$$</span> 这里的 <span class="math inline"><em>ω</em><sup>*</sup></span>
+是指一个具体的 <span class="math inline"><em>ω</em></span> 的值。根据
+<span
+class="math inline"><em>L</em>(<em>ω</em>,<em>α</em>,<em>β</em>)</span>
+的定义，展开不等式右边的式子有： <span class="math display">$$
+L(\omega^*,\alpha^*,\beta^*)=f(\omega^*)+\sum_{i=1}^{K}\alpha_i^*g_i(\omega^*)+\sum_{i=1}^M\beta_i^*h_i(\omega^*)
+$$</span> 既然 <span class="math inline"><em>ω</em><sup>*</sup></span>
+是原问题的解，那么 <span
+class="math inline"><em>ω</em><sup>*</sup></span>
+必然满足原问题的两个限制条件，也就是说 <span
+class="math inline"><em>g</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) ≤ 0</span>，<span
+class="math inline"><em>h</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) = 0</span>；另外，既然
+<span class="math inline"><em>α</em><sup>*</sup></span>
+是对偶问题的解，那么 <span
+class="math inline"><em>α</em><sup>*</sup></span> 也必然满足 <span
+class="math inline"><em>α</em><sup>*</sup> ≥ 0</span>。进一步，既然
+<span
+class="math inline"><em>h</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) = 0</span>，那么上式中
+<span
+class="math inline">$\sum_{i=1}^M\beta_i^*h_i(\omega^*)=0$</span>；既然
+<span
+class="math inline"><em>g</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) ≤ 0</span>，<span
+class="math inline"><em>α</em><sup>*</sup> ≥ 0</span>，那么上式中 <span
+class="math inline">$\sum_{i=1}^{K}\alpha_i^*g_i(\omega^*)\le0$</span>，所以存在：
+<span class="math display">$$
+\theta(\alpha^*,\beta^*)=\underset{\omega}{\inf}\{L(\omega,\alpha^*,\beta^*\}\le
+L(\omega^*,\alpha^*,\beta^*)\le f(\omega^*)
+$$</span> 证毕。</p>
+<p>遂定义： <span
+class="math display"><em>G</em> = <em>f</em>(<em>ω</em><sup>*</sup>) − <em>θ</em>(<em>α</em><sup>*</sup>,<em>β</em><sup>*</sup>) ≥ 0</span>
+<span class="math inline"><em>G</em></span>
+叫做原问题与对偶问题的<strong>间距（Duality
+Gap）</strong>。对应某些特定的优化问题，可以证明 <span
+class="math inline"><em>G</em> = 0</span>.
+这里不再证明，直接给出问题的结论——<strong>强对偶定理</strong>：</p>
+<blockquote>
+<p>若 <span class="math inline"><em>f</em>(<em>ω</em>)</span>
+为凸函数，且 <span
+class="math inline"><em>g</em>(<em>ω</em>) = <em>A</em><em>ω</em> + <em>b</em></span>（线性函数），<span
+class="math inline"><em>h</em>(<em>ω</em>) = <em>C</em><em>W</em> + <em>d</em></span>（一组线性函数），则此优化问题的原问题和对偶问题的间距是
+0，即 <span
+class="math inline"><em>f</em>(<em>ω</em><sup>*</sup>) = <em>θ</em>(<em>α</em><sup>*</sup>,<em>β</em><sup>*</sup>)</span>。</p>
+</blockquote>
+<p>问题是，强对偶定理的前提成立意味着什么？假设现在原问题和对偶问题满足强对偶定理，即
+<span
+class="math inline"><em>f</em>(<em>ω</em><sup>*</sup>) = <em>θ</em>(<em>α</em><sup>*</sup>,<em>β</em><sup>*</sup>)</span>
+成立，那么就有 <span
+class="math inline">$f(\omega^*)=\theta(\alpha^*,\beta^*)=\underset{\omega}{\inf}\{L(\omega,\alpha^*,\beta^*\}$</span>，也就是说，<u>原问题的解
+<span
+class="math inline"><em>ω</em><sup>*</sup></span>，刚刚就是对偶问题在
+<span class="math inline"><em>α</em><sup>*</sup></span> 和 <span
+class="math inline"><em>β</em><sup>*</sup></span>
+确定时，取到最小值的那个点</u>。</p>
+<p>更加精妙的是，当 <span class="math inline"><em>G</em> = 0</span>
+成立时，<span
+class="math inline">$\sum_{i=1}^{K}\alpha_i^*g_i(\omega^*)+\sum_{i=1}^M\beta_i^*h_i(\omega^*)=0$</span>，其中，<span
+class="math inline">$\sum_{i=1}^M\beta_i^*h_i(\omega^*)$</span> 等于 0
+不用再说了，但 <span
+class="math inline">$\sum_{i=1}^{K}\alpha_i^*g_i(\omega^*)=0$</span>
+意味着，<u><span
+class="math inline">∀<em>i</em> = 1 ∼ <em>K</em></span>，要么 <span
+class="math inline"><em>α</em><sub><em>i</em></sub><sup>*</sup> = 0</span>，要么
+<span
+class="math inline"><em>g</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) = 0</span></u>。这个条件叫做
+<strong>KKT 条件</strong>。</p>
+<h2 id="隐马尔可夫模型">隐马尔可夫模型</h2>
+<p>隐马尔可夫模型 HMM（Hidden Markov
+Model）是一种统计模型，用来描述一个隐含未知量的马尔可夫过程（马尔可夫过程是一类随机过程，它的原始模型是马尔科夫链），它是结构最简单的动态贝叶斯网，是一种著名的有向图模型，主要用于时序数据建模，在语音识别、自然语言处理等领域有广泛应用，是一种<strong>生成式模型</strong>。</p>
+<!-- more -->
+<h3 id="马尔可夫模型">01 马尔可夫模型</h3>
+<p>在学习隐马尔可夫模型之前，我们先来了解一下它的前生——马尔可夫模型
+MM（Markov Model）。</p>
+<p>我们用一个例子进行引入：天气的变化应该具有某种联系。晴天、多云和暴雨这三种天气之间的转换应该存在某种规律，下图中的箭头表示两种天气之间转换的概率：</p>
+<p><img src="/img/隐马尔可夫模型-01.png" /></p>
+<p>于是我们能得到一个<strong>状态转移概率矩阵</strong>：</p>
+<p><img src="/img/隐马尔可夫模型-02.png" /></p>
+<p>根据该矩阵，我们就能在知道今天天气的情况下，预测明天的天气。显然，这种预测是建立在<u>未来所处的状态仅与当前状态有关</u>的假设上的，即第二天的天气只取决于前一天的天气。这种假设就是<strong>马尔可夫假设</strong>，符合这种假设描述的随机过程，就被称为<strong>马尔可夫过程</strong>，其具有<strong>马尔可夫性</strong>，即<strong>无后效性</strong>。</p>
+<p>令 <span class="math inline"><em>q</em><sub><em>t</em></sub></span>
+表示在时刻 <span class="math inline"><em>t</em></span>
+系统所处的状态，令 <span
+class="math inline"><em>S</em><sub><em>i</em></sub></span>
+表示某一具体状态，则 <span
+class="math inline"><em>q</em><sub><em>t</em></sub> = <em>S</em><sub><em>i</em></sub></span>
+表示在某一时刻 <span class="math inline"><em>t</em></span>，系统处于状态
+<span class="math inline"><em>S</em><sub><em>i</em></sub></span>，令
+<span
+class="math inline"><em>P</em>(<em>q</em><sub><em>t</em> + 1</sub>=<em>S</em><sub><em>i</em></sub>|<em>q</em><sub><em>t</em></sub>=<em>S</em><sub><em>j</em></sub>)</span>
+表示在前一时刻 <span class="math inline"><em>t</em></span> 系统处于状态
+<span class="math inline"><em>S</em><sub><em>j</em></sub></span>
+的情况下，下一时刻 <span class="math inline"><em>t</em> + 1</span>
+系统处于状态 <span
+class="math inline"><em>S</em><sub><em>i</em></sub></span>
+的概率。基于<strong>马尔可夫假设</strong>，则在马尔可夫模型中存在下列关系：
+<span
+class="math display"><em>P</em>(<em>q</em><sub><em>t</em> + 1</sub>=<em>S</em><sub><em>i</em></sub>|<em>q</em><sub><em>t</em></sub>=<em>S</em><sub><em>j</em></sub>,<em>q</em><sub><em>t</em> − 1</sub>=<em>S</em><sub><em>k</em></sub>,...) = <em>P</em>(<em>q</em><sub><em>t</em> + 1</sub>=<em>S</em><sub><em>i</em></sub>|<em>q</em><sub><em>t</em></sub>=<em>S</em><sub><em>j</em></sub>)</span>
+除了状态转移概率矩阵（用 <span class="math inline"><em>A</em></span>
+表示）之外，我们还需要知道所有状态的<strong>初始状态概率向量</strong>
+<span class="math inline"><em>Π</em></span>，设系统中一共有 <span
+class="math inline"><em>N</em></span> 种状态，则 <span
+class="math inline"><em>Π</em></span> 的长度为 <span
+class="math inline"><em>N</em></span>，<span
+class="math inline"><em>Π</em></span>
+中的每一个元素代表系统的初始状态为某一状态的概率，且有 <span
+class="math inline">$\sum_{i=1}^N\Pi_i=1$</span>。</p>
+<p>假设我们想计算一下今天 <span
+class="math inline"><em>t</em> = 1</span> 的天气状况，则我们可以得到：
+<span class="math display">$$
+P(q_1=S_{\text{sun}})=P(q_1=S_{\text{sun}}|q_0=\sum_{i=1}^{3}S_i)=\sum_{i=1}^{3}\Pi_{S_i}\times
+A_{S_i\rightarrow S_{\text{sun}}}
+$$</span> 用文字形式表示就是：</p>
+<p><img src="/img/隐马尔可夫模型-03.png" /></p>
+<h3 id="隐马尔可夫模型-1">02 隐马尔可夫模型</h3>
+<h4 id="概念">2.1 概念</h4>
+<p>而隐马尔可夫模型就比马尔可夫模型要复杂多了。我们还是用上面这个例子进行引入，但是这次我们漂流到了一个岛上，这里没有天气预报，只有一片海藻，海藻具有干燥、较干、较湿和湿润四种状态。现在我们没有直接的天气信息了，但是天气状况跟海藻的状态还是有一定联系的，虽然看不见天气状况，但其决定了海藻的状态，所以我们还是能从海藻的状态推知天气的状态。</p>
+<p>在这个例子里，海藻是能看到的，那它就是<strong>观测状态</strong>；天气信息是看不到的，那它就是<strong>隐藏状态</strong>。其中，隐藏状态天气时是决定性因素，观测状态是被决定因素，由隐藏状态到观测状态，这就是<strong>隐马尔可夫模型</strong>。</p>
+<p><img src="/img/隐马尔可夫模型-04.png" /></p>
+<p>如上图所示，观测状态（海藻的状态）有 4 个，而隐藏状态（天气）只有 3
+个，说明观测状态与隐藏状态的数量并不是一一对应的，可以根据需要定义。我们可以画出更加抽象的隐马尔可夫模型的示意图：</p>
+<p><img src="/img/隐马尔可夫模型-05.png" /></p>
+<p>图中，<span
+class="math inline"><em>Z</em><sub><em>i</em></sub></span>
+表示隐藏状态，<span
+class="math inline"><em>X</em><sub><em>i</em></sub></span>
+表示观测状态，隐藏状态决定了观测状态，所以箭头由 <span
+class="math inline"><em>Z</em></span> 指向 <span
+class="math inline"><em>X</em></span>。并且，隐藏状态之间还可以相互转换，所以
+<span class="math inline"><em>Z</em><sub><em>i</em></sub></span> 和
+<span class="math inline"><em>Z</em><sub><em>j</em></sub></span>
+之间也有箭头。根据马尔可夫假设，下一时刻的状态只取决于当前时刻的状态，所以，对于观测状态和隐藏状态来讲，都存在如下关系：
+<span class="math display">$$
+\begin{aligned}
+&amp;P=(Z_t|Z_{t-1},X_{t-1},Z_{t-2},X_{t-2},...,Z_1,X_1)=P(Z_t|Z_{t-1})\\
+&amp;P=(X_t|Z_{t},X_{t},Z_{t-1},X_{t-1},...,Z_1,X_1)=P(X_t|Z_t)\\
+\end{aligned}
+$$</span></p>
+<h4 id="组成">2.2 组成</h4>
+<p>马尔可夫模型有两个组成部分——初始状态概率向量 <span
+class="math inline"><em>Π</em></span> 和 状态转移概率矩阵 <span
+class="math inline"><em>A</em></span>。</p>
+<p>而隐马尔可夫模型有则有三个组成部分：</p>
+<ol type="1">
+<li>初始状态概率向量 <span class="math inline"><em>Π</em></span></li>
+<li>状态转移概率矩阵 <span class="math inline"><em>A</em></span></li>
+<li>观测状态概率矩阵 <span class="math inline"><em>B</em></span></li>
+</ol>
+<p>其中，<span class="math inline"><em>Π</em></span>
+是针对隐藏状态来说的，因为隐藏状态决定了观测状态；<span
+class="math inline"><em>A</em></span>
+矩阵是针对隐藏状态来说的，因为隐马尔可夫模型中进行状态转移的是隐藏状态；而
+<span class="math inline"><em>B</em></span>
+是由隐藏状态到观测状态转移的概率矩阵，在上例中，矩阵 <span
+class="math inline"><em>B</em></span> 可表示如下：</p>
+<p><img src="/img/隐马尔可夫模型-06.png" /></p>
+<p>也就是说，由 <span
+class="math inline"><em>Z</em><sub><em>i</em></sub> → <em>Z</em><sub><em>j</em></sub></span>
+的转换看矩阵 <span class="math inline"><em>A</em></span>，由 <span
+class="math inline"><em>Z</em><sub><em>i</em></sub> → <em>X</em><sub><em>i</em></sub></span>
+的转换看矩阵 <span class="math inline"><em>B</em></span>。</p>
+<p>因此，隐马尔可夫模型 <span class="math inline"><em>λ</em></span>
+可以用三元符号表示： <span
+class="math display"><em>λ</em>(<em>A</em>,<em>B</em>,<em>Π</em>)</span></p>
+<h4 id="求解目标">2.3 求解目标</h4>
+<p>HMM 的求解目标有三个：</p>
+<ol type="1">
+<li>给定模型 <span
+class="math inline"><em>λ</em>(<em>A</em>,<em>B</em>,<em>Π</em>)</span>
+及观测序列 <span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，计算该观测序列出现的概率
+<span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>；</li>
+<li>给定观测序列 <span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，求解参数
+<span class="math inline">(<em>A</em>,<em>B</em>,<em>Π</em>)</span> 使得
+<span class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+最大；</li>
+<li>已知模型 <span
+class="math inline"><em>λ</em>(<em>A</em>,<em>B</em>,<em>Π</em>)</span>
+和观测序列 <span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，求状态序列，使得
+<span
+class="math inline"><em>P</em>(<em>I</em>|<em>O</em>,<em>λ</em>)</span>
+最大。</li>
+</ol>
+<h3 id="暴力求解法">03 暴力求解法</h3>
+<p>我们要求的是在给定模型下观测序列出现的概率，那如果我们能把所有的隐藏序列都列出来，也就可以知道联合概率分布
+<span
+class="math inline"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>
+了（其中，<span class="math inline"><em>I</em></span> 为 <span
+class="math inline"><em>O</em></span> 对应的隐藏状态序列），再根据 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>I</em></sub><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>，我们就能求得观测序列出现的概率。</p>
+<p>根据联合概率分布的公式：<span
+class="math inline"><em>P</em>(<em>X</em>=<em>x</em>,<em>Y</em>=<em>y</em>) = <em>P</em>(<em>X</em>=<em>x</em>)<em>P</em>(<em>Y</em>=<em>y</em>|<em>X</em>=<em>x</em>)</span>，可得
+<span
+class="math inline"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>
+的求解方法： <span
+class="math display"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>) = <em>P</em>(<em>I</em>|<em>λ</em>)<em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>
+其中，<span class="math inline"><em>P</em>(<em>I</em>|<em>λ</em>)</span>
+是在给定模型下，一个隐藏序列出现的概率，即 <span
+class="math inline"><em>P</em>(<em>I</em>|<em>λ</em>) = <em>P</em>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,...,<em>i</em><sub><em>n</em></sub>|<em>λ</em>) = <em>P</em>(<em>i</em><sub>1</sub>|<em>λ</em>)<em>P</em>(<em>i</em><sub>2</sub>|<em>λ</em>)...<em>P</em>(<em>i</em><sub><em>n</em></sub>|<em>λ</em>)</span>。那么怎么求
+<span
+class="math inline"><em>P</em>(<em>i</em><sub><em>n</em></sub>|<em>λ</em>)</span>？别忘了状态转移概率矩阵
+<span class="math inline"><em>A</em></span> 的存在，<span
+class="math inline"><em>A</em></span>
+所记录的不就是隐藏状态之间转换的概率吗？所以可得： <span
+class="math display"><em>P</em>(<em>I</em>|<em>λ</em>) = <em>π</em><sub><em>i</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>1</sub><em>i</em><sub>2</sub></sub><em>a</em><sub><em>i</em><sub>2</sub><em>i</em><sub>3</sub></sub>...<em>a</em><sub><em>i</em><sub><em>t</em> − 1</sub><em>i</em><sub><em>t</em></sub></sub></span>
+接下来要求的就是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>，它的含义是：在给定模型下，当隐藏序列为
+<span class="math inline"><em>I</em></span> 时，观测序列为 <span
+class="math inline"><em>O</em></span> 的概率。求解 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>
+的方法和求解 <span
+class="math inline"><em>P</em>(<em>I</em>|<em>λ</em>)</span>
+的方法是一样的，还记得观测状态概率矩阵 <span
+class="math inline"><em>B</em></span> 吗？<span
+class="math inline"><em>B</em></span>
+记录的正是从隐藏序列到观测序列转换的概率，所以 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>)</span>
+的计算方法如下： <span
+class="math display"><em>P</em>(<em>O</em>|<em>I</em>,<em>λ</em>) = <em>b</em><sub><em>i</em><sub>1</sub><em>o</em><sub>1</sub></sub><em>b</em><sub><em>i</em><sub>2</sub><em>o</em><sub>2</sub></sub>...<em>b</em><sub><em>i</em><sub><em>t</em></sub><em>o</em><sub><em>t</em></sub></sub></span>
+于是，我们只需要将上面两个式子乘在一起，就能得到 <span
+class="math inline"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>
+了： <span
+class="math display"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>) = <em>π</em><sub><em>i</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>1</sub><em>i</em><sub>2</sub></sub><em>b</em><sub><em>i</em><sub>1</sub><em>o</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>2</sub><em>i</em><sub>3</sub></sub><em>b</em><sub><em>i</em><sub>2</sub><em>o</em><sub>2</sub></sub>...<em>a</em><sub><em>i</em><sub><em>t</em> − 1</sub><em>i</em><sub><em>t</em></sub></sub><em>b</em><sub><em>i</em><sub><em>t</em></sub><em>o</em><sub><em>t</em></sub></sub></span>
+则观测序列 <span class="math inline"><em>O</em></span> 出现的概率为：
+<span
+class="math display"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>I</em></sub><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>) = ∑<sub><em>i</em><sub>1</sub>, <em>i</em><sub>2</sub>, ..., <em>i</em><sub><em>T</em></sub></sub><em>π</em><sub><em>i</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>1</sub><em>i</em><sub>2</sub></sub><em>b</em><sub><em>i</em><sub>1</sub><em>o</em><sub>1</sub></sub><em>a</em><sub><em>i</em><sub>2</sub><em>i</em><sub>3</sub></sub><em>b</em><sub><em>i</em><sub>2</sub><em>o</em><sub>2</sub></sub>...<em>a</em><sub><em>i</em><sub><em>t</em> − 1</sub><em>i</em><sub><em>T</em></sub></sub><em>b</em><sub><em>i</em><sub><em>t</em></sub><em>o</em><sub><em>T</em></sub></sub></span>
+解释一下上面的公式：我们要求的是在给定模型下，某一观测序列出现的概率。暴力求解的方法找出所有可能的隐藏序列，将由这些隐藏序列得到该观测序列的概率全部加起来，最终得到该观测序列的概率。假设隐藏状态数有
+<span class="math inline"><em>N</em></span>
+个，我们需要遍历每一个隐藏序列，序列的长度为观测状态数 <span
+class="math inline"><em>T</em></span>，所以可能的隐藏序列有 <span
+class="math inline"><em>N</em><sup><em>T</em></sup></span>
+种，而对于每一个序列，都要遍历其 <span
+class="math inline"><em>T</em></span> 个 <span
+class="math inline"><em>a</em><sub><em>i</em></sub></span> 和 <span
+class="math inline"><em>b</em><sub><em>i</em></sub></span>，加起来就是
+<span
+class="math inline">2<em>T</em></span>，计算时间复杂度时省去系数，则该算法的<strong>时间复杂度将达到
+<span
+class="math inline"><em>O</em>(<em>T</em><em>N</em><sup><em>T</em></sup>)</span></strong>。</p>
+<h3 id="前向算法">04 前向算法</h3>
+<h4 id="算法解析">4.1 算法解析</h4>
+<p>暴力求解法告诉我们隐马尔可夫模型的问题看上去是可解，但高昂的时间开销却是不可承受的。对此，有人提出了前向算法，该算法利用<strong>动态规划</strong>的思想来求解该问题，降低了时间复杂度。</p>
+<p>给定 <span class="math inline"><em>t</em></span> 时刻的隐藏状态为
+<span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>（注意，这里的
+<span class="math inline"><em>i</em></span>
+是指一种<u>具体</u>的隐藏状态，例如晴天、雨天等，是固定好的），观测序列为
+<span
+class="math inline"><em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ...<em>o</em><sub><em>n</em></sub></span>
+的概率叫做<strong>前向概率</strong>，定义为： <span
+class="math display"><em>α</em><sub><em>t</em></sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...,<em>o</em><sub><em>t</em></sub>,<em>S</em><sub><em>t</em></sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>
+换句话来讲，前向概率就是在给定某一观测序列的情况下，某一时刻的状态刚刚好为
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率。</p>
+<p>则，当 <span class="math inline"><em>t</em> = <em>T</em></span>
+时，<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...,<em>o</em><sub><em>T</em></sub>,<em>S</em><sub><em>T</em></sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>
+表示最后一个时刻，隐藏状态为状态 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+并且得到观察序列为 <span
+class="math inline"><em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>T</em></sub></span>
+的概率。现在我们回来思考一下我们要解决的最原始的问题是什么，应该是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...<em>o</em><sub><em>T</em></sub>|<em>λ</em>)</span>，而
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>)</span>
+和它相比，末尾多了个 <span
+class="math inline"><em>S</em><sub><em>T</em></sub> = <em>q</em><sub><em>i</em></sub></span>，也就是说
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>)</span>
+还要求最终的隐藏状态必须为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>，貌似和原本的问题相比有点画蛇添足，但仔细想想，如果我们能把所有最终可能的隐藏状态都拿过来，求
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(1) + <em>α</em><sub><em>T</em></sub>(2) +  ·  ·  ·  + <em>α</em><sub><em>T</em></sub>(<em>n</em>)</span>，那不就大功告成了？所以现在的问题就变成了如何求解
+<span class="math inline"><em>T</em></span>
+时刻的前向概率，这是一个动态规划的问题。</p>
+<p>在第一个时刻：<span
+class="math inline"><em>α</em><sub>1</sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>S</em><sub>1</sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>
+表示第一时刻的隐藏状态为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>，观测序列为
+<span class="math inline"><em>o</em><sub>1</sub></span>
+的概率，其结果为（这里的 <span
+class="math inline"><em>b</em><sub><em>i</em></sub>(<em>o</em><sub>1</sub>)</span>
+就表示由隐藏状态 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+转换为观测状态 <span class="math inline"><em>o</em><sub>1</sub></span>
+的概率，是矩阵 <span class="math inline"><em>B</em></span> 的元素）：
+<span
+class="math display"><em>α</em><sub>1</sub>(<em>i</em>) = <em>π</em><sub><em>i</em></sub><em>b</em><sub><em>i</em></sub>(<em>o</em><sub>1</sub>)</span>
+在第 <span class="math inline"><em>t</em></span> 时刻，隐藏状态变成了
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span>（这里的
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span>
+不是具体状态，是任意状态都可以），<span
+class="math inline"><em>t</em> + 1</span> 时刻隐藏状态变成了为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>，此时，隐藏状态由
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span> 变成
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率可由矩阵 <span class="math inline"><em>A</em></span> 得到，值为
+<span
+class="math inline"><em>a</em><sub><em>j</em><em>i</em></sub></span>，而
+<span class="math inline"><em>q</em><sub><em>j</em></sub></span>
+可以是任何一种状态，我们都得考虑进去，所以我们得遍历一遍所有隐藏状态，然后相加，即
+<span
+class="math inline">∑<sub><em>j</em></sub><em>α</em><sub><em>t</em></sub>(<em>j</em>)</span>，所以有：
+<span
+class="math display"><em>α</em><sub><em>t</em> + 1</sub>(<em>i</em>) = [∑<sub><em>j</em></sub><em>α</em><sub><em>t</em></sub>(<em>j</em>)<em>a</em><sub><em>i</em><em>j</em></sub>]<em>b</em><sub><em>i</em></sub>(<em>o</em><sub><em>t</em> + 1</sub>)</span>
+如果这个式子看上去还是太麻烦，我们可以拆开来看：<span
+class="math inline"><em>α</em><sub><em>t</em></sub>(<em>j</em>)</span>
+表示的是前一时刻隐藏状态为 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 的概率，<span
+class="math inline"><em>a</em><sub><em>i</em><em>j</em></sub></span>
+表示由隐藏状态 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 转换为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率，相乘就是前一时刻的隐藏状态恰好为 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span>，并且由 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 能转换到
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率，由于得考虑全部 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span>
+的情况，所以得遍历求和；后面的 <span
+class="math inline"><em>b</em><sub><em>i</em></sub>(<em>o</em><sub><em>t</em> + 1</sub>)</span>
+则是由隐藏状态 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+转换到观测状态 <span
+class="math inline"><em>o</em><sub><em>t</em> + 1</sub></span>
+的概率，将它与前一部分相乘，就得到了前一时刻的隐藏状态恰好为 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span>，并且由 <span
+class="math inline"><em>q</em><sub><em>j</em></sub></span> 能转换到
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span>，又由
+<span class="math inline"><em>q</em><sub><em>i</em></sub></span> 得到
+<span class="math inline"><em>o</em><sub><em>t</em> + 1</sub></span>
+的概率。</p>
+<p>则最终结果就是： <span
+class="math display"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>i</em></sub><em>α</em><sub><em>i</em></sub>(<em>T</em>)</span>
+计算一下前向算法的时间复杂度：一共要计算 <span
+class="math inline"><em>T</em></span> 次 <span
+class="math inline"><em>α</em></span>，每次计算 <span
+class="math inline"><em>α</em></span> 的时间复杂度为 <span
+class="math inline"><em>N</em><sup>2</sup></span>
+（原因很简单，自己想），所以前向算法的<strong>时间复杂度为 <span
+class="math inline"><em>O</em>(<em>T</em><em>N</em><sup>2</sup>)</span></strong>。显然，前向算法将暴力算法的时间复杂度从指数级降到了线性级别，极大提升了执行效率。</p>
+<h4 id="公式推导">4.2 公式推导</h4>
+<p>由上述过程，我们可以得到前向算法的递推式：</p>
+<ol type="1">
+<li>初值：</li>
+</ol>
+<p><span
+class="math display"><em>α</em><sub>1</sub>(<em>i</em>) = <em>π</em><sub><em>i</em></sub><em>b</em><sub><em>i</em></sub>(<em>o</em><sub>1</sub>)，<em>i</em> = 1, 2, ..., <em>N</em></span></p>
+<ol start="2" type="1">
+<li>递推：</li>
+</ol>
+<p><span class="math display">$$
+\alpha_{t+1}(i)=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})，i=1,2,...,N
+$$</span></p>
+<ol start="3" type="1">
+<li>终止：</li>
+</ol>
+<p><span class="math display">$$
+P(O|\lambda)=\sum_{i=1}^N\alpha_T(i)
+$$</span></p>
+<p>接下来，我们对每一个公式进行推导。</p>
+<p>首先，我们要求解的目标是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = ∑<sub><em>I</em></sub><em>P</em>(<em>I</em>,<em>O</em>|<em>λ</em>)</span>，而
+<span
+class="math inline"><em>α</em><sub><em>T</em></sub>(<em>i</em>) = <em>P</em>(<em>O</em>,<em>S</em><sub><em>T</em></sub>=<em>q</em><sub><em>i</em></sub>|<em>λ</em>)</span>，所以对于终止公式有：
+<span class="math display">$$
+\begin{aligned}
+P(O|\lambda)&amp;=\sum_{I}P(I,O|\lambda)\\
+&amp;=\sum_{i=1}^NP(o_1,o_2,...,o_T,S_T=q_i|\lambda)\\
+&amp;=\sum_{i=1}^N\alpha_T(i)
+\end{aligned}
+$$</span> 对于递推公式则有： <span class="math display">$$
+\begin{aligned}
+\alpha_{t+1}(i)&amp;=P(o_1,o_2,...,o_{t+1},S_{t+1}=q_i|\lambda)\\
+&amp;=P(S_{t+1}=q_i|\lambda)P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^NP(S_{t+1}=q_i,S_t=q_j|\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^NP(S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^NP(o_1,...,o_t,S_t=q_j|\lambda)P(S_{t+1}=q_i|S_t=q_j,\lambda)]P(o_1,o_2,...,o_{t+1}|S_{t+1}=q_i,\lambda)\\
+&amp;=[\sum_{j=1}^N\alpha_t(j)a_{ji}]b_i(o_{t+1})
+\end{aligned}
+$$</span></p>
+<p>对于初值有： <span class="math display">$$
+\begin{aligned}
+\alpha_1(i)&amp;=P(o_1,S_1=q_i|\lambda)\\
+&amp;=P(S_1=q_i|\lambda)P(o_1|S_1=q_i,\lambda)\\
+&amp;=\pi_1b_i(o_1)
+\end{aligned}
+$$</span></p>
+<h3 id="后向算法">05 后向算法</h3>
+<p>后向算法比前向算法稍微复杂一点，这一节着重讲解后向算法初值、递推和终止公式的推导。</p>
+<p>给定隐马尔可夫模型，定义在时刻 <span
+class="math inline"><em>t</em></span> 状态为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span> 的条件下，从
+<span class="math inline"><em>t</em> + 1</span> 到 <span
+class="math inline"><em>T</em></span> 的部分观测序列为 <span
+class="math inline"><em>o</em><sub><em>t</em> + 1</sub>, <em>o</em><sub><em>t</em> + 2</sub>, ..., <em>o</em><sub><em>T</em></sub></span>
+的概率称为<strong>后向概率</strong>，记作： <span
+class="math display"><em>β</em><sub><em>t</em></sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub><em>t</em> + 1</sub>,<em>o</em><sub><em>t</em> + 2</sub>,...,<em>o</em><sub><em>T</em></sub>|<em>S</em><sub><em>t</em></sub>=<em>q</em><sub><em>i</em></sub>,<em>λ</em>)</span>
+观察后向概率的公式和定义，我们可以用另一种方法描述后向概率：当前时刻为
+<span class="math inline"><em>T</em></span>，也就是终止时刻，前 <span
+class="math inline"><em>T</em> − <em>t</em></span> 个时刻的观测序列为
+<span
+class="math inline"><em>o</em><sub><em>t</em> + 1</sub>, <em>o</em><sub><em>t</em> + 2</sub>, ..., <em>o</em><sub><em>T</em></sub></span>，且
+<span class="math inline"><em>t</em></span> 时刻隐藏状态恰好为 <span
+class="math inline"><em>q</em><sub><em>i</em></sub></span>
+的概率。可以发现，后向概率是以终止时刻为起点，倒退回去考虑的，与前向概率正好相反，所以递推的起点是
+<span
+class="math inline"><em>β</em><sub><em>T</em></sub>(<em>i</em>) = <em>P</em>(∅|<em>S</em><sub><em>T</em></sub>=<em>q</em><sub><em>i</em></sub>,<em>λ</em>)</span>，可以发现，当
+<span class="math inline"><em>t</em> = <em>T</em></span>
+时，已不存在后续观测序列，所以我们规定 <span
+class="math inline"><em>β</em><sub><em>T</em></sub>(<em>i</em>) = 1</span>。</p>
+<p>我们要求解的是 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>) = <em>P</em>(<em>o</em><sub>1</sub>,<em>o</em><sub>2</sub>,...<em>o</em><sub><em>T</em></sub>|<em>λ</em>)</span>，后向算法递推的终点是序列的起始点，也就是
+<span class="math inline"><em>t</em> = 1</span>，而 <span
+class="math inline"><em>β</em><sub>1</sub>(<em>i</em>) = <em>P</em>(<em>o</em><sub>2</sub>,<em>o</em><sub>3</sub>,...,<em>o</em><sub><em>T</em></sub>|<em>S</em><sub><em>t</em></sub>=<em>q</em><sub><em>i</em></sub>,<em>λ</em>)</span>，这之间又要怎么转换？这就是后向算法比前向算法复杂的点，它并不像前向算法那样容易推导。首先，我们使用全概率公式和条件概率公式对
+<span class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+进行变换： <span class="math display">$$
+\begin{aligned}
+P(O|\lambda)&amp;=\sum_{i=1}^{N}P(o_1,o_2,...,o_T,S_1=q_i|\lambda)\\
+&amp;=\sum_{i=1}^{N}P(o_1,o_2,...,o_T|S_1=q_i,\lambda)P(S_1=q_i|\lambda)\\
+&amp;=\sum_{i=1}^{N}P(o_1|o_2,...,o_T,S_1=q_i,\lambda)P(o_2,...,o_T|S_1=q_i,\lambda)\pi_i\\
+&amp;=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i
+\end{aligned}
+$$</span> 经过上面的推导，我们就能发现 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span> 和 <span
+class="math inline"><em>β</em><sub>1</sub>(<em>i</em>)</span>
+的联系。下一个要解决的就是 <span
+class="math inline"><em>β</em><sub><em>t</em></sub>(<em>i</em>)</span>
+的推导了，首先令 <span
+class="math inline"><em>β</em><sub><em>t</em> + 1</sub>(<em>j</em>) = <em>P</em>(<em>o</em><sub><em>t</em> + 2</sub>,<em>o</em><sub><em>t</em> + 3</sub>,...<em>o</em><sub><em>T</em></sub>|<em>S</em><sub><em>t</em> + 1</sub>=<em>q</em><sub><em>j</em></sub>,<em>λ</em>)</span>，其推导过程如下：
+<span class="math display">$$
+\begin{aligned}
+\beta_t(i)&amp;=P(o_{t+1},o_{t+2},...,o_T|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1},o_{t+2},...,o_T,S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_t=q_i,S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^{N}P(o_{t+1}|o_{t+2},...,o_T,S_{t+1}=q_j,\lambda)P(o_{t+2},...,o_T|S_{t+1}=q_j,\lambda)P(S_{t+1}=q_j|S_t=q_i,\lambda)\\
+&amp;=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}
+\end{aligned}
+$$</span> 至此，我们就得到后向算法中的初值、递推和终止公式：</p>
+<ol type="1">
+<li>初值：</li>
+</ol>
+<p><span
+class="math display"><em>β</em><sub><em>T</em></sub>(<em>i</em>) = 1</span></p>
+<ol start="2" type="1">
+<li>递推：</li>
+</ol>
+<p><span class="math display">$$
+\beta_t(i)=\sum_{j=1}^N\beta_{t+1}(j)b_j(o_{t+1})a_{ij}
+$$</span></p>
+<ol start="3" type="1">
+<li>终止：</li>
+</ol>
+<p><span class="math display">$$
+P(O|\lambda)=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i
+$$</span></p>
+<h3 id="baum-welch-算法">06 Baum-Welch 算法</h3>
+<p>讨论完了如何求解 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>，下一步我们就要考虑最难的一个问题——如何求解
+HMM 的参数，即 <span class="math inline"><em>A</em></span>，<span
+class="math inline"><em>B</em></span>，<span
+class="math inline"><em>Π</em></span>。</p>
+<p>如果是不加任何限制地考虑这个问题，那其实是很简单的。根据<strong>大数定理</strong>：在试验次数足够多的情况下，频数就等于概率。要想得到
+<span class="math inline"><em>A</em></span> 和 <span
+class="math inline"><em>B</em></span>，只需要对数据进行统计，计算每种状态出现的频数就行了，于是就有：
+<span class="math display">$$
+\begin{aligned}
+&amp;\hat{a}_{ij}=\frac{A_{ij}}{\sum_{j=1}^{N}A_{ij}}&amp;,i=1,2,...,N,j=1,2,...,N\\
+&amp;\hat{b}_{j}(k)=\frac{B_{jk}}{\sum_{k=1}^{M}B_{jk}}&amp;,j=1,2,...,N,k=1,2,...,M\\
+\end{aligned}
+$$</span> 解释一下取值范围：<span class="math inline"><em>A</em></span>
+是状态转移概率矩阵，这是隐藏状态和隐藏状态之间转移的概率，所以 <span
+class="math inline"><em>i</em></span> 和 <span
+class="math inline"><em>j</em></span> 的最大值都是隐藏状态的数量 <span
+class="math inline"><em>N</em></span>；而 <span
+class="math inline"><em>B</em></span>
+是生成观测状态概率矩阵，这是隐藏状态到观测状态之间转移的概率，令 <span
+class="math inline"><em>j</em></span>
+代表隐藏状态，其最大值就是隐藏状态的数量 <span
+class="math inline"><em>N</em></span>，<span
+class="math inline"><em>k</em></span>
+代表观测状态，其最大值就是观测状态的数量 <span
+class="math inline"><em>M</em></span>，我们之前讲到过，HMM
+中的隐藏状态和观测状态数量不一定要相同，所以 <span
+class="math inline"><em>N</em></span> 不一定等于 <span
+class="math inline"><em>M</em></span>。</p>
+<p>至于 <span class="math inline"><em>Π</em></span>
+也很简单，根据往期数据计算就行了。所以如果只是像这样单纯地求解 HMM
+的参数，只要有数据，那就几乎是没有难度的。但我们来考虑一下求解目标中的第二个：给定观测序列
+<span
+class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2</sub>, ..., <em>o</em><sub><em>t</em></sub>}</span>，求解参数
+<span class="math inline">(<em>A</em>,<em>B</em>,<em>Π</em>)</span> 使得
+<span class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+最大。这要怎么做？</p>
+<p>之前的讨论是在所有数据均有的情况下进行的，也就是隐藏状态序列 <span
+class="math inline"><em>I</em></span> 和观测状态序列 <span
+class="math inline"><em>O</em></span> 均已知的情况下，但现在只有观测序列
+<span class="math inline"><em>O</em></span>，要我们求最优的参数 <span
+class="math inline">(<em>A</em>,<em>B</em>,<em>Π</em>)</span>，使 <span
+class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>
+最大。也就是说 <span class="math inline"><em>I</em></span>
+被隐藏了，这相当于是一个含隐变量的参数估计问题，需要 EM 算法来解决。</p>
+<p>EM 算法应用到 HMM 中时通常被称为 Baum-Welch 算法，Baum-Welch 算法是
+EM 算法的一个特例。</p>
+<h2 id="归结原理">归结原理</h2>
+<h3 id="归结推理">01 归结推理</h3>
+<p>反证法：<span
+class="math inline"><em>P</em> ⇒ <em>Q</em></span>，当且仅当 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em> ⇔ <em>F</em></span>，即
+<span class="math inline"><em>Q</em></span> 为 <span
+class="math inline"><em>P</em></span> 的逻辑结论，当且仅当 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em></span> 是不可满足的。</p>
+<p>定理：<span class="math inline"><em>Q</em></span> 为 <span
+class="math inline"><em>P</em><sub>1</sub></span>，<span
+class="math inline"><em>P</em><sub>2</sub></span>，……，<span
+class="math inline"><em>P</em><sub><em>n</em></sub></span>
+的逻辑结论，当且仅当 <span
+class="math inline">(<em>P</em><sub>1</sub>∧<em>P</em><sub>2</sub>∧…∧<em>P</em><sub><em>n</em></sub>) ∧ ¬<em>Q</em></span>
+是不可满足的。</p>
+<p>归结推理就是基于上面两条定理，将原命题转换成反命题，然后证明其反命题是不可满足的，即可得证原命题是真命题。归结推理的整体思路是：</p>
+<ol type="1">
+<li>欲证明 <span class="math inline"><em>P</em> ⇒ <em>Q</em></span></li>
+<li>化为反命题 <span
+class="math inline"><em>P</em> ∧ ¬<em>Q</em></span></li>
+<li>化成子句集</li>
+<li>证明子句集不可满足(鲁滨逊归结原理)</li>
+</ol>
+<h3 id="子句集">02 子句集</h3>
+<p>什么是子句？如何将谓词公式化为子句集？</p>
+<p>我们称一个不能再分割的命题为<strong>原子谓词公式</strong>，将原子谓词公式及其否定形式称为<strong>文字</strong>，而<strong>子句</strong>就是任何文字的<u>析取式</u>，任何文字本身也是子句。<strong>空子句</strong>是一个不包含任何文字的子句，它永远为假，不可满足，通常表示为
+<span
+class="math inline"><em>N</em><em>I</em><em>L</em></span>，虽然听上去没什么用，但它却是归结推理中最重要的子句，之后你会知道为什么。以上就是子句的概念，而子句集就是由子句构成的集合。</p>
+<p>以下面这道题为例讲解如何将一个谓词公式化为子句集： <span
+class="math display">(∀<em>x</em>)((∀<em>y</em>)<em>P</em>(<em>x</em>,<em>y</em>)→¬(∀<em>y</em>)(<em>Q</em>(<em>x</em>,<em>y</em>)→<em>R</em>(<em>x</em>,<em>y</em>)))</span>
+第一步：消去谓词公式中的 <span class="math inline">→</span> 和 <span
+class="math inline">↔︎</span>，得到： <span
+class="math display">(∀<em>x</em>)(¬(∀<em>y</em>)<em>P</em>(<em>x</em>,<em>y</em>)∨¬(∀<em>y</em>)(¬<em>Q</em>(<em>x</em>,<em>y</em>)∨<em>R</em>(<em>x</em>,<em>y</em>)))</span>
+第二步：将否定符号 <span class="math inline">¬</span>
+移到紧靠谓词的位置上： <span
+class="math display">(∀<em>x</em>)((∃<em>y</em>)¬<em>P</em>(<em>x</em>,<em>y</em>)∨(∃<em>y</em>)(<em>Q</em>(<em>x</em>,<em>y</em>)∧¬<em>R</em>(<em>x</em>,<em>y</em>)))</span>
+第三步：变量标准化，将重复的变量名换掉： <span
+class="math display">(∀<em>x</em>)((∃<em>y</em>)¬<em>P</em>(<em>x</em>,<em>y</em>)∨(∃<em>z</em>)(<em>Q</em>(<em>x</em>,<em>z</em>)∧¬<em>R</em>(<em>x</em>,<em>z</em>)))</span>
+第四步：消去存在量词，要用到 Skolem 函数，令 <span
+class="math inline"><em>y</em> = <em>f</em>(<em>x</em>)</span>，<span
+class="math inline"><em>z</em> = <em>g</em>(<em>x</em>)</span>： <span
+class="math display">(∀<em>x</em>)(¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨(<em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>))∧¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>))))</span>
+第五步：化为前束形，即将所有的全称谓词提到公式最前面，使母式中不存在任何量词，上式已满足前束形。</p>
+<p>第六步：化为 Skolem 标准形，即将母式化为合取式： <span
+class="math display">(∀<em>x</em>)((¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨<em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>))∧(¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>))))</span>
+第七步：略去全称量词： <span
+class="math display">(¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ <em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>)) ∧ (¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>))∨¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>)))</span>
+第八步：把和取词看作分隔符，把整体化为集合： <span
+class="math display">{¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ <em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>)), ¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ ¬<em>R</em>(<em>x</em>,<em>g</em>(<em>x</em>))}</span></p>
+<p>第九步：子句变量标准化，即将不同的子句中的变量名字区分开，用不同的符号表示：
+<span
+class="math display">{¬<em>P</em>(<em>x</em>,<em>f</em>(<em>x</em>)) ∨ <em>Q</em>(<em>x</em>,<em>g</em>(<em>x</em>)), ¬<em>P</em>(<em>y</em>,<em>f</em>(<em>y</em>)) ∨ ¬<em>R</em>(<em>y</em>,<em>g</em>(<em>y</em>))}</span>
+以上，就得到了谓词公式的子句集。</p>
+<h3 id="鲁滨逊归结原理">03 鲁滨逊归结原理</h3>
+<p>子句集中的各子句是合取关系，所以只要有一个不可满足，则整个子句集不可满足。所以，我们需要去找一个空子句，假如子句集中存在空子句，那就肯定不可满足。但是子句集中直接出现空子句的情况是很少的，那么如何找到空子句？这就是鲁滨逊归结原理要解决的问题，根据鲁滨逊归结原理对子句集进行归结，如果最终归结出一个空子句，则说明该子句集不可满足，进一步说明原命题不可满足。</p>
+<p>鲁滨逊归结原理（也称消解原理）的基本思路是：检查子句集 <span
+class="math inline">S</span> 中是否包含空子句，若包含，则 <span
+class="math inline">S</span> 不可满足；若不包含，在 <span
+class="math inline">S</span>
+中选择合适的子句进行归结，一旦归结出空子句，就说明 <span
+class="math inline">S</span> 是不可满足的。</p>
+<p>归结的定义：设 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span>
+是子句集中的任意两个子句，如果 <span
+class="math inline"><em>C</em><sub>1</sub></span> 中的文字 <span
+class="math inline"><em>L</em><sub>1</sub></span> 与 <span
+class="math inline"><em>C</em><sub>2</sub></span> 中的文字 <span
+class="math inline"><em>L</em><sub>2</sub></span> 互补，那么从 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 中分别消去 <span
+class="math inline"><em>L</em><sub>1</sub></span> 和 <span
+class="math inline"><em>L</em><sub>2</sub></span>，并将两个子句中余下的部分<strong>析取</strong>，构成一个新子句
+<span class="math inline"><em>C</em><sub>12</sub></span>。</p>
+<hr />
+<p>例题：设 <span
+class="math inline"><em>C</em><sub>1</sub> = ¬<em>P</em> ∨ <em>Q</em></span>，<span
+class="math inline"><em>C</em><sub>2</sub> = ¬<em>Q</em> ∨ <em>R</em></span>，<span
+class="math inline"><em>C</em><sub>3</sub> = <em>P</em></span>，请对
+<span
+class="math inline">{<em>C</em><sub>1</sub>, <em>C</em><sub>2</sub>, <em>C</em><sub>3</sub>}</span>
+进行归结。</p>
+<p><span class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 中存在互补子句 <span
+class="math inline"><em>Q</em></span> 和 <span
+class="math inline">¬<em>Q</em></span>，所以消去这两个子句集，并将余下子句析取，得到
+<span
+class="math inline"><em>C</em><sub>12</sub> = ¬<em>P</em> ∨ <em>R</em></span>；<span
+class="math inline"><em>C</em><sub>12</sub></span> 和 <span
+class="math inline"><em>C</em><sub>3</sub></span> 中存在互补子句 <span
+class="math inline">¬<em>P</em></span> 和 <span
+class="math inline"><em>P</em></span>，所以消去这两个子句集，并将余下子句析取，得到
+<span
+class="math inline"><em>C</em><sub>123</sub> = <em>R</em></span>。所以
+<span class="math inline"><em>C</em><sub>123</sub></span>
+就是该子句集归结的结果。</p>
+<hr />
+<p>定理：归结式 <span class="math inline"><em>C</em><sub>12</sub></span>
+是其亲本子句 <span class="math inline"><em>C</em><sub>1</sub></span> 和
+<span class="math inline"><em>C</em><sub>2</sub></span>
+的逻辑结论，即，如果 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 为真，则 <span
+class="math inline"><em>C</em><sub>12</sub></span> 也为真。</p>
+<p>上述定理有一条推论：设 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 是子句集 <span
+class="math inline">$\text S$</span> 中的两个子句集，<span
+class="math inline"><em>C</em><sub>12</sub></span> 是它们的归结式，若用
+<span class="math inline"><em>C</em><sub>12</sub></span> 代替 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 后得到新子句集 <span
+class="math inline">S<sub>1</sub></span>，则由 <span
+class="math inline">S<sub>1</sub></span> 不可满足性可推出 <span
+class="math inline">S</span> 的不可满足性。但是注意，这条推论不能证明若
+<span class="math inline">S</span> 是不可满足的，则 <span
+class="math inline">S<sub>1</sub></span>
+也不可满足，所以还有另一条推论：设 <span
+class="math inline"><em>C</em><sub>1</sub></span> 和 <span
+class="math inline"><em>C</em><sub>2</sub></span> 是子句集 <span
+class="math inline">$\text S$</span> 中的两个子句集，<span
+class="math inline"><em>C</em><sub>12</sub></span> 是它们的归结式，若
+<span class="math inline"><em>C</em><sub>12</sub></span> 加入原子句集
+<span class="math inline">S</span>，得到新子句集 <span
+class="math inline">S<sub>2</sub></span>，则 <span
+class="math inline">$\text S$</span> 和 <span class="math inline">$\text
+S_2$</span> 在不可满足性上是<u>等价</u>的，即若 <span
+class="math inline">S</span> 是不可满足的，则 <span
+class="math inline">S<sub>2</sub></span>
+也不可满足，反之亦然。不过我们的目的只是为了证明原子句集不可满足，也就是归结出一个空子句，所以上述两个推论均可用。</p>
+<h3 id="归结反演">04 归结反演</h3>
+<p>应用鲁滨逊归结原理证明定理的过程称为<strong>归结反演</strong>。它总共分为以下四个步骤：</p>
+<ol type="1">
+<li>将已知前提表示为谓词公式 <span
+class="math inline"><em>F</em></span>；</li>
+<li>将待证明的结论表示为谓词公式 <span
+class="math inline"><em>Q</em></span>，并否定得到 <span
+class="math inline">¬<em>Q</em></span>；</li>
+<li>把谓词公式集 <span
+class="math inline">{<em>F</em>, ¬<em>Q</em>}</span> 化为子句集 <span
+class="math inline">$\text S$</span>；</li>
+<li>应用归结原理对子句集 <span class="math inline">$\text S$</span>
+中的子句进行归结，并把每次归结得到的归结式都并入到 <span
+class="math inline">$\text S$</span>
+中。如此反复进行，若出现了空子句，则停止归结，此时就证明了 <span
+class="math inline"><em>Q</em></span> 为真。</li>
+</ol>
+<hr />
+<p>例题：某公司招聘工作人员，A，B，C
+三人面试，经面试后公司表示如下想法：</p>
+<ul>
+<li>三人中至少录取一人；</li>
+<li>如果录取 A 而不录取 B，则一定录取 C；</li>
+<li>如果录取 B，则一定录取 C。</li>
+</ul>
+<p>求证：公司一定录取 C。</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 <span
+class="math inline"><em>P</em>(<em>x</em>)</span> 表示录取 <span
+class="math inline"><em>x</em></span>。于是可得如下前提：</p>
+<ul>
+<li><span
+class="math inline"><em>P</em>(<em>A</em>) ∨ <em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline"><em>P</em>(<em>A</em>) ∧ ¬<em>P</em>(<em>B</em>) → <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline"><em>P</em>(<em>B</em>) → <em>P</em>(<em>C</em>)</span></li>
+</ul>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：<span
+class="math inline">¬<em>P</em>(<em>C</em>)</span>。</p>
+<p>第三步，将上述谓词公式化为子句集：</p>
+<ol type="1">
+<li><span
+class="math inline"><em>P</em>(<em>A</em>) ∨ <em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline">¬<em>P</em>(<em>A</em>) ∨ <em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span
+class="math inline">¬<em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)</span></li>
+<li><span class="math inline">¬<em>P</em>(<em>C</em>)</span></li>
+</ol>
+<p>第四步，应用归结原理进行归结：</p>
+<ol start="5" type="1">
+<li><span
+class="math inline"><em>P</em>(<em>B</em>) ∨ <em>P</em>(<em>C</em>)  <em>归</em><em>结</em>(1)<em>和</em>(2)</span></li>
+<li><span
+class="math inline"><em>P</em>(<em>C</em>)          <em>归</em><em>结</em>(3)<em>和</em>(5)</span></li>
+<li><span
+class="math inline"><em>N</em><em>I</em><em>L</em>           <em>归</em><em>结</em>(4)<em>和</em>(6)</span></li>
+</ol>
+<p>由于归结出了空子句，所以成功证明了 <span
+class="math inline">¬<em>P</em>(<em>C</em>)</span> 为假，因此原命题
+<span class="math inline"><em>P</em>(<em>C</em>)</span>
+为真，公司一定录取 C。</p>
+<hr />
+<p>例题：已知：</p>
+<ul>
+<li>任何人的兄弟不是女性；</li>
+<li>任何人的姐妹必是女性；</li>
+<li>Mary 是 Bill 的姐妹。</li>
+</ul>
+<p>求证：Mary 不是 Tom 的兄弟。</p>
+<p>解：第一步，将已知前提表示为谓词公式，先定义谓词：设 <span
+class="math inline"><em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)</span>
+表示录取 <span class="math inline"><em>x</em></span> 是 <span
+class="math inline"><em>y</em></span> 的兄弟，设 <span
+class="math inline"><em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)</span>
+表示录取 <span class="math inline"><em>x</em></span> 是 <span
+class="math inline"><em>y</em></span> 的姐妹，设 <span
+class="math inline"><em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>)</span>
+表示录取 <span class="math inline"><em>x</em></span>
+是女性。于是可得如下前提：</p>
+<ul>
+<li><span
+class="math inline">(∀<em>x</em>)(∀<em>y</em>)(<em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)→¬<em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>))</span></li>
+<li><span
+class="math inline">(∀<em>x</em>)(∀<em>y</em>)(<em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>)→<em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>))</span></li>
+<li><span
+class="math inline"><em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>B</em><em>i</em><em>l</em><em>l</em>)</span></li>
+</ul>
+<p>第二步，将待证明的结论表示为谓词公式，并将其否定：<span
+class="math inline"><em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span>。</p>
+<p>第三步，将上述谓词公式化为子句集：</p>
+<ol type="1">
+<li><span
+class="math inline"><em>C</em><sub>1</sub> = ¬<em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>) ∨ ¬<em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>2</sub> = ¬<em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>x</em>,<em>y</em>) ∨ <em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>x</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>3</sub> = <em>s</em><em>i</em><em>s</em><em>t</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>B</em><em>i</em><em>l</em><em>l</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>4</sub> = <em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span></li>
+</ol>
+<p>第四步，应用归结原理进行归结：</p>
+<ol type="1">
+<li><span
+class="math inline"><em>C</em><sub>23</sub> = <em>w</em><em>o</em><em>m</em><em>a</em><em>n</em>(<em>M</em><em>a</em><em>r</em><em>y</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>123</sub> = ¬<em>b</em><em>o</em><em>r</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>y</em>)</span></li>
+<li><span
+class="math inline"><em>C</em><sub>1234</sub> = <em>N</em><em>I</em><em>L</em></span></li>
+</ol>
+<p>由于归结出了空子句，所以成功证明了 <span
+class="math inline"><em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span>
+为假，因此原命题 <span
+class="math inline">¬<em>b</em><em>r</em><em>o</em><em>t</em><em>h</em><em>e</em><em>r</em>(<em>M</em><em>a</em><em>r</em><em>y</em>,<em>T</em><em>o</em><em>m</em>)</span>
+为真，Mary 不是 Tom 的兄弟。</p>
+<h2 id="a-搜索">A* 搜索</h2>
+<h3 id="启发式搜索">01 启发式搜索</h3>
+<p>能有助于简化搜索过程的信息称为启发信息，利用启发信息的搜索过程称为启发式搜索。</p>
+<p>求解问题中能利用的大多是非完备的启发信息，所谓非完备就是指，信息也许对搜索有正面影响的，但是我们无法得知它是否总能提供正面影响，不知道它是否会造成负面影响。就例如极值点导数为
+0，这是一条完备的信息，因为它可被证明总是成立。造成这种结果的原因如下：</p>
+<ol type="1">
+<li>求解问题系统不可能知道与实际问题有关的全部信息，因而无法知道该问题的全部状态空间，也不可能用一套算法来求解所以问题；</li>
+<li>有些问题在理论上虽然存在着求解算法，但是在工程实践中，这些算法不是效率太低，就是根本无法实现(就比如宽度优先搜索，它总能找到最优解，但是无法实现)。</li>
+</ol>
+<p>启发式搜索在搜索过程中根据启发信息评估各个节点的重要性，优先搜索重要的节点。<strong>估价函数</strong>的任务就是估计待搜索节点“有希望”的程度。估价函数
+<span class="math inline"><em>f</em><sub><em>n</em></sub></span>
+表示从初始节点经过 <span class="math inline"><em>n</em></span>
+节点到达目的节点的路径的最小代价估计值，其一般形式为： <span
+class="math display"><em>f</em>(<em>n</em>) = <em>g</em>(<em>n</em>) + <em>h</em>(<em>n</em>)</span>
+其中，<span class="math inline"><em>g</em>(<em>n</em>)</span>
+是从初始节点到结点 <span class="math inline"><em>n</em></span>
+的<strong>实际代价</strong>，<span
+class="math inline"><em>h</em>(<em>n</em>)</span> 是从节点 <span
+class="math inline"><em>n</em></span>
+到目的节点的最佳路径的<strong>估计代价</strong>。一般地，在 <u><span
+class="math inline"><em>f</em>(<em>n</em>)</span> 中，<span
+class="math inline"><em>g</em>(<em>n</em>)</span>
+的比重越大，越倾向于宽度优先搜索方式，而 <span
+class="math inline"><em>h</em>(<em>n</em>)</span>
+的比重越大，表示启发性能更强</u>。如果 <span
+class="math inline"><em>h</em>(<em>n</em>)</span> 的比重降为
+0，则搜索过程将变为盲目搜索，因为不再考虑启发信息。</p>
+<p>估价函数的设计方法有很多种，并且不同的估价函数对问题有不同的影响。以八数码问题为例，最简单的估价函数可以取一格局与目的格局相比，其位置不同的数码数目；这种估价函数是最简单实现的，但是效果未必好，一种比较好的估价函数的设计是取各数码移到目的位置所需移动的距离的总和，这是最理想的，但是不可能实现；还可以将每一对逆转数码<a
+href="#fn1" class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a>乘以一个倍数
+3；但是这种做法的局限性太大，所以还可以在此基础上再加上位置不符的数码的个数。</p>
+<h3 id="a-搜索算法">02 A 搜索算法</h3>
+<p>启发式图搜索法的基本特点：寻找并设计一个与问题有关的 <span
+class="math inline"><em>h</em>(<em>n</em>)</span> 以构造 <span
+class="math inline"><em>f</em>(<em>n</em>) = <em>g</em>(<em>n</em>) + <em>h</em>(<em>n</em>)</span>，然后以
+<span class="math inline"><em>f</em>(<em>n</em>)</span>
+的大小来排列待扩展状态的次序，每次选择 <span
+class="math inline"><em>f</em>(<em>n</em>)</span>
+值<strong>最小者</strong>进行扩展。这也就是 A 搜索算法的执行流程。</p>
+<p>利用 A 搜索算法求解八数码问题，估价函数定义为： <span
+class="math display"><em>f</em>(<em>n</em>) = <em>d</em>(<em>n</em>) + <em>w</em>(<em>n</em>)</span>
+其中，<span class="math inline"><em>d</em>(<em>n</em>)</span>
+代表状态的深度，每步为单位代价；<span
+class="math inline"><em>w</em>(<em>n</em>)</span>
+以与目标格局不符的数码数量作为启发信息的度量。例如：</p>
+<p><img src="/img/A-star搜索-01.png" /></p>
+<p>初始格局处于第 0 层，因此 <span
+class="math inline"><em>d</em>(<em>S</em>) = 0</span>，其中，<span
+class="math inline">*</span> 代表空格，计算 <span
+class="math inline"><em>w</em>(<em>n</em>)</span> 的时候，既可以算上
+<span
+class="math inline">*</span>，也可以不算，反正不影响节点扩展，如果不算入，那么
+<span class="math inline"><em>w</em>(<em>S</em>) = 4</span>
+(算入的话结果为 5)。由初始格局可得到 3
+种状态，即分别把空格往上、左、右移动，上图中只展示了 3 种情况。其中，A
+格局的 <span
+class="math inline"><em>d</em>(<em>A</em>) = 1</span>，<span
+class="math inline"><em>w</em>(<em>A</em>) = 5</span>，所以 <span
+class="math inline"><em>f</em>(<em>A</em>) = 6</span>；B 格局的 <span
+class="math inline"><em>d</em>(<em>B</em>) = 1</span>，<span
+class="math inline"><em>w</em>(<em>B</em>) = 3</span>，所以 <span
+class="math inline"><em>f</em>(<em>B</em>) = 4</span>；C 格局的 <span
+class="math inline"><em>d</em>(<em>C</em>) = 1</span>，<span
+class="math inline"><em>w</em>(<em>C</em>) = 5</span>，所以 <span
+class="math inline"><em>f</em>(<em>C</em>) = 6</span>。根据 A
+搜索算法的原则，估价函数值最小的是 B
+格局，因此应该扩展该节点，接下来的过程也是一样。最终经过 5
+次搜索，也就是扩展 5
+层节点，最终能到达目标格局，该过程的完整搜索树在课本 P143
+页，这里就不再展开了。</p>
+<p>那么 A
+搜索算法能否保证找到最优解？其实仔细想想就知道，我们构造的估价函数中，<span
+class="math inline"><em>h</em>(<em>n</em>)</span>
+是对待扩展节点到目标节点的代价估计，不一定准确，所以 A
+搜索算法不一定能保证找到最优解。</p>
+<blockquote>
+<p>如果有代价一样的结点怎么办：可以随机。</p>
+</blockquote>
+<h3 id="a-搜索算法-1">03 A* 搜索算法</h3>
+<p>A* 搜索算法是对 A 搜索算法的改进。我们说 A
+搜索算法无法保证找到最优解，而 A*
+搜索算法则保证了一定能搜索到解，并且一定能搜索到最优解。A* 算法给出了 A
+算法能得到最优解的条件，我们令 <span
+class="math inline"><em>h</em><sup>*</sup>(<em>n</em>)</span> 为状态
+<span class="math inline"><em>n</em></span>
+到目标状态的实际最小代价，<span
+class="math inline"><em>h</em>(<em>n</em>)</span>
+是我们定义的估计代价，则当 <span
+class="math inline">∀<em>n</em></span>，<span
+class="math inline"><em>h</em>(<em>n</em>) ≤ <em>h</em><sup>*</sup>(<em>n</em>)</span>
+时，我们就称该搜索算法为 A* 搜索算法。</p>
+<p>这就好比是有人托我们帮他买衣服，这种品牌的衣服的最低价格是 1000
+元(相当于 <span
+class="math inline"><em>h</em><sup>*</sup></span>)，如果他希望以不高于
+1000 (相当于 <span
+class="math inline"><em>h</em></span>)的价格买到这件衣服(此时 <span
+class="math inline"><em>h</em> ≤ <em>h</em><sup>*</sup></span>)，那我们就要搜索很多家店(前提是这家店要存在)，这种情况下，虽然搜索的店较多，但是我们必然能找到一家店能满足要求；但是倘若他希望以
+1500 元以内(相当于 <span
+class="math inline"><em>h</em></span>)的价格买到这件衣服(此时 <span
+class="math inline"><em>h</em> &gt; <em>h</em><sup>*</sup></span>)，那搜索的范围就大大减少了，因为最低价是
+1000，那么价格高于 1000
+的店找起来肯定没那么费力气，但缺点就是找到的店铺未必是最便宜的。</p>
+<p>在上面我们讨论的八数码问题中，我们选取一格局与目标格局不符的数码数量作为启发信息的度量
+<span
+class="math inline"><em>w</em>(<em>n</em>)</span>，而八数码问题中的
+<span class="math inline"><em>h</em><sup>*</sup>(<em>n</em>)</span>
+应该是各数码移到目的位置所需移动的距离的总和，显然 <span
+class="math inline"><em>w</em>(<em>n</em>) ≤ <em>h</em><sup>*</sup>(<em>n</em>)</span>，满足了
+<span
+class="math inline"><em>h</em>(<em>n</em>) ≤ <em>h</em><sup>*</sup>(<em>n</em>)</span>
+的条件，所以也算一种 A* 搜索算法。</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>逆转数码的概念涉及到逆序数。例如 1 4 2
+3，在这个序列中，它并未按照从小到大的顺序排序，2 和 3 比 4
+小，但是却排在 4 后面，所以该序列的逆序数就是 2.
+逆序数可以用来判断一个八数码问题是否有解，至于原因就不在此赘述了。<a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+		<li class="prev"><a href="/2024/04/03/%E5%9B%BE%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+          <li class="next"><a href="/2023/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-12-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E4%B8%9A%E5%9F%BA%E7%A1%80/">计算机专业基础<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/machine-learning/">machine learning<span>5</span></a></li> <li><a href="/tags/heuristic-search/">heuristic search<span>1</span></a></li> <li><a href="/tags/a-star/">a-star<span>1</span></a></li> <li><a href="/tags/svm/">svm<span>1</span></a></li> <li><a href="/tags/hmm/">hmm<span>1</span></a></li> <li><a href="/tags/deduction/">deduction<span>1</span></a></li> <li><a href="/tags/ai/">ai<span>1</span></a></li>
+
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA"><span class="toc-article-text">支持向量机</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E8%B7%AF"><span class="toc-article-text">1.1 算法思路</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%95%B0%E5%AD%A6%E6%8F%8F%E8%BF%B0"><span class="toc-article-text">1.2 数学描述</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 非线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.1 优化目标</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E9%AB%98%E7%BB%B4%E6%98%A0%E5%B0%84"><span class="toc-article-text">2.2 高维映射</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="toc-article-text">2.3 核函数</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%8E%9F%E9%97%AE%E9%A2%98%E5%88%B0%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-article-text">2.4 原问题到对偶问题</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-article-text">2.5 算法流程总结</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B"><span class="toc-article-text">训练流程</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-article-text">测试流程</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A1%A5%E5%85%85%E4%BC%98%E5%8C%96%E7%90%86%E8%AE%BA"><span class="toc-article-text">03* 补充：优化理论</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">隐马尔可夫模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 马尔可夫模型</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B-1"><span class="toc-article-text">02 隐马尔可夫模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-article-text">2.1 概念</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%BB%84%E6%88%90"><span class="toc-article-text">2.2 组成</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%B1%82%E8%A7%A3%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.3 求解目标</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9A%B4%E5%8A%9B%E6%B1%82%E8%A7%A3%E6%B3%95"><span class="toc-article-text">03 暴力求解法</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">04 前向算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E8%A7%A3%E6%9E%90"><span class="toc-article-text">4.1 算法解析</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="toc-article-text">4.2 公式推导</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">05 后向算法</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#baum-welch-%E7%AE%97%E6%B3%95"><span class="toc-article-text">06 Baum-Welch 算法</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86"><span class="toc-article-text">归结原理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BD%92%E7%BB%93%E6%8E%A8%E7%90%86"><span class="toc-article-text">01 归结推理</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AD%90%E5%8F%A5%E9%9B%86"><span class="toc-article-text">02 子句集</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86"><span class="toc-article-text">03 鲁滨逊归结原理</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BD%92%E7%BB%93%E5%8F%8D%E6%BC%94"><span class="toc-article-text">04 归结反演</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#a-%E6%90%9C%E7%B4%A2"><span class="toc-article-text">A* 搜索</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%90%AF%E5%8F%91%E5%BC%8F%E6%90%9C%E7%B4%A2"><span class="toc-article-text">01 启发式搜索</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#a-%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95"><span class="toc-article-text">02 A 搜索算法</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#a-%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95-1"><span class="toc-article-text">03 A* 搜索算法</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+
+    </div>
+  </div>
+  <div class="container-narrow">
+    <footer> <!--<p>
+  &copy; 2025 me
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p>-->
+ </footer>
+  </div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+<!-- syntax highlighting -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</html>

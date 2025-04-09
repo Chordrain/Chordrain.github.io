@@ -6,27 +6,7 @@
   <title>初识Transformer | Jiahao Peng</title>
   <meta name="author" content="me">
   
-  <meta name="description" content="01 Seq2seq
-Transformer 是一个 sequence-to-sequence model，我们一般简写作
-seq2seq。seq2seq 的意思是指，输入是一个 sequence，输出也是一个
-sequence，并且两个 sequence 的长度不一定，这里的长度不一定的意思是指：1.
-输入的长度不一定；2. 输出的长度由机器自己决定；3.
-输入和输出的长度并不存在必然关系。
-比较典型的 seq2seq 的例子有语音识别、文字翻译、语音翻译等，还有例如
-text-to-speech (文字转语音) 的 model 也是一种 seq2seq，甚至是聊天机器人
-chatbot，也是 seq2seq。
-其实，seq2seq 在 NLP 方面的应用是很广泛的，很多你认为可能跟 seq2seq
-无关的任务也可以转换成 seq2seq。NLP 的本质其实是 question answering
-(QA)，而只要能想象成 QA，就基本上都能用 seq2seq 解决。
-Seq2seq 还可以用于解决 multi-label classification，multi-label
-是将一个东西分到多个类别里的任务，并且一个东西可能属于不止一个类别，而
-seq2seq
-的输出长度是机器自己决定的，也就是机器觉得有几个输出就几个输出，也就是机器觉得这个东西属于哪几个类别那就是哪几个类别，所以
-seq2seq 也可以硬解 multi-label classification。
-除此以外，就连图像识别问题也可以用
-seq2seq，但是这里就不展开了。至少至此，我们已经知道了 seq2seq
-是一个强大的
-model，那么它究竟是怎么做到的，接下来我们就要开始研究了。">
+  <meta name="description" content="课程：李宏毅老师的深度学习课程">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -46,7 +26,7 @@ model，那么它究竟是怎么做到的，接下来我们就要开始研究了
   
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/css/themes/lumen.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/themes/bootstrap.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
@@ -71,7 +51,7 @@ model，那么它究竟是怎么做到的，接下来我们就要开始研究了
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
-  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 	<span class="sr-only">Toggle navigation</span>
@@ -119,8 +99,8 @@ model，那么它究竟是怎么做到的，接下来我们就要开始研究了
 
 
 	
-		<div class="page-header page-header-inverse ">		
-			<h1 class="title title-inverse "> 初识Transformer</h1>
+		<div class="page-header ">		
+			<h1 class="title "> 初识Transformer</h1>
 		</div>		
 	
 
@@ -138,6 +118,11 @@ model，那么它究竟是怎么做到的，接下来我们就要开始研究了
 
 	<!-- content -->
 	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>课程：李宏毅老师的深度学习课程</p>
+			
+		 </div> <!-- alert -->
 	  		
 
 	  <h2 id="seq2seq">01 Seq2seq</h2>
@@ -449,7 +434,7 @@ search 就比较没用。如果感兴趣，可以自行了解。</p>
 <ul class="pagination">
 	 
 				
-		<li class="prev"><a href="/2023/12/06/%E9%B2%81%E6%BB%A8%E9%80%8A%E5%BD%92%E7%BB%93%E5%8E%9F%E7%90%86/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+		<li class="prev"><a href="/2023/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
@@ -530,7 +515,7 @@ search 就比较没用。如果感兴趣，可以自行了解。</p>
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>3</span></a></li> <li><a href="/tags/nlp/">nlp<span>2</span></a></li>
+  <li><a href="/tags/transformer/">transformer<span>1</span></a></li>
 
     </ul>
 	</div>

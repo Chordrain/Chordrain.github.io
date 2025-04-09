@@ -24,7 +24,7 @@
   
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/css/themes/lumen.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/themes/bootstrap.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
@@ -49,7 +49,7 @@
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
-  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+  <nav id="main-nav" class="navbar  navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 	<span class="sr-only">Toggle navigation</span>
@@ -93,8 +93,8 @@
 
   <div class="container">
     <div class="content">
-      <div class="page-header page-header-inverse ">
-  <h1 class="title title-inverse ">Hello &amp; Welcome!</h1>
+      <div class="page-header ">
+  <h1 class="title ">Hello &amp; Welcome!</h1>
 </div>
 
 <div class="row page">
@@ -105,7 +105,7 @@
 
 		
 <div class="slogan">
-      Hello and welcome! This is my blog for restoring my lecture notes and other weird thoughts. English &amp; 中文 are both used on this site (sorry about the &#34;language shock&#34;). Hope you find something useful here.
+      This is my blog for restoring my lecture notes and other weird thoughts. English &amp; 中文 are both used on this site. Hope you find something useful here.
 </div>
 
 
@@ -122,116 +122,8 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
-			<div class="date"> 2023-12-11 </div>
-			<div class="article-title"><a href="/2023/12/11/%E6%A0%B7%E6%9D%A1%E8%A1%A8%E7%A4%BA/" >样条表示</a></div>
-		</h3>
-	
-
-
-			  
-<div class="entry">
-
-  <div class="row">
-	
-	
-		<p>样条是通过一组指定点集而生成平滑曲线的柔性带。通俗来讲，之前学的画线算法解决的是在图形学里画直线的问题，样条表示解决的是在图形学里画曲线的问题。</p>
-<p>在计算机图形学中，<strong>样条曲线</strong>指多项式曲线段连接而成的曲线，在每段的边界处满足特定的连续性条件。<strong>样条曲面</strong>可以使用两组样条曲线进行描述。</p>
-<h2 id="概述">01 概述</h2>
-<h3 id="曲线曲面的表示方法">1.1 曲线曲面的表示方法</h3>
-<p>曲线曲面的表示有三种：显式、隐式和参数表示。</p>
-<p>显式表示就是我们熟知的 <span
-class="math inline"><em>y</em> = <em>f</em>(<em>x</em>)</span>
-形式，这种形式虽然直观简单，但是显式方程中，一个 x 只能对应一个 y
-值，所以显式方程不能表示封闭或多值曲线。</p>
-<p>隐式表示的形式是 <span
-class="math inline"><em>f</em>(<em>x</em>,<em>y</em>) = 0</span>，隐式方程的优点是易于判断一个点是否在曲线上，缺点是不直观，作图不方便。并且，不论显示还是隐式，都与坐标轴相关，而且有可能会出现斜率无穷大的情形。</p>
-	
-	</div>
-  <a type="button" href="/2023/12/11/%E6%A0%B7%E6%9D%A1%E8%A1%A8%E7%A4%BA/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2023-12-11 </div>
-			<div class="article-title"><a href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" >支持向量机</a></div>
-		</h3>
-	
-
-
-			  
-<div class="entry">
-
-  <div class="row">
-	
-	
-		<p><strong>支持向量机（support vector machines,
-SVM）</strong>是一种二分类模型，它的基本模型是定义在特征空间上的<strong>间隔最大的线性分类器</strong>，间隔最大使它有别于感知机；SVM还包括<strong>核技巧</strong>，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。</p>
-	
-	</div>
-  <a type="button" href="/2023/12/11/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2023-12-11 </div>
-			<div class="article-title"><a href="/2023/12/11/%E4%BA%8C%E7%BB%B4%E5%8F%98%E6%8D%A2/" >二维变换</a></div>
-		</h3>
-	
-
-
-			  
-<div class="entry">
-
-  <div class="row">
-	
-	
-		<h2 id="平移">01 平移</h2>
-<p>通过将坐标轴加上位移量，可以实现一次<strong>平移</strong>。对二维图像的平移可以转换为对其端点的平移。设某点的坐标为
-<span class="math inline">(<em>x</em>,<em>y</em>)</span>，将其 x
-轴坐标平移 <span
-class="math inline"><em>t</em><sub><em>x</em></sub></span> 个单位，y
-轴坐标平移 <span
-class="math inline"><em>t</em><sub><em>y</em></sub></span>
-个单位，得到新坐标 <span
-class="math inline">(<em>x</em>+<em>t</em><sub><em>x</em></sub>,<em>y</em>+<em>t</em><sub><em>y</em></sub>)</span>，记为
-<span
-class="math inline">(<em>x</em><sup>′</sup>,<em>y</em><sup>′</sup>)</span>，其中，<span
-class="math inline"><em>t</em><sub><em>x</em></sub></span> 和 <span
-class="math inline"><em>t</em><sub><em>y</em></sub></span>
-称为<strong>平移距离</strong>，<span
-class="math inline">(<em>t</em><sub><em>x</em></sub>,<em>t</em><sub><em>y</em></sub>)</span>
-称为<strong>平移向量</strong>，将它们转换为矩阵形式： <span
-class="math display">$$
-\begin{aligned}
-P=\begin{bmatrix} x \\ y \end{bmatrix},P^\prime=\begin{bmatrix} x^\prime
-\\ y^\prime \end{bmatrix},T=\begin{bmatrix} t_x \\ t_y \end{bmatrix}
-\end{aligned}
-$$</span> 这样就可以用矩阵形式来表示二维平移方程： <span
-class="math display"><em>P</em><sup>′</sup> = <em>P</em> + <em>T</em></span></p>
-	
-	</div>
-  <a type="button" href="/2023/12/11/%E4%BA%8C%E7%BB%B4%E5%8F%98%E6%8D%A2/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
 			<div class="date"> 2023-12-10 </div>
-			<div class="article-title"><a href="/2023/12/10/%E5%A1%AB%E5%85%85%E7%AE%97%E6%B3%95/" >填充算法</a></div>
+			<div class="article-title"><a href="/2023/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" title="这是我本科学习计算机图形学时所记的笔记，但是并不全面，仅有画线算法、扫描线算法、二维变换、样条表示四部分内容。">计算机图形学</a></div>
 		</h3>
 	
 
@@ -242,39 +134,8 @@ class="math display"><em>P</em><sup>′</sup> = <em>P</em> + <em>T</em><
   <div class="row">
 	
 	
-		<p>如何在计算机程序中存储几何图形
-(多边形)？最容易的方法就是按顺序存储多边形的顶点，这个多边形就唯一确定了。那显示器是如何显示几何图形的呢？显示设备通常提供一个帧缓冲存储器
-(俗称显存)，可以把它当做二维数组，该数组存储的值与屏幕上显示的每一像素的颜色一一对应。那么问题来了，如何把程序中的几何图形转换成显存中的几何图形？这就是扫描线算法要解决的问题。</p>
-<h2 id="扫描线算法">01 扫描线算法</h2>
-<h3 id="算法的目标">1.1 算法的目标</h3>
-<p>扫描线多边形区域填充算法是按扫描线顺序
-(<strong>由下到上</strong>)，计算扫描线与多边形的相交区间，再用要求的颜色显示这些区间的像素，即完成填充工作。扫描线在对多边形进行扫描时，会与多边形产生多个交点，如下图所示：</p>
-<p><img src="/img/计算机图形学-02.png" /></p>
-	
-	</div>
-  <a type="button" href="/2023/12/10/%E5%A1%AB%E5%85%85%E7%AE%97%E6%B3%95/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2023-12-10 </div>
-			<div class="article-title"><a href="/2023/12/10/%E7%94%BB%E7%BA%BF%E7%AE%97%E6%B3%95/" >画线算法</a></div>
-		</h3>
-	
-
-
-			  
-<div class="entry">
-
-  <div class="row">
-	
-	
-		<p>本节主要掌握 DDA 算法和 Bresenham 算法。DDA
+		<h2 id="画线算法">01 画线算法</h2>
+<p>本节主要掌握 DDA 算法和 Bresenham 算法。DDA
 算法主要是由笛卡尔斜率截距方程导出的，而 Bresenham 算法则算是对 DDA
 算法的改进。</p>
 <p>笛卡尔斜率截距方程为：<span
@@ -299,7 +160,148 @@ class="math inline"><em>δ</em><em>y</em></span>，那么在 x 轴上就要延�
 y}{m}$</span>。这两个公式被称为<strong>增量公式</strong>。</p>
 	
 	</div>
-  <a type="button" href="/2023/12/10/%E7%94%BB%E7%BA%BF%E7%AE%97%E6%B3%95/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2023/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2023-10-24 </div>
+			<div class="article-title"><a href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/" title="课程：李宏毅老师的深度学习课程">初识Transformer</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="seq2seq">01 Seq2seq</h2>
+<p>Transformer 是一个 sequence-to-sequence model，我们一般简写作
+seq2seq。seq2seq 的意思是指，输入是一个 sequence，输出也是一个
+sequence，并且两个 sequence 的长度不一定，这里的长度不一定的意思是指：1.
+输入的长度不一定；2. 输出的长度由机器自己决定；3.
+输入和输出的长度并不存在必然关系。</p>
+<p>比较典型的 seq2seq 的例子有语音识别、文字翻译、语音翻译等，还有例如
+text-to-speech (文字转语音) 的 model 也是一种 seq2seq，甚至是聊天机器人
+chatbot，也是 seq2seq。</p>
+<p>其实，seq2seq 在 NLP 方面的应用是很广泛的，很多你认为可能跟 seq2seq
+无关的任务也可以转换成 seq2seq。NLP 的本质其实是 question answering
+(QA)，而只要能想象成 QA，就基本上都能用 seq2seq 解决。</p>
+<p>Seq2seq 还可以用于解决 multi-label classification，multi-label
+是将一个东西分到多个类别里的任务，并且一个东西可能属于不止一个类别，而
+seq2seq
+的输出长度是机器自己决定的，也就是机器觉得有几个输出就几个输出，也就是机器觉得这个东西属于哪几个类别那就是哪几个类别，所以
+seq2seq 也可以硬解 multi-label classification。</p>
+<p>除此以外，就连图像识别问题也可以用
+seq2seq，但是这里就不展开了。至少至此，我们已经知道了 seq2seq
+是一个强大的
+model，那么它究竟是怎么做到的，接下来我们就要开始研究了。</p>
+	
+	</div>
+  <a type="button" href="/2023/10/24/%E5%88%9D%E8%AF%86Transformer/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2023-09-09 </div>
+			<div class="article-title"><a href="/2023/09/09/%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6-Self-attention/" title="课程：李宏毅老师的深度学习课程">自注意力机制 Self-attention</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="复杂输入">01 复杂输入</h2>
+<p>不论是在预测问题还是在影像处理上，我们都会假设输入的向量长度是一定的，但如果是不一定的呢？</p>
+<p>比如说在翻译问题中，输入是句子，我们可以采用 one-hot encoding 或 word
+embedding
+的方式将句子转换成向量，而句子是不定长的，也就是说输入的向量是不定长的，这就与我们之前所谈论的情况不一样了。</p>
+<p>或者说更复杂一些，输入的向量不仅不定长，而且数量也不确定，如语音辨识，输入是很长一段语音，这段语音中包含了很多句子，机器需要把这些句子拆分出来，然后进行翻译，这种情况下，句子的数量和长度都不是确定的。</p>
+<p>还有一些更复杂的数据结构，比如说图，例如社交网络、分子结构等，这些信息也可以看作是一组向量，所有这些情况就构成了更加复杂的输入
+(more sophisticated input)，那么我们要如何处理这些输入呢？</p>
+	
+	</div>
+  <a type="button" href="/2023/09/09/%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6-Self-attention/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2022-07-24 </div>
+			<div class="article-title"><a href="/2022/07/24/Regularization/" title="本篇笔记是大一时入门机器学习所写，听的是吴恩达的机器学习入门课程。由于课程是英文课程，所以笔记也是英文的。现在看来当时的写作水平十分生涩。">Regularization</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="the-problem-of-overfitting">01 The Problem of Overfitting</h2>
+<h3 id="overfitting">1.1 Overfitting</h3>
+<p>What is overfitting? Let’s take some examples:</p>
+<p><img src="/img/Regularization-01.png" /></p>
+<p>In the first figure, the straight line does not fit the training data
+very well. We call it “Underfitting” or “has a high bias”.</p>
+<p>In the second plot, we could fit a quadratic functions to the data
+and we could see that it fits the data pretty well.</p>
+	
+	</div>
+  <a type="button" href="/2022/07/24/Regularization/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2022-07-23 </div>
+			<div class="article-title"><a href="/2022/07/23/Logistic-Regression/" title="本篇笔记是大一时入门机器学习所写，听的是吴恩达的机器学习入门课程。由于课程是英文课程，所以笔记也是英文的。现在看来当时的写作水平十分生涩。">Logistic Regression</a></div>
+		</h3>
+	
+
+
+			  
+<div class="entry">
+
+  <div class="row">
+	
+	
+		<h2 id="introduction">01 Introduction</h2>
+<p>Linear Regression is a good tool to help solve the regression
+problem, which predicts continuous valued output. However, it won’t be a
+good idea if we apply it to the classification problem, which gives
+discrete valued output. That’s because linear regression can be
+susceptible to outlier data, rendering the result inaccurate.</p>
+<p>So here we introduce a new method to cope with the classification
+problem — <strong>Logistic Regression</strong>.</p>
+	
+	</div>
+  <a type="button" href="/2022/07/23/Logistic-Regression/#more" class="btn btn-default more">Read More</a>
 </div>
 
            
@@ -347,31 +349,20 @@ y}{m}$</span>。这两个公式被称为<strong>增量公式</strong>。</p>
 
 
 		
-			<div class="widget">
-    
-</div>
-
-		
 			
 	<div class="widget">
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/Artificial-Intelligence/">Artificial Intelligence<span>2</span></a></li>
-		
-			<li><a href="/categories/Computer-Graphics/">Computer Graphics<span>4</span></a></li>
-		
 			<li><a href="/categories/Deep-Learning/">Deep Learning<span>3</span></a></li>
 		
-			<li><a href="/categories/Discrete-Math/">Discrete Math<span>1</span></a></li>
+			<li><a href="/categories/Machine-Learning-Andrew-Ng/">Machine Learning - Andrew Ng<span>4</span></a></li>
 		
-			<li><a href="/categories/Machine-Learning/">Machine Learning<span>2</span></a></li>
+			<li><a href="/categories/Problem-Shooting/">Problem Shooting<span>1</span></a></li>
 		
-			<li><a href="/categories/Machine-Learning-Wu/">Machine Learning - Wu<span>4</span></a></li>
+			<li><a href="/categories/Software-Analysis-Testing-and-Verification-Ting-Su/">Software Analysis, Testing and Verification - Ting Su<span>1</span></a></li>
 		
-			<li><a href="/categories/Programming-Solutions/">Programming Solutions<span>1</span></a></li>
-		
-			<li><a href="/categories/Software-Analysis-Testing-and-Verification/">Software Analysis, Testing and Verification<span>1</span></a></li>
+			<li><a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E4%B8%9A%E5%9F%BA%E7%A1%80/">计算机专业基础<span>3</span></a></li>
 		
 		</ul>
 	</div>
@@ -382,21 +373,37 @@ y}{m}$</span>。这两个公式被称为<strong>增量公式</strong>。</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/error-handling/">error handling<span>1</span></a></li>
+			<li><a href="/tags/svm/">svm<span>1</span></a></li>
 		
-			<li><a href="/tags/software-testing/">software testing<span>1</span></a></li>
+			<li><a href="/tags/transformer/">transformer<span>1</span></a></li>
 		
-			<li><a href="/tags/artificial-intelligence/">artificial intelligence<span>2</span></a></li>
+			<li><a href="/tags/heuristic-search/">heuristic search<span>1</span></a></li>
 		
-			<li><a href="/tags/discrete-math/">discrete math<span>2</span></a></li>
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
-			<li><a href="/tags/computer-science/">computer science<span>4</span></a></li>
+			<li><a href="/tags/attention/">attention<span>2</span></a></li>
 		
-			<li><a href="/tags/nlp/">nlp<span>2</span></a></li>
+			<li><a href="/tags/gnn/">gnn<span>1</span></a></li>
 		
-			<li><a href="/tags/machine-learning/">machine learning<span>6</span></a></li>
+			<li><a href="/tags/deduction/">deduction<span>1</span></a></li>
 		
-			<li><a href="/tags/deep-learning/">deep learning<span>3</span></a></li>
+			<li><a href="/tags/error/">error<span>1</span></a></li>
+		
+			<li><a href="/tags/hmm/">hmm<span>1</span></a></li>
+		
+			<li><a href="/tags/a-star/">a-star<span>1</span></a></li>
+		
+			<li><a href="/tags/discrete-math/">discrete math<span>1</span></a></li>
+		
+			<li><a href="/tags/graphics/">graphics<span>1</span></a></li>
+		
+			<li><a href="/tags/program-analysis/">program analysis<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>5</span></a></li>
+		
+			<li><a href="/tags/ai/">ai<span>1</span></a></li>
+		
+			<li><a href="/tags/vscode/">vscode<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -418,15 +425,15 @@ y}{m}$</span>。这两个公式被称为<strong>增量公式</strong>。</p>
       </li>
     
       <li>
-        <a href="/2025/03/18/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"  title="这篇笔记完成于ECNU研究生复试准备期间，参考书目为Kenneth H.Rosen版《离散数学及其应用》，仅选取了ECNU本科生教学内容" ><i class="fa fa-file-o"></i>离散数学</a>
+        <a href="/2025/03/18/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"  title="这篇笔记完成于ECNU研究生复试准备期间，参考书目为Kenneth H.Rosen版《离散数学及其应用》，仅选取了ECNU本科生教学内容，主要内容包括逻辑和证明、集合、计数、递推关系式、容斥原理、关系、图论。" ><i class="fa fa-file-o"></i>离散数学</a>
       </li>
     
       <li>
-        <a href="/2024/04/03/%E5%9B%BE%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/" ><i class="fa fa-file-o"></i>图注意力机制的原理</a>
+        <a href="/2024/04/03/%E5%9B%BE%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/"  title="当时要做一个与图神经网络有关的项目，所以把GAT的论文拿出来读了一遍（虽然最后没有采用这个模型）" ><i class="fa fa-file-o"></i>图注意力机制的原理</a>
       </li>
     
       <li>
-        <a href="/2023/12/18/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/" ><i class="fa fa-file-o"></i>隐马尔可夫模型</a>
+        <a href="/2023/12/11/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF/"  title="本科期间学了机器学习以及人工智能的课程，但是笔记零零碎碎，不够单独组成合辑，遂整合到一起，仅作留档，没什么逻辑。" ><i class="fa fa-file-o"></i>人工智能技术杂谈</a>
       </li>
     
   </ul>
