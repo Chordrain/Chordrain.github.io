@@ -1,0 +1,604 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>填充算法 | Jiahao Peng</title>
+  <meta name="author" content="me">
+  
+  <meta name="description" content="如何在计算机程序中存储几何图形
+(多边形)？最容易的方法就是按顺序存储多边形的顶点，这个多边形就唯一确定了。那显示器是如何显示几何图形的呢？显示设备通常提供一个帧缓冲存储器
+(俗称显存)，可以把它当做二维数组，该数组存储的值与屏幕上显示的每一像素的颜色一一对应。那么问题来了，如何把程序中的几何图形转换成显存中的几何图形？这就是扫描线算法要解决的问题。
+01 扫描线算法
+1.1 算法的目标
+扫描线多边形区域填充算法是按扫描线顺序
+(由下到上)，计算扫描线与多边形的相交区间，再用要求的颜色显示这些区间的像素，即完成填充工作。扫描线在对多边形进行扫描时，会与多边形产生多个交点，如下图所示：">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="填充算法"/>
+  <meta property="og:site_name" content="Jiahao Peng"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Jiahao Peng" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/lumen.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+  <![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  
+  
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">Jiahao Peng</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+    <div class="content">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 填充算法</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>如何在计算机程序中存储几何图形
+(多边形)？最容易的方法就是按顺序存储多边形的顶点，这个多边形就唯一确定了。那显示器是如何显示几何图形的呢？显示设备通常提供一个帧缓冲存储器
+(俗称显存)，可以把它当做二维数组，该数组存储的值与屏幕上显示的每一像素的颜色一一对应。那么问题来了，如何把程序中的几何图形转换成显存中的几何图形？这就是扫描线算法要解决的问题。</p>
+<h2 id="扫描线算法">01 扫描线算法</h2>
+<h3 id="算法的目标">1.1 算法的目标</h3>
+<p>扫描线多边形区域填充算法是按扫描线顺序
+(<strong>由下到上</strong>)，计算扫描线与多边形的相交区间，再用要求的颜色显示这些区间的像素，即完成填充工作。扫描线在对多边形进行扫描时，会与多边形产生多个交点，如下图所示：</p>
+<p><img src="/img/计算机图形学-02.png" /></p>
+<span id="more"></span>
+<p>直接观察可以看出，在上图所示的扫描线中，x 轴坐标在 <span
+class="math inline">[10,14]</span> 和 <span
+class="math inline">[18,24]</span>
+上的像素点位于多边形内部，在填充多边形时，只需要将这些点渲染成对应的颜色即可。但我们也看到，<span
+class="math inline">(14,18)</span>
+上的点并不在多边形内，所以它们不是要填充的部分，扫描线算法的核心就在于区分出哪些像素点位于多边形内，哪些位于多边形外。然而，这件事听起来简单，做起来却不容易。</p>
+<p>上图展示的情形是最简单的一种，通过总结规律，我们可以发现，在扫描线不经过多边形的端点的情况下，其与多边形的交点数量永远是偶数，且在多边形区域内的线段与在多边形区域外的线段交替出现，利用这一性质，我们可以很容易地完成填充。但是，当扫描线刚刚好经过多边形的端点的时候，情况就变复杂了，如下图：</p>
+<p><img src="/img/计算机图形学-03.png" /></p>
+<p>上图画了两根扫描线 <span class="math inline"><em>y</em></span> 和
+<span
+class="math inline"><em>y</em><sup>′</sup></span>，它们的共同点是都经过了多边形的端点，不同点是扫描线
+<span class="math inline"><em>y</em><sup>′</sup></span>
+已经不满足上面所说的“在多边形区域内的线段与在多边形区域外的线段交替出现”这一性质了，而
+<span class="math inline"><em>y</em></span>
+则仍然遵守，那么，我们如何区分这两种情况，以及如何设计一个完备的算法处理？这是扫描线算法要解决的第一个问题。</p>
+<p>此外，算法还需要求解扫描线与多边形的交点，一个直观的解法是：根据多边形的顶点求出各条边的方程，然后将扫描线的纵坐标代入方程求出横坐标。但是显然，这样做会涉及大量的乘法和除法运算，并且需要遍历每条扫描线和每条边，性能开销极大，设计一个合理的算法求解每条扫描线与多边形的交点，是扫描线算法要解决的第二个问题。</p>
+<h3 id="算法的原理">1.2 算法的原理</h3>
+<p>对于第一个问题，仔细观察上图可以发现两根扫描线在拓扑结构上的区别：<span
+class="math inline"><em>y</em><sup>′</sup></span>
+上的端点所连接的两条边皆在 <span
+class="math inline"><em>y</em><sup>′</sup></span> 的上面，而 <span
+class="math inline"><em>y</em></span> 上的端点所连接的两条边分别位列
+<span class="math inline"><em>y</em></span>
+的两边。根据这一区别，我们可以设计这样一个算法区分这两种情况，并把它们转换为最好处理的情况：对端点两侧
+(水平方向) 的两条边的斜率进行比较，假如两条边的斜率符号相反，则属于
+<span class="math inline"><em>y</em><sup>′</sup></span>
+的情况，反之则属于 <span class="math inline"><em>y</em></span>
+的情况；当出现 <span class="math inline"><em>y</em><sup>′</sup></span>
+的情况时，我们需要将该端点看作两个，这样就相当于 <span
+class="math inline"><em>y</em><sup>′</sup></span> 共穿过了 4
+个交点，每个交点两两配对，就构成了 3 条线段，这 3
+条线段满足“在多边形区域内的线段与在多边形区域外的线段交替出现”的性质，这样就巧妙地将情形转换成了一开始所说的最简单的情况；而对于后者，则是将端点看作是一个交点，这样也能满足该性质。</p>
+<p>如何将端点看作是一个点？将端点看作是两个点其实是很好理解的，毕竟端点同时属于两条边，只要将一个端点看作是两条边上不同点就行了。但是如何把一个端点看作是一个点呢？一个可行的办法是，将端点所连接的一条边
+(一般是在下面的那条) 在垂直方向上缩短 <span class="math inline">1</span>
+个单位，如下图所示：</p>
+<p><img src="/img/计算机图形学-04.png" /></p>
+<p>上图中展示了两种情况：一个是上线段斜率大于 <span
+class="math inline">0</span>，而下线段斜率小于 <span
+class="math inline">0</span>；另一个则反一下。但不论是哪种，处理的方法都是：将下端点
+<span class="math inline"><em>y</em></span>
+轴坐标小的那条线段按照其梯度下降的方向缩短 <span
+class="math inline">1</span> 个单位，即沿 y 轴缩短 <span
+class="math inline">1</span> 个单位，这样端点就被拆分开来了，原本扫描线
+<span class="math inline"><em>y</em></span>
+经过一个端点，与两条边相交，现在只是与一条边相交，则不存在端点的问题了，但相应地，由于缩短了下线段的长度，下线段的上端点应当跑到扫描线
+<span class="math inline"><em>y</em> − 1</span> 上。</p>
+<p>然后来解决第二个问题，如何快速求解扫描线与多边形的交点？请看下图：</p>
+<p><img src="/img/计算机图形学-05.png" /></p>
+<p>图中展示了两条扫描线 <span
+class="math inline"><em>y</em><sub><em>k</em></sub></span> 和 <span
+class="math inline"><em>y</em><sub><em>k</em> + 1</sub></span>，两条扫描线相邻，所以有
+<span
+class="math inline"><em>y</em><sub><em>k</em> + 1</sub> = <em>y</em><sub><em>k</em></sub> + 1</span>.
+设 <span class="math inline"><em>y</em><sub><em>k</em></sub></span>
+与多边形的一个交点为 <span
+class="math inline">(<em>x</em><sub><em>k</em></sub>,<em>y</em><sub><em>k</em></sub>)</span>，则在下一刻，也就是在
+<span class="math inline"><em>y</em><sub><em>k</em> + 1</sub></span>
+中，它将变动到坐标 <span
+class="math inline">(<em>x</em><sub><em>k</em> + 1</sub>,<em>y</em><sub><em>k</em> + 1</sub>)</span>
+上。在 <a href="计算机图形学.md#01%20画线算法">画线算法</a>
+中我们已经讨论了增量公式，假设 <span
+class="math inline">(<em>x</em><sub><em>k</em></sub>,<em>y</em><sub><em>k</em></sub>)</span>
+和 <span
+class="math inline">(<em>x</em><sub><em>k</em> + 1</sub>,<em>y</em><sub><em>k</em> + 1</sub>)</span>
+所在的直线的斜率为 <span class="math inline"><em>m</em></span>，并且
+<span
+class="math inline">$m=\frac{y_{k+1}-y_k}{x_{k+1}-x_k}=\frac{1}{x_{k+1}-x_k}$</span>，由于扫描线
+<span class="math inline"><em>y</em><sub><em>k</em></sub></span> 和
+<span class="math inline"><em>y</em><sub><em>k</em> + 1</sub></span>
+的距离为 <span class="math inline">1</span>，所以自然有 <span
+class="math inline"><em>y</em><sub><em>k</em> + 1</sub> = <em>y</em><sub><em>k</em></sub> + 1</span>，根据增量公式，就有
+<span class="math display">$$
+x_{k+1}=x_k+\frac{1}{m}
+$$</span>
+只要有上一条扫描线的交点的坐标和直线的斜率，就可以直接计算出下一条扫描线与该直线的交点。</p>
+<h3 id="算法的执行流程">1.3 算法的执行流程</h3>
+<p>为了实现算法，扫描线算法提出了两种数据结构 —— <strong>边表</strong>
+(Edge table，简称 ET) 和<strong>活动边表</strong> (Active edge
+table，简称
+AET)。边表实质上是一个邻接链表，其作用是记录扫描线所经过的<strong>端点</strong>所连接的两条边的信息，并且链表中的每个节点按照线段的<strong>下端点的
+y 轴坐标</strong>进行归类 (即下端点的 y
+轴坐标相同的放到同一层去)，下图是一个边表的示例：</p>
+<p><img src="/img/计算机图形学-06.png" /></p>
+<p>其中，链表中的成员属性如下：</p>
+<center>
+<div alt="three-table">
+<table>
+<tr>
+<th alt="center">
+上端点 y 坐标
+</th>
+<th alt="center">
+下端点 x 坐标
+</th>
+<th alt="center">
+线段斜率的倒数
+</th>
+<th alt="center">
+下一条边的地址
+</th>
+</tr>
+</table>
+</div>
+</center>
+<p>以上图中的扫描线 <span
+class="math inline"><em>y</em><sub><em>A</em></sub></span>
+为例，其经过端点 <span
+class="math inline"><em>A</em></span>，该端点连接了边 <span
+class="math inline"><em>A</em><em>E</em></span> 和 <span
+class="math inline"><em>A</em><em>B</em></span>，由于这两条边的下端点都是
+<span
+class="math inline"><em>A</em></span>，所以应该将这两条边的信息保存到扫描线
+<span class="math inline"><em>y</em><sub><em>A</em></sub></span>
+对应的下标位置；在扫描线 <span
+class="math inline"><em>y</em><sub><em>c</em></sub></span>
+中，它经过端点 <span class="math inline"><em>C</em></span>，由于 <span
+class="math inline"><em>C</em></span> 连接的两条边分别位于 <span
+class="math inline"><em>y</em><sub><em>C</em></sub></span>
+两边，所以应当将 <span class="math inline"><em>C</em><em>D</em></span>
+沿 y 轴缩短一个单位，这样就将 <span
+class="math inline"><em>C</em></span> 拆分成了两个点 —— <span
+class="math inline"><em>C</em></span> 和 <span
+class="math inline"><em>C</em><sup>′</sup></span>. 由于 <span
+class="math inline"><em>C</em><em>B</em></span> 和 <span
+class="math inline"><em>C</em><sup>′</sup><em>D</em></span> 的下端点的
+<span class="math inline"><em>y</em></span> 轴坐标不同，只有 <span
+class="math inline"><em>C</em><em>B</em></span> 的下端点 y 轴坐标等于
+<span
+class="math inline"><em>y</em><sub><em>C</em></sub></span>，所以不能将
+<span class="math inline"><em>C</em><sup>′</sup><em>D</em></span>
+的信息保存到 <span
+class="math inline"><em>y</em><sub><em>C</em></sub></span>
+中去，而应该保存到 <span
+class="math inline"><em>y</em><sub><em>D</em></sub></span> 中。</p>
+<p>而活动边表是一个链表，其中的节点所保存的信息如下
+(注意比较和边表的区别)：</p>
+<center>
+<div alt="three-table">
+<table>
+<tr>
+<th alt="center">
+上端点 y 坐标
+</th>
+<th alt="center">
+交点 x 坐标
+</th>
+<th alt="center">
+线段斜率的倒数
+</th>
+<th alt="center">
+下一条边的地址
+</th>
+</tr>
+</table>
+</div>
+</center>
+<p>它是一个随扫描线 <span class="math inline"><em>y</em></span>
+轴变化而变化的同态表，而且与边表不同的是，边表只记录端点所在的边，活动边表记录的则是扫描线经过的所有边，并且按照交点的
+x
+坐标大小从小到大排序。那么活动边表是如何得到每个交点的？方法在之前已经介绍过了，初始的活动边表
+(空表不计) 中只有端点所连接的两条边的信息 (水平线例外)，例如上图中的
+<span class="math inline"><em>y</em><sub><em>A</em></sub></span>，所以在
+<span class="math inline"><em>y</em><sub><em>A</em></sub></span>
+时刻，活动边表中的信息与边表中 <span
+class="math inline"><em>y</em><sub><em>A</em></sub></span>
+是一样的，而在 <span
+class="math inline"><em>y</em><sub><em>A</em></sub> + 1</span>
+时刻，扫描线会与多边形产生两个交点，如何求这两个交点？首先，交点的 y
+轴坐标是已知的，就是 <span
+class="math inline"><em>y</em><sub><em>A</em></sub> + 1</span>，唯一要求解的其实只有
+x 轴的坐标，根据公式 <span
+class="math inline">$x_{k+1}=x_k+\frac{1}{m}$</span>，我们可以很轻松地从上一个交点的
+x 轴坐标直接计算出当前交点的 x 轴坐标，所以按照此方法更新交点的 x
+轴坐标；并且，由于端点的信息在边表中保存了两次，但分别隶属于斜率不同的两条线段，所以原本重叠的端点在下一时刻就分开了，然后根据之前说的“在多边形区域内的线段与在多边形区域外的线段交替出现”的性质，对交点进行两两配对，我们就能得到扫描线
+<span class="math inline"><em>y</em><sub><em>A</em></sub> + 1</span>
+上处于多边形内部的线段范围。当扫描线扫描到 <span
+class="math inline"><em>y</em><sub><em>D</em></sub></span>
+时，又要向活动边表中加入新的端点 (2个)；而当扫描线扫描到 <span
+class="math inline"><em>y</em><sub><em>E</em></sub></span>
+时，有两个交点，<span
+class="math inline"><em>即</em><em>在</em> <em>E</em></span>
+点重叠的点，即将被丢弃，因为在下一时刻，这个点就不再是交点了，判断的标准就是
+<span
+class="math inline">$扫描线的y轴坐标\ge上端点的y轴坐标$</span>，只要这一点不再满足，就说明该交点就不再存在了。</p>
+<p>限于文字描述，可能上述过程并不是很清楚，更加详细和具体的例子可以参考<a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/405105092">【知乎】扫描线填充算法详解</a>这篇文章。</p>
+<hr />
+<p>》参考：<a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/405105092">【知乎】扫描线填充算法详解</a>、<a
+target="_blank" rel="noopener" href="https://www.jianshu.com/p/d9be99077c2b">【简书】扫描线算法完全解析</a></p>
+<hr />
+<h2 id="作业">02 作业</h2>
+<blockquote>
+<p>多边形顶点的坐标为 <span
+class="math inline">(7,1)、(2,3)、(2,9)、(7,7)、(13,11)、(13,5)</span>
+和 <span class="math inline">(7,1)</span>，请写出该多边形的边表
+ET，以及活动边表 AET 中内容的变化。</p>
+</blockquote>
+<p>首先画出该多边形：</p>
+<p><img src="/img/计算机图形学-07.png" /></p>
+<p>先求出各条边的斜率及其倒数：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">边</th>
+<th style="text-align: center;">m</th>
+<th style="text-align: center;">1/m</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">AB</td>
+<td style="text-align: center;">-2/5</td>
+<td style="text-align: center;">-5/2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">BC</td>
+<td style="text-align: center;">∞</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">CD</td>
+<td style="text-align: center;">-2/5</td>
+<td style="text-align: center;">-5/2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">DE</td>
+<td style="text-align: center;">2/3</td>
+<td style="text-align: center;">3/2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">EF</td>
+<td style="text-align: center;">∞</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">FA</td>
+<td style="text-align: center;">2/3</td>
+<td style="text-align: center;">3/2</td>
+</tr>
+</tbody>
+</table>
+<p>然后开始构造边表，要注意的是，图中的点 B 和点 F
+属于特殊端点，需要将其进行拆分，也就是要变成下面这样：</p>
+<p><img src="/img/计算机图形学-08.png" /></p>
+<p>接下来构造边表：</p>
+<p><img src="/img/计算机图形学-09.png" /></p>
+<p>接下来开始构造活动边表，我们从 <span
+class="math inline"><em>y</em><sub>1</sub></span> 开始：</p>
+<p><img src="/img/计算机图形学-10.png" /></p>
+<p>我们将 <span class="math inline"><em>y</em><sub>1</sub></span>
+对应的边表中的内容加入到活动边表：</p>
+<p><img src="/img/计算机图形学-11.png" /></p>
+<p>通过该表，我们就能渲染 y 轴坐标为 <span
+class="math inline">1</span>，x 轴坐标在 <span
+class="math inline">[7,7]</span> 之间的点。接下来我们来看 <span
+class="math inline"><em>y</em><sub>2</sub></span>：</p>
+<p><img src="/img/计算机图形学-12.png" /></p>
+<p>可以看到，<span class="math inline"><em>y</em><sub>2</sub></span>
+交分别交 <span
+class="math inline"><em>A</em><em>B</em><sup>′</sup></span> 和 <span
+class="math inline"><em>A</em><em>F</em><sup>′</sup></span> 于点 <span
+class="math inline">(4.5,2)</span> 和 <span
+class="math inline">(8.5,2)</span>，活动边表应及时更新这一信息，也就是更新交点的
+x 轴坐标，即用原来的加上斜率的倒数：</p>
+<p><img src="/img/计算机图形学-13.png" /></p>
+<p>通过该表，我们就能渲染 y 轴坐标为 <span
+class="math inline">1</span>，x 轴坐标在 <span
+class="math inline">[4.5,8.5]</span> 之间的点。接下来看 <span
+class="math inline"><em>y</em><sub>3</sub></span> 的情况：</p>
+<p><img src="/img/计算机图形学-14.png" /></p>
+<p>此时出现了新情况，那就是 <span
+class="math inline"><em>y</em><sub>3</sub></span>
+经过了一个新端点，将该端点从边表中取出，并按 x
+轴的大小从小大到大排序插入活动边表，此外，原本的 <span
+class="math inline"><em>B</em><sup>′</sup></span> 由于已低于 <span
+class="math inline"><em>y</em><sub>3</sub></span>，所以应当从活动边表中删除：</p>
+<p><img src="/img/计算机图形学-15.png" /></p>
+<p>之后的步骤是一样的，直到扫描完最高的端点就结束了，故不再赘述，下面直接给出活动边表的变化过程：</p>
+<p><img src="/img/计算机图形学-16.png" /></p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+		<li class="prev"><a href="/2023/12/11/%E4%BA%8C%E7%BB%B4%E5%8F%98%E6%8D%A2/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+          <li class="next"><a href="/2023/12/10/%E7%94%BB%E7%BA%BF%E7%AE%97%E6%B3%95/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-12-10 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/Computer-Graphics/">Computer Graphics<span>4</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/computer-science/">computer science<span>4</span></a></li>
+
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%AB%E6%8F%8F%E7%BA%BF%E7%AE%97%E6%B3%95"><span class="toc-article-text">01 扫描线算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-article-text">1.1 算法的目标</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-article-text">1.2 算法的原理</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">1.3 算法的执行流程</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%9C%E4%B8%9A"><span class="toc-article-text">02 作业</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+
+    </div>
+  </div>
+  <div class="container-narrow">
+    <footer> <!--<p>
+  &copy; 2025 me
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p>-->
+ </footer>
+  </div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+<!-- syntax highlighting -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</html>
