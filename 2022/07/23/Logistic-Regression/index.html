@@ -125,7 +125,7 @@
 		 </div> <!-- alert -->
 	  		
 
-	  <h1 id="introduction">01 Introduction</h1>
+	  <h2 id="introduction">01 Introduction</h2>
 <p>Linear Regression is a good tool to help solve the regression
 problem, which predicts continuous valued output. However, it won’t be a
 good idea if we apply it to the classification problem, which gives
@@ -134,8 +134,8 @@ susceptible to outlier data, rendering the result inaccurate.</p>
 <p>So here we introduce a new method to cope with the classification
 problem — <strong>Logistic Regression</strong>.</p>
 <span id="more"></span>
-<h1 id="hypotheses-representation">02 Hypotheses Representation</h1>
-<h2 id="logistic-regression-model">2.1 Logistic Regression Model</h2>
+<h2 id="hypotheses-representation">02 Hypotheses Representation</h2>
+<h3 id="logistic-regression-model">2.1 Logistic Regression Model</h3>
 <p>The value of the hypothesis function in classification problem should
 be between 0 ~ 1: <span
 class="math inline">0 ≤ <em>h</em><sub><em>θ</em></sub>(<em>x</em>) ≤ 1</span></p>
@@ -165,8 +165,8 @@ $$</span></p>
 <p>As you can see, the sigmoid function approaches 1 as its parameter
 <span class="math inline"><em>z</em></span> approaches infinity, and
 approaches 0 as its parameter approaches infinitesimal.</p>
-<h2 id="interpretation-of-hypothesis-output">2.2 Interpretation of
-Hypothesis Output</h2>
+<h3 id="interpretation-of-hypothesis-output">2.2 Interpretation of
+Hypothesis Output</h3>
 <p><span class="math display">$$
 h_\theta(x)=\text{estimated\;probability\;of\;}y=1\;\text{on\;input}\;x
 $$</span></p>
@@ -175,14 +175,14 @@ Example: If $x=
 <p>$, <span
 class="math inline"><em>h</em><sub><em>θ</em></sub>(<em>x</em>) = 0.7</span></p>
 <p>Tell patient that 70% chance of tumor being malignant.</p>
-<h1 id="decision-boundary">03 Decision Boundary</h1>
-<h2 id="recap-logistic-regression">3.1 Recap: Logistic Regression</h2>
+<h2 id="decision-boundary">03 Decision Boundary</h2>
+<h3 id="recap-logistic-regression">3.1 Recap: Logistic Regression</h3>
 <p><img src="/img/Logistic-Regression-02.png" /></p>
 <p>Viewing the plot of our hypothesis function, we can easily find that
 its value is greater than or equal to 0.5 whenever the parameter is
 positive, while it’s less than 0.5 whenever the parameter is
 negative.</p>
-<h2 id="decision-boundary-1">3.2 Decision Boundary</h2>
+<h3 id="decision-boundary-1">3.2 Decision Boundary</h3>
 <p>Suppose we have a dataset and hypothesis function like:</p>
 <p><img src="/img/Logistic-Regression-03.png" /></p>
 <p>Concretely, we define the parameters <span
@@ -226,8 +226,8 @@ hypothesis including the parameters <span
 class="math inline"><em>θ</em></span> rather than the dataset, which
 means even if we change all the data, as long as the hypothesis remains
 the same, the boundary remains the same.</p>
-<h2 id="non-linear-decision-boundaries">3.3 Non-linear decision
-boundaries</h2>
+<h3 id="non-linear-decision-boundaries">3.3 Non-linear decision
+boundaries</h3>
 <p><img src="/img/Logistic-Regression-05.png" /></p>
 <p>In the above case, we define the parameters <span
 class="math inline"><em>θ</em></span> to be <span
@@ -237,8 +237,8 @@ it’s more complicated than just a simple line. The decision boundary can
 be much more complex especially when it comes to higher order polynomial
 terms. But no matter how complex it is, it’s still a property of the
 hypothesis instead of the training set.</p>
-<h1 id="cost-function">04 Cost Function</h1>
-<h2 id="why-the-former-wont-work">4.1 Why the Former Won’t Work</h2>
+<h2 id="cost-function">04 Cost Function</h2>
+<h3 id="why-the-former-wont-work">4.1 Why the Former Won’t Work</h3>
 <p><img src="/img/Logistic-Regression-06.png" /></p>
 <p>Back to when we were developing a linear regression model, we use the
 following cost function:</p>
@@ -261,8 +261,8 @@ will be many local optimums, making it difficult for gradient descent to
 converge to the global minimum.</p>
 <p>So we are going to choose another function better suitable for
 logistic regression.</p>
-<h2 id="logistic-regression-cost-function">4.2 Logistic Regression Cost
-Function</h2>
+<h3 id="logistic-regression-cost-function">4.2 Logistic Regression Cost
+Function</h3>
 <p>So we give the cost function for logistic regression: <span
 class="math display">$$
 Cost(h_θ(x),y)=\begin{cases}
@@ -273,9 +273,9 @@ $$</span></p>
 <p>Its curve be like:</p>
 <p><img src="/img/Logistic-Regression-08.png" /></p>
 <p><img src="/img/Logistic-Regression-09.png" /></p>
-<h1 id="simplified-cost-function-and-gradient-descent">05 Simplified
-Cost Function and Gradient Descent</h1>
-<h2 id="simplified-cost-function">5.1 Simplified Cost Function</h2>
+<h2 id="simplified-cost-function-and-gradient-descent">05 Simplified
+Cost Function and Gradient Descent</h2>
+<h3 id="simplified-cost-function">5.1 Simplified Cost Function</h3>
 <p><img src="/img/Logistic-Regression-10.png" /></p>
 <p>Because <span class="math inline"><em>y</em></span> is either 0 or 1,
 we’ll be able to come up with a simpler way to write the cost function.
@@ -301,14 +301,14 @@ class="math inline"> − <em>l</em><em>o</em><em>g</em>(1−<em>h</em><sub><
 <p><span class="math display">$$
 J(θ)=\frac{1}{m}∑^m_{i=1}Cost(h_θ(x^{(i)}),y^{(i)})\\=-\frac{1}{m}[∑^m_{(i=1)}y^{(i)}logh_θ(x^{(i)})+(1-y^{(i)})log(1-h_θ(x^{(i)}))]
 $$</span></p>
-<h2 id="gradient-descent">5.2 Gradient Descent</h2>
+<h3 id="gradient-descent">5.2 Gradient Descent</h3>
 <p>Now we have got the new cost function. The next step is to fit
 parameters <span class="math inline"><em>θ</em></span> and what we are
 going to fit parameters <span class="math inline"><em>θ</em></span> is
 try to find the parameters θ that minimizes <span
 class="math inline"><em>J</em>(<em>θ</em>)</span>.</p>
 <p><img src="/img/Logistic-Regression-11.png" /></p>
-<h1 id="advance-optimization">06 Advance Optimization</h1>
+<h2 id="advance-optimization">06 Advance Optimization</h2>
 <p>Given <span class="math inline"><em>θ</em></span>, we have code that
 can compute <span class="math inline"><em>J</em>(<em>θ</em>)</span> and
 <span class="math inline">$\frac{∂}{∂\theta_j}J{\theta}$</span> <span
@@ -327,9 +327,9 @@ class="math inline"><em>α</em></span></li>
 <ul>
 <li>More complex</li>
 </ul>
-<h1 id="multi-class-classification-one-vs-all">07 Multi-class
-Classification: One vs all</h1>
-<h2 id="multi-class-classification">7.1 Multi-class Classification</h2>
+<h2 id="multi-class-classification-one-vs-all">07 Multi-class
+Classification: One vs all</h2>
+<h3 id="multi-class-classification">7.1 Multi-class Classification</h3>
 <ul>
 <li>Email foldering/tagging: Work, Friends, Family, Hobby</li>
 </ul>
@@ -349,7 +349,7 @@ regression, we know how to plot a straight line to separate the positive
 and negative classes. Using an idea called one-versus-all
 classification, we can then take this and make it work for multi-class
 classification as well.</p>
-<h2 id="one-vs-all">7.2 One vs all</h2>
+<h3 id="one-vs-all">7.2 One vs all</h3>
 <p>Train a logistic regression classifier <span
 class="math inline"><em>h</em><sub><em>θ</em></sub><sup>(<em>i</em>)</sup>(<em>x</em>)</span>
 for each class <span class="math inline"><em>i</em></span> to predict
@@ -464,12 +464,12 @@ class="math inline"><em>m</em><em>a</em><em>x</em><sub><em>i</em></sub><em>h</em
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#introduction"><span class="toc-article-text">01 Introduction</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#hypotheses-representation"><span class="toc-article-text">02 Hypotheses Representation</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#logistic-regression-model"><span class="toc-article-text">2.1 Logistic Regression Model</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#interpretation-of-hypothesis-output"><span class="toc-article-text">2.2 Interpretation of
-Hypothesis Output</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#decision-boundary"><span class="toc-article-text">03 Decision Boundary</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#recap-logistic-regression"><span class="toc-article-text">3.1 Recap: Logistic Regression</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#decision-boundary-1"><span class="toc-article-text">3.2 Decision Boundary</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#non-linear-decision-boundaries"><span class="toc-article-text">3.3 Non-linear decision
-boundaries</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#cost-function"><span class="toc-article-text">04 Cost Function</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#why-the-former-wont-work"><span class="toc-article-text">4.1 Why the Former Won’t Work</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#logistic-regression-cost-function"><span class="toc-article-text">4.2 Logistic Regression Cost
-Function</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#simplified-cost-function-and-gradient-descent"><span class="toc-article-text">05 Simplified
-Cost Function and Gradient Descent</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#simplified-cost-function"><span class="toc-article-text">5.1 Simplified Cost Function</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#gradient-descent"><span class="toc-article-text">5.2 Gradient Descent</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#advance-optimization"><span class="toc-article-text">06 Advance Optimization</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#multi-class-classification-one-vs-all"><span class="toc-article-text">07 Multi-class
-Classification: One vs all</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#multi-class-classification"><span class="toc-article-text">7.1 Multi-class Classification</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#one-vs-all"><span class="toc-article-text">7.2 One vs all</span></a></li></ol></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#introduction"><span class="toc-article-text">01 Introduction</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#hypotheses-representation"><span class="toc-article-text">02 Hypotheses Representation</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#logistic-regression-model"><span class="toc-article-text">2.1 Logistic Regression Model</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#interpretation-of-hypothesis-output"><span class="toc-article-text">2.2 Interpretation of
+Hypothesis Output</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#decision-boundary"><span class="toc-article-text">03 Decision Boundary</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#recap-logistic-regression"><span class="toc-article-text">3.1 Recap: Logistic Regression</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#decision-boundary-1"><span class="toc-article-text">3.2 Decision Boundary</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#non-linear-decision-boundaries"><span class="toc-article-text">3.3 Non-linear decision
+boundaries</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#cost-function"><span class="toc-article-text">04 Cost Function</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#why-the-former-wont-work"><span class="toc-article-text">4.1 Why the Former Won’t Work</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#logistic-regression-cost-function"><span class="toc-article-text">4.2 Logistic Regression Cost
+Function</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#simplified-cost-function-and-gradient-descent"><span class="toc-article-text">05 Simplified
+Cost Function and Gradient Descent</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#simplified-cost-function"><span class="toc-article-text">5.1 Simplified Cost Function</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#gradient-descent"><span class="toc-article-text">5.2 Gradient Descent</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#advance-optimization"><span class="toc-article-text">06 Advance Optimization</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#multi-class-classification-one-vs-all"><span class="toc-article-text">07 Multi-class
+Classification: One vs all</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#multi-class-classification"><span class="toc-article-text">7.1 Multi-class Classification</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#one-vs-all"><span class="toc-article-text">7.2 One vs all</span></a></li></ol></li></ol>
 		</div>
 	
 	</div>

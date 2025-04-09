@@ -133,7 +133,7 @@ $$ 这样就可以用矩阵形式来表示二维平移方程： P′ = P +
 	<div class="mypage">		
 	  		
 
-	  <h1 id="平移">01 平移</h1>
+	  <h2 id="平移">01 平移</h2>
 <p>通过将坐标轴加上位移量，可以实现一次<strong>平移</strong>。对二维图像的平移可以转换为对其端点的平移。设某点的坐标为
 <span class="math inline">(<em>x</em>,<em>y</em>)</span>，将其 x
 轴坐标平移 <span
@@ -157,7 +157,7 @@ P=\begin{bmatrix} x \\ y \end{bmatrix},P^\prime=\begin{bmatrix} x^\prime
 $$</span> 这样就可以用矩阵形式来表示二维平移方程： <span
 class="math display"><em>P</em><sup>′</sup> = <em>P</em> + <em>T</em></span></p>
 <span id="more"></span>
-<h1 id="旋转">02 旋转</h1>
+<h2 id="旋转">02 旋转</h2>
 <p>通过指定<strong>旋转轴</strong>和<strong>旋转角度</strong>，可以实现一次<strong>旋转</strong>。利用三角函数，我们可以得到一个点围绕某个轴旋转后的坐标，以下图为例：</p>
 <p><img src="/img/计算机图形学-17.png" /></p>
 <p>该图中，长度为 <span class="math inline"><em>r</em></span>
@@ -205,7 +205,7 @@ x^\prime=x_r+(x-x_r)\cos\theta-(y-y_r)\sin\theta\\
 y^\prime=y_r+(x-x_r)\sin\theta+(y-y_r)\cos\theta
 \end{aligned}
 $$</span> 以上就是通用的二维旋转方程。</p>
-<h1 id="缩放">03 缩放</h1>
+<h2 id="缩放">03 缩放</h2>
 <p>改变一个图形的大小可以使用<strong>缩放</strong>。缩放的本质其实就是在原本坐标的基础上，给横纵坐标分别乘上一个<strong>缩放系数</strong>
 <span class="math inline"><em>s</em><sub><em>x</em></sub></span> 和
 <span
@@ -254,7 +254,7 @@ $$</span> 重新整理上述公式可得： <span class="math display">$$
 &amp;y^\prime=y·s_y+y_f(1-s_y)
 \end{aligned}
 $$</span></p>
-<h1 id="齐次坐标">04 齐次坐标</h1>
+<h2 id="齐次坐标">04 齐次坐标</h2>
 <p>我们可以尝试将平移、旋转、缩放的公式写到一起，就有： <span
 class="math display"><em>P</em><sup>′</sup> = <em>M</em><sub>1</sub> · <em>P</em> + <em>M</em><sub>2</sub></span>
 <span class="math inline"><em>M</em><sub>1</sub></span>
@@ -301,7 +301,7 @@ $$</span> 二维缩放公式： <span class="math display">$$
 s_x &amp; 0 &amp; 0 \\ 0 &amp; s_y &amp; 0 \\ 0 &amp; 0 &amp; 1
 \end{bmatrix}·\begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
 $$</span></p>
-<h1 id="逆变换">05 逆变换</h1>
+<h2 id="逆变换">05 逆变换</h2>
 <p>如果我们需要将一个进行了平移后的对象还原回去，那就需要进行逆操作，逆平移矩阵为：
 <span class="math display">$$
 T^{-1}=\begin{bmatrix} 1 &amp; 0 &amp; -t_x \\ 0 &amp; 1 &amp; -t_y \\ 0
@@ -316,7 +316,7 @@ class="math display">$$
 S^{-1}=\begin{bmatrix} \frac{1}{s_x} &amp; 0 &amp; 0 \\ 0 &amp;
 \frac{1}{s_y} &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{bmatrix}
 $$</span></p>
-<h1 id="复合变换">06 复合变换</h1>
+<h2 id="复合变换">06 复合变换</h2>
 <p><span class="math display">$$
 P^\prime=M_1·M_2...M_n·P\\
 \Downarrow\\
@@ -417,7 +417,7 @@ $$</span></p>
 class="math inline"><em>M</em><sub>1</sub> · <em>M</em><sub>2</sub> · <em>M</em><sub>3</sub> = (<em>M</em><sub>1</sub>·<em>M</em><sub>2</sub>) · <em>M</em><sub>3</sub> = <em>M</em><sub>1</sub> · (<em>M</em><sub>2</sub>·<em>M</em><sub>3</sub>)</span>；但是，变换积一般不可交换顺序，也就是
 <span
 class="math inline"><em>M</em><sub>1</sub> · <em>M</em><sub>2</sub> ≠ <em>M</em><sub>2</sub> · <em>M</em><sub>1</sub></span>，除非所进行的复合变换属于同种变换。</p>
-<h1 id="错切">07 错切</h1>
+<h2 id="错切">07 错切</h2>
 <p>错切是指，将某一点沿 x 轴 (或 y 轴) 方向移动其与 y 轴 (或 x 轴)
 距离的某一倍数，定义错切参数 <span
 class="math inline">sh<sub><em>x</em></sub></span>、<span
@@ -441,7 +441,7 @@ $$</span> 这样，错切方程将会变为： <span class="math display">$$
 &amp;y^\prime=y+\operatorname{sh}_y(x-x_{ref})
 \end{aligned}
 $$</span></p>
-<h1 id="作业">08 作业</h1>
+<h2 id="作业">08 作业</h2>
 <blockquote>
 <p>将正方形 <span
 class="math inline"><em>A</em>(0,0)、<em>B</em>(0,1)、<em>C</em>(1,1)、<em>D</em>(1,0)</span>，放大
@@ -622,7 +622,7 @@ $$</span></p>
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%B9%B3%E7%A7%BB"><span class="toc-article-text">01 平移</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%97%8B%E8%BD%AC"><span class="toc-article-text">02 旋转</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%BC%A9%E6%94%BE"><span class="toc-article-text">03 缩放</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E9%BD%90%E6%AC%A1%E5%9D%90%E6%A0%87"><span class="toc-article-text">04 齐次坐标</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E9%80%86%E5%8F%98%E6%8D%A2"><span class="toc-article-text">05 逆变换</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%A4%8D%E5%90%88%E5%8F%98%E6%8D%A2"><span class="toc-article-text">06 复合变换</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E9%94%99%E5%88%87"><span class="toc-article-text">07 错切</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BD%9C%E4%B8%9A"><span class="toc-article-text">08 作业</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B9%B3%E7%A7%BB"><span class="toc-article-text">01 平移</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%97%8B%E8%BD%AC"><span class="toc-article-text">02 旋转</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BC%A9%E6%94%BE"><span class="toc-article-text">03 缩放</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%BD%90%E6%AC%A1%E5%9D%90%E6%A0%87"><span class="toc-article-text">04 齐次坐标</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%80%86%E5%8F%98%E6%8D%A2"><span class="toc-article-text">05 逆变换</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%8D%E5%90%88%E5%8F%98%E6%8D%A2"><span class="toc-article-text">06 复合变换</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%94%99%E5%88%87"><span class="toc-article-text">07 错切</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%9C%E4%B8%9A"><span class="toc-article-text">08 作业</span></a></li></ol>
 		</div>
 	
 	</div>

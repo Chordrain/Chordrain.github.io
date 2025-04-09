@@ -124,8 +124,8 @@ SVM）是一种二分类模型，它的基本模型是定义在特征空间上�
 	  <p><strong>支持向量机（support vector machines,
 SVM）</strong>是一种二分类模型，它的基本模型是定义在特征空间上的<strong>间隔最大的线性分类器</strong>，间隔最大使它有别于感知机；SVM还包括<strong>核技巧</strong>，这使它成为实质上的非线性分类器。SVM的的学习策略就是间隔最大化，可形式化为一个求解凸二次规划的问题，也等价于正则化的合页损失函数的最小化问题。SVM的的学习算法就是求解凸二次规划的最优化算法。</p>
 <span id="more"></span>
-<h1 id="线性模型">01 线性模型</h1>
-<h2 id="算法思路">1.1 算法思路</h2>
+<h2 id="线性模型">01 线性模型</h2>
+<h3 id="算法思路">1.1 算法思路</h3>
 <p>假设训练样本在空间中的分布如下左图分布，圆圈和星星分别代表两类不同类别的数据，那么我们能找出一条直线，将两者分割开，我们就称这样的训练样本集为一个<strong>线性可分（Linear
 Separable）样本集</strong>，这样的模型就被称为<strong>线性模型</strong>；同理，倘若我们找不到这样一条直线，将两者完全分离开，如下右图所示，则称这样的训练样本集为一个<strong>线性不可分（Non-Linear
 Separable）样本集</strong>，这样的模型就被称为<strong>非线性模型</strong>。</p>
@@ -148,7 +148,7 @@ class="math inline"><em>d</em></span>
 就是不变的，所以还得给出另一个限制条件：直线必须位于两根平行线的正中间，也就是使上图中的实线与左右两根平行虚线的距离分别为
 <span class="math inline">$\frac d2$</span>。</p>
 <p><img src="/img/支持向量机-04.png" /></p>
-<h2 id="数学描述">1.2 数学描述</h2>
+<h3 id="数学描述">1.2 数学描述</h3>
 <p>既然性能指标已经确定了，下一个问题就是如何描述这个优化过程了。在描述优化过程之前，我们还是先得给出一些定义，首先，我们将上面的
 <span class="math inline"><em>d</em></span>
 称为<strong>间隔（Margin）</strong>，将虚线穿过的向量称为<strong>支持向量（Support
@@ -276,8 +276,8 @@ class="math inline">$\frac12$</span> 只是为了求导方便。</p></li>
 <p>非凸问题的目标函数图像是一条包含很多局部极值的曲线，会使得机器很容易落入局部最优解的陷阱。支持向量机算法优美的地方就在于，它将求解目标化成了一个凸优化问题。</p></li>
 </ul>
 </blockquote>
-<h1 id="非线性模型">02 非线性模型</h1>
-<h2 id="优化目标">2.1 优化目标</h2>
+<h2 id="非线性模型">02 非线性模型</h2>
+<h3 id="优化目标">2.1 优化目标</h3>
 <p>之前已经讨论过，非线性模型不是线性可分的，也就是说找不到一个 <span
 class="math inline"><em>W</em></span> 和 <span
 class="math inline"><em>b</em></span>，使之确定一个能完美分割所有样本点的超平面，即限制条件
@@ -318,7 +318,7 @@ class="math inline"><em>C</em></span>是一个由人事先设定的参数，这�
 class="math inline">$\frac{1}{2}\lVert\ W\rVert^{2}$</span>和<span
 class="math inline">$\sum_{i=1}^{N}\xi_{i}$</span>的权重。至于<span
 class="math inline"><em>C</em></span>具体取多少是没有定论的，一般是凭经验，选定一个区间，然后一个一个尝试。SVM很方便的一点就是，它只有这一个参数需要人来设置，但是在神经网络里，要去一个一个尝试的参数可能有很多。</p>
-<h2 id="高维映射">2.2 高维映射</h2>
+<h3 id="高维映射">2.2 高维映射</h3>
 <p>虽然通过引入松弛变量，我们将非线性问题转换为了一个线性可分问题，但是还是存在一个问题，那就是求解目标的本质没有变，最后仍然是找出一条直线，来分割样本点，也就是说，即使一个样本集用肉眼看就能看出其能被一条简单的曲线分割，SVM
 还是会找一条直线来分割样本点，如下图所示：</p>
 <p><img src="/img/支持向量机-05.png" /></p>
@@ -384,7 +384,7 @@ class="math inline"><em>X</em><sub>3</sub></span>、<span
 class="math inline"><em>X</em><sub>4</sub></span>
 分开了。也就是说，在低维空间中线性不可分的样本集，可能在高维空间中就是线性可分的，这也就是我们要去升维的原因。关于这一点也有很多人研究过，它们的结论是，对于任何线性不可分的样本集，特征空间的维数越高，其被线性分割的概率也越大；若维数趋近无穷大，那么其被线性分割的概率将达到
 1.</p>
-<h2 id="核函数">2.3 核函数</h2>
+<h3 id="核函数">2.3 核函数</h3>
 <p>在引入了高维映射之后，优化式 1 就变成了 <span
 class="math inline"><em>y</em><sub><em>i</em></sub>[<em>W</em><sup><em>T</em></sup><em>ϕ</em>(<em>X</em><sub><em>i</em></sub>)+<em>b</em>] ≥ 1 − <em>ξ</em><sub><em>i</em></sub>  (<em>i</em>=1∼<em>N</em>)</span>，虽然看起来只有
 <span class="math inline"><em>X</em><sub><em>i</em></sub></span>
@@ -438,7 +438,7 @@ class="math inline">$\sum_{i=1}^{N}\sum_{j=1}^{N}C_iC_jK(X_i,X_j)\ge0$</span>，
 <span class="math inline"><em>C</em></span> 和向量 <span
 class="math inline"><em>X</em></span> 都满足该式；</li>
 </ol>
-<h2 id="原问题到对偶问题">2.4 原问题到对偶问题</h2>
+<h3 id="原问题到对偶问题">2.4 原问题到对偶问题</h3>
 <p>现在我们有了核函数，那么我们要怎样利用核函数，来替代优化式 1 中的
 <span class="math inline"><em>ϕ</em>(<em>X</em>)</span>
 呢？在这之前，请先阅读<a
@@ -665,8 +665,8 @@ class="math inline"><em>α</em><sub><em>i</em></sub> ∉ {0, <em>C</em>}</
 class="math inline"><em>b</em></span>，最后取 <span
 class="math inline"><em>b</em></span>
 的平均值，这样能使结果更加精确。</p>
-<h2 id="算法流程总结">2.5 算法流程总结</h2>
-<h3 id="训练流程">训练流程</h3>
+<h3 id="算法流程总结">2.5 算法流程总结</h3>
+<h4 id="训练流程">训练流程</h4>
 <ol type="1">
 <li>输入：<span
 class="math inline">{(<em>X</em><sub><em>i</em></sub>,<em>y</em><sub><em>i</em></sub>)}  <em>i</em> = 1 ∼ <em>N</em></span></li>
@@ -686,7 +686,7 @@ class="math inline"><em>α</em><sub><em>i</em></sub></span> 来计算 <span
 class="math inline"><em>b</em></span>：<span
 class="math inline">$b=\frac{1-y_i\sum_{i=1}^N\alpha_iy_iK(X_i,X)}{y_i}$</span></li>
 </ol>
-<h3 id="测试流程">测试流程</h3>
+<h4 id="测试流程">测试流程</h4>
 <ol type="1">
 <li>输入测试样本 <span class="math inline"><em>X</em></span></li>
 <li>分类：
@@ -704,7 +704,7 @@ class="math inline">$\sum_{i=1}^N\alpha_iy_iK(X_i,X)+b\lt0$</span>，则
 class="math inline"><em>ϕ</em>(<em>X</em>)</span>，只需要使用核函数就行了。这也就是
 SVM 用有限维手段来处理无限维问题的方法。</p>
 </blockquote>
-<h1 id="补充优化理论">03* 补充：优化理论</h1>
+<h2 id="补充优化理论">03* 补充：优化理论</h2>
 <p>在优化领域中，在优化理论中，<strong>原问题（Prime
 Problem）</strong>和<strong>对偶问题（Dual
 Problem）</strong>是一对相关的数学问题。</p>
@@ -959,7 +959,7 @@ class="math inline"><em>g</em><sub><em>i</em></sub>(<em>ω</em><sup>*</sup>) =
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E8%B7%AF"><span class="toc-article-text">1.1 算法思路</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%95%B0%E5%AD%A6%E6%8F%8F%E8%BF%B0"><span class="toc-article-text">1.2 数学描述</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 非线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.1 优化目标</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%AB%98%E7%BB%B4%E6%98%A0%E5%B0%84"><span class="toc-article-text">2.2 高维映射</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="toc-article-text">2.3 核函数</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8E%9F%E9%97%AE%E9%A2%98%E5%88%B0%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-article-text">2.4 原问题到对偶问题</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-article-text">2.5 算法流程总结</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B"><span class="toc-article-text">训练流程</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-article-text">测试流程</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E8%A1%A5%E5%85%85%E4%BC%98%E5%8C%96%E7%90%86%E8%AE%BA"><span class="toc-article-text">03* 补充：优化理论</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E8%B7%AF"><span class="toc-article-text">1.1 算法思路</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%95%B0%E5%AD%A6%E6%8F%8F%E8%BF%B0"><span class="toc-article-text">1.2 数学描述</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 非线性模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.1 优化目标</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%AB%98%E7%BB%B4%E6%98%A0%E5%B0%84"><span class="toc-article-text">2.2 高维映射</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="toc-article-text">2.3 核函数</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8E%9F%E9%97%AE%E9%A2%98%E5%88%B0%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-article-text">2.4 原问题到对偶问题</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-article-text">2.5 算法流程总结</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B"><span class="toc-article-text">训练流程</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-article-text">测试流程</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%A1%A5%E5%85%85%E4%BC%98%E5%8C%96%E7%90%86%E8%AE%BA"><span class="toc-article-text">03* 补充：优化理论</span></a></li></ol>
 		</div>
 	
 	</div>
