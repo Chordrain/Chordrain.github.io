@@ -13,14 +13,14 @@
       
       <categories>
           
-          <category> solutions </category>
+          <category> Programming Solutions </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> technique </tag>
+            <tag> error handling </tag>
             
         </tags>
       
@@ -45,7 +45,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> software testing </tag>
             
         </tags>
       
@@ -63,14 +63,14 @@
       
       <categories>
           
-          <category> discrete math </category>
+          <category> Discrete Math </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> discrete math </tag>
             
         </tags>
       
@@ -88,14 +88,14 @@
       
       <categories>
           
-          <category> deep learning </category>
+          <category> Deep Learning </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> technique </tag>
+            <tag> deep learning </tag>
             
         </tags>
       
@@ -113,14 +113,14 @@
       
       <categories>
           
-          <category> machine learning </category>
+          <category> Machine Learning </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> technique </tag>
+            <tag> machine learning </tag>
             
         </tags>
       
@@ -138,14 +138,14 @@
       
       <categories>
           
-          <category> machine learning </category>
+          <category> Machine Learning </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> technique </tag>
+            <tag> machine learning </tag>
             
         </tags>
       
@@ -163,14 +163,14 @@
       
       <categories>
           
-          <category> AI </category>
+          <category> Artificial Intelligence </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> technique </tag>
+            <tag> artificial intelligence </tag>
             
         </tags>
       
@@ -188,14 +188,16 @@
       
       <categories>
           
-          <category> AI </category>
+          <category> Artificial Intelligence </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> artificial intelligence </tag>
+            
+            <tag> discrete math </tag>
             
         </tags>
       
@@ -213,14 +215,16 @@
       
       <categories>
           
-          <category> deep learning </category>
+          <category> Deep Learning </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> technique </tag>
+            <tag> deep learning </tag>
+            
+            <tag> nlp </tag>
             
         </tags>
       
@@ -238,14 +242,16 @@
       
       <categories>
           
-          <category> deep learning </category>
+          <category> Deep Learning </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> technique </tag>
+            <tag> deep learning </tag>
+            
+            <tag> nlp </tag>
             
         </tags>
       
@@ -270,7 +276,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> machine learning </tag>
             
         </tags>
       
@@ -295,7 +301,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> machine learning </tag>
             
         </tags>
       
@@ -320,7 +326,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> machine learning </tag>
             
         </tags>
       
@@ -345,7 +351,7 @@
       
         <tags>
             
-            <tag> lecture notes </tag>
+            <tag> machine learning </tag>
             
         </tags>
       
