@@ -124,7 +124,7 @@ Model）是一种统计模型，用来描述一个隐含未知量的马尔可夫
 	  <p>隐马尔可夫模型 HMM（Hidden Markov
 Model）是一种统计模型，用来描述一个隐含未知量的马尔可夫过程（马尔可夫过程是一类随机过程，它的原始模型是马尔科夫链），它是结构最简单的动态贝叶斯网，是一种著名的有向图模型，主要用于时序数据建模，在语音识别、自然语言处理等领域有广泛应用，是一种<strong>生成式模型</strong>。</p>
 <span id="more"></span>
-<h2 id="马尔可夫模型">01 马尔可夫模型</h2>
+<h1 id="马尔可夫模型">01 马尔可夫模型</h1>
 <p>在学习隐马尔可夫模型之前，我们先来了解一下它的前生——马尔可夫模型
 MM（Markov Model）。</p>
 <p>我们用一个例子进行引入：天气的变化应该具有某种联系。晴天、多云和暴雨这三种天气之间的转换应该存在某种规律，下图中的箭头表示两种天气之间转换的概率：</p>
@@ -166,8 +166,8 @@ P(q_1=S_{\text{sun}})=P(q_1=S_{\text{sun}}|q_0=\sum_{i=1}^{3}S_i)=\sum_{i=1}^{3}
 A_{S_i\rightarrow S_{\text{sun}}}
 $$</span> 用文字形式表示就是：</p>
 <p><img src="/img/隐马尔可夫模型-03.png" /></p>
-<h2 id="隐马尔可夫模型">02 隐马尔可夫模型</h2>
-<h3 id="概念">2.1 概念</h3>
+<h1 id="隐马尔可夫模型">02 隐马尔可夫模型</h1>
+<h2 id="概念">2.1 概念</h2>
 <p>而隐马尔可夫模型就比马尔可夫模型要复杂多了。我们还是用上面这个例子进行引入，但是这次我们漂流到了一个岛上，这里没有天气预报，只有一片海藻，海藻具有干燥、较干、较湿和湿润四种状态。现在我们没有直接的天气信息了，但是天气状况跟海藻的状态还是有一定联系的，虽然看不见天气状况，但其决定了海藻的状态，所以我们还是能从海藻的状态推知天气的状态。</p>
 <p>在这个例子里，海藻是能看到的，那它就是<strong>观测状态</strong>；天气信息是看不到的，那它就是<strong>隐藏状态</strong>。其中，隐藏状态天气时是决定性因素，观测状态是被决定因素，由隐藏状态到观测状态，这就是<strong>隐马尔可夫模型</strong>。</p>
 <p><img src="/img/隐马尔可夫模型-04.png" /></p>
@@ -190,7 +190,7 @@ class="math inline"><em>X</em></span>。并且，隐藏状态之间还可以相�
 &amp;P=(X_t|Z_{t},X_{t},Z_{t-1},X_{t-1},...,Z_1,X_1)=P(X_t|Z_t)\\
 \end{aligned}
 $$</span></p>
-<h3 id="组成">2.2 组成</h3>
+<h2 id="组成">2.2 组成</h2>
 <p>马尔可夫模型有两个组成部分——初始状态概率向量 <span
 class="math inline"><em>Π</em></span> 和 状态转移概率矩阵 <span
 class="math inline"><em>A</em></span>。</p>
@@ -216,7 +216,7 @@ class="math inline"><em>Z</em><sub><em>i</em></sub> → <em>X</em><sub><em>i
 <p>因此，隐马尔可夫模型 <span class="math inline"><em>λ</em></span>
 可以用三元符号表示： <span
 class="math display"><em>λ</em>(<em>A</em>,<em>B</em>,<em>Π</em>)</span></p>
-<h3 id="求解目标">2.3 求解目标</h3>
+<h2 id="求解目标">2.3 求解目标</h2>
 <p>HMM 的求解目标有三个：</p>
 <ol type="1">
 <li>给定模型 <span
@@ -238,7 +238,7 @@ class="math inline"><em>O</em> = {<em>o</em><sub>1</sub>, <em>o</em><sub>2
 class="math inline"><em>P</em>(<em>I</em>|<em>O</em>,<em>λ</em>)</span>
 最大。</li>
 </ol>
-<h2 id="暴力求解法">03 暴力求解法</h2>
+<h1 id="暴力求解法">03 暴力求解法</h1>
 <p>我们要求的是在给定模型下观测序列出现的概率，那如果我们能把所有的隐藏序列都列出来，也就可以知道联合概率分布
 <span
 class="math inline"><em>P</em>(<em>O</em>,<em>I</em>|<em>λ</em>)</span>
@@ -294,8 +294,8 @@ class="math inline"><em>b</em><sub><em>i</em></sub></span>，加起来就是
 class="math inline">2<em>T</em></span>，计算时间复杂度时省去系数，则该算法的<strong>时间复杂度将达到
 <span
 class="math inline"><em>O</em>(<em>T</em><em>N</em><sup><em>T</em></sup>)</span></strong>。</p>
-<h2 id="前向算法">04 前向算法</h2>
-<h3 id="算法解析">4.1 算法解析</h3>
+<h1 id="前向算法">04 前向算法</h1>
+<h2 id="算法解析">4.1 算法解析</h2>
 <p>暴力求解法告诉我们隐马尔可夫模型的问题看上去是可解，但高昂的时间开销却是不可承受的。对此，有人提出了前向算法，该算法利用<strong>动态规划</strong>的思想来求解该问题，降低了时间复杂度。</p>
 <p>给定 <span class="math inline"><em>t</em></span> 时刻的隐藏状态为
 <span
@@ -396,7 +396,7 @@ class="math inline"><em>α</em></span> 的时间复杂度为 <span
 class="math inline"><em>N</em><sup>2</sup></span>
 （原因很简单，自己想），所以前向算法的<strong>时间复杂度为 <span
 class="math inline"><em>O</em>(<em>T</em><em>N</em><sup>2</sup>)</span></strong>。显然，前向算法将暴力算法的时间复杂度从指数级降到了线性级别，极大提升了执行效率。</p>
-<h3 id="公式推导">4.2 公式推导</h3>
+<h2 id="公式推导">4.2 公式推导</h2>
 <p>由上述过程，我们可以得到前向算法的递推式：</p>
 <ol type="1">
 <li>初值：</li>
@@ -443,7 +443,7 @@ $$</span></p>
 &amp;=\pi_1b_i(o_1)
 \end{aligned}
 $$</span></p>
-<h2 id="后向算法">05 后向算法</h2>
+<h1 id="后向算法">05 后向算法</h1>
 <p>后向算法比前向算法稍微复杂一点，这一节着重讲解后向算法初值、递推和终止公式的推导。</p>
 <p>给定隐马尔可夫模型，定义在时刻 <span
 class="math inline"><em>t</em></span> 状态为 <span
@@ -512,7 +512,7 @@ $$</span></p>
 <p><span class="math display">$$
 P(O|\lambda)=\sum_{i=1}^Nb_i(o_1)\beta_1(i)\pi_i
 $$</span></p>
-<h2 id="baum-welch-算法">06 Baum-Welch 算法</h2>
+<h1 id="baum-welch-算法">06 Baum-Welch 算法</h1>
 <p>讨论完了如何求解 <span
 class="math inline"><em>P</em>(<em>O</em>|<em>λ</em>)</span>，下一步我们就要考虑最难的一个问题——如何求解
 HMM 的参数，即 <span class="math inline"><em>A</em></span>，<span
@@ -664,7 +664,7 @@ EM 算法的一个特例。</p>
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 马尔可夫模型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 隐马尔可夫模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-article-text">2.1 概念</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BB%84%E6%88%90"><span class="toc-article-text">2.2 组成</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B1%82%E8%A7%A3%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.3 求解目标</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9A%B4%E5%8A%9B%E6%B1%82%E8%A7%A3%E6%B3%95"><span class="toc-article-text">03 暴力求解法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">04 前向算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E8%A7%A3%E6%9E%90"><span class="toc-article-text">4.1 算法解析</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="toc-article-text">4.2 公式推导</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">05 后向算法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#baum-welch-%E7%AE%97%E6%B3%95"><span class="toc-article-text">06 Baum-Welch 算法</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">01 马尔可夫模型</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">02 隐马尔可夫模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-article-text">2.1 概念</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BB%84%E6%88%90"><span class="toc-article-text">2.2 组成</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%B1%82%E8%A7%A3%E7%9B%AE%E6%A0%87"><span class="toc-article-text">2.3 求解目标</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%9A%B4%E5%8A%9B%E6%B1%82%E8%A7%A3%E6%B3%95"><span class="toc-article-text">03 暴力求解法</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">04 前向算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E8%A7%A3%E6%9E%90"><span class="toc-article-text">4.1 算法解析</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="toc-article-text">4.2 公式推导</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-article-text">05 后向算法</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#baum-welch-%E7%AE%97%E6%B3%95"><span class="toc-article-text">06 Baum-Welch 算法</span></a></li></ol>
 		</div>
 	
 	</div>

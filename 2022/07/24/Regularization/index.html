@@ -125,8 +125,8 @@
 		 </div> <!-- alert -->
 	  		
 
-	  <h2 id="the-problem-of-overfitting">01 The Problem of Overfitting</h2>
-<h3 id="overfitting">1.1 Overfitting</h3>
+	  <h1 id="the-problem-of-overfitting">01 The Problem of Overfitting</h1>
+<h2 id="overfitting">1.1 Overfitting</h2>
 <p>What is overfitting? Let’s take some examples:</p>
 <p><img src="/img/Regularization-01.png" /></p>
 <p>In the first figure, the straight line does not fit the training data
@@ -143,7 +143,7 @@ housing prices.</p>
 variance. </p>
 <p>Another example:</p>
 <p><img src="/img/Regularization-02.png" /></p>
-<h3 id="addressing-overfitting">1.2 Addressing Overfitting</h3>
+<h2 id="addressing-overfitting">1.2 Addressing Overfitting</h2>
 <p>Options:</p>
 <ol type="1">
 <li><p>Reduce number of features</p>
@@ -156,7 +156,7 @@ variance. </p>
 contributes a bit to predicting <span
 class="math inline"><em>y</em></span>.</p></li>
 </ol>
-<h2 id="cost-function">02 Cost Function</h2>
+<h1 id="cost-function">02 Cost Function</h1>
 <p><img src="/img/Regularization-03.png" /></p>
 <p>As you can see, the first curve fits the data very well but the
 second is overfitting and not generalize well. How can we address
@@ -202,8 +202,8 @@ constant:</p>
 <p><span class="math display">$$
 J(\theta)=\frac{1}{2m}[∑^m_{i=1}(h_\theta(x^{(i)})-y^{(i)})^2+λ∑^n_{j=1}\theta^2_j]
 $$</span></p>
-<h2 id="regularized-linear-regression">03 Regularized Linear
-Regression</h2>
+<h1 id="regularized-linear-regression">03 Regularized Linear
+Regression</h1>
 <p><span class="math display">$$
 J(\theta)=\frac{1}{2m}[∑^m_{i=1}(h_\theta(x^{(i)})-y^{(i)})^2+λ∑^n_{j=1}\theta^2_j]
 $$</span></p>
@@ -211,7 +211,7 @@ $$</span></p>
 function and get a new cost function above. In this section, we are
 going to generalize regularization to gradient descent and normal
 equation.</p>
-<h3 id="gradient-descent">3.1 Gradient Descent</h3>
+<h2 id="gradient-descent">3.1 Gradient Descent</h2>
 <p>The original gradient descent is as follows:</p>
 <p><img src="/img/Regularization-04.png" /></p>
 <p>Here, as you can see, we separate the <span
@@ -223,7 +223,7 @@ to modify the cost function and take its derivate:</p>
 <p><span class="math display">$$
 \theta_j:=\theta_j(1-\alpha\frac{\lambda}{m})-\alpha\frac{1}{m}∑^m_{i=1}(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}
 $$</span></p>
-<h3 id="normal-equation">3.2 Normal Equation</h3>
+<h2 id="normal-equation">3.2 Normal Equation</h2>
 <p>The original idea to use normal equation to minimize the cost
 function is through the equation below:</p>
 <p><span
@@ -243,8 +243,8 @@ $$</span></p>
 class="math inline">(<em>n</em>+1) * (<em>n</em>+1)</span>. All of the
 elements in the matrix is zero except for the elements on the diagonal
 starting from line 2.</p>
-<h2 id="regularized-logistic-regression">04 Regularized Logistic
-Regression</h2>
+<h1 id="regularized-logistic-regression">04 Regularized Logistic
+Regression</h1>
 <p>The gradient descent in logistic regression is to repeat the
 sentences below until find all the parameters <span
 class="math inline"><em>θ</em></span>: <span class="math display">$$
@@ -364,8 +364,8 @@ $$</span></p>
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#the-problem-of-overfitting"><span class="toc-article-text">01 The Problem of Overfitting</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#overfitting"><span class="toc-article-text">1.1 Overfitting</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#addressing-overfitting"><span class="toc-article-text">1.2 Addressing Overfitting</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#cost-function"><span class="toc-article-text">02 Cost Function</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#regularized-linear-regression"><span class="toc-article-text">03 Regularized Linear
-Regression</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#gradient-descent"><span class="toc-article-text">3.1 Gradient Descent</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#normal-equation"><span class="toc-article-text">3.2 Normal Equation</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#regularized-logistic-regression"><span class="toc-article-text">04 Regularized Logistic
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#the-problem-of-overfitting"><span class="toc-article-text">01 The Problem of Overfitting</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#overfitting"><span class="toc-article-text">1.1 Overfitting</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#addressing-overfitting"><span class="toc-article-text">1.2 Addressing Overfitting</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#cost-function"><span class="toc-article-text">02 Cost Function</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#regularized-linear-regression"><span class="toc-article-text">03 Regularized Linear
+Regression</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#gradient-descent"><span class="toc-article-text">3.1 Gradient Descent</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#normal-equation"><span class="toc-article-text">3.2 Normal Equation</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#regularized-logistic-regression"><span class="toc-article-text">04 Regularized Logistic
 Regression</span></a></li></ol>
 		</div>
 	

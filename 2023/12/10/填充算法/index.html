@@ -129,8 +129,8 @@
 	  <p>如何在计算机程序中存储几何图形
 (多边形)？最容易的方法就是按顺序存储多边形的顶点，这个多边形就唯一确定了。那显示器是如何显示几何图形的呢？显示设备通常提供一个帧缓冲存储器
 (俗称显存)，可以把它当做二维数组，该数组存储的值与屏幕上显示的每一像素的颜色一一对应。那么问题来了，如何把程序中的几何图形转换成显存中的几何图形？这就是扫描线算法要解决的问题。</p>
-<h2 id="扫描线算法">01 扫描线算法</h2>
-<h3 id="算法的目标">1.1 算法的目标</h3>
+<h1 id="扫描线算法">01 扫描线算法</h1>
+<h2 id="算法的目标">1.1 算法的目标</h2>
 <p>扫描线多边形区域填充算法是按扫描线顺序
 (<strong>由下到上</strong>)，计算扫描线与多边形的相交区间，再用要求的颜色显示这些区间的像素，即完成填充工作。扫描线在对多边形进行扫描时，会与多边形产生多个交点，如下图所示：</p>
 <p><img src="/img/计算机图形学-02.png" /></p>
@@ -151,7 +151,7 @@ class="math inline"><em>y</em><sup>′</sup></span>，它们的共同点是都�
 <span class="math inline"><em>y</em></span>
 则仍然遵守，那么，我们如何区分这两种情况，以及如何设计一个完备的算法处理？这是扫描线算法要解决的第一个问题。</p>
 <p>此外，算法还需要求解扫描线与多边形的交点，一个直观的解法是：根据多边形的顶点求出各条边的方程，然后将扫描线的纵坐标代入方程求出横坐标。但是显然，这样做会涉及大量的乘法和除法运算，并且需要遍历每条扫描线和每条边，性能开销极大，设计一个合理的算法求解每条扫描线与多边形的交点，是扫描线算法要解决的第二个问题。</p>
-<h3 id="算法的原理">1.2 算法的原理</h3>
+<h2 id="算法的原理">1.2 算法的原理</h2>
 <p>对于第一个问题，仔细观察上图可以发现两根扫描线在拓扑结构上的区别：<span
 class="math inline"><em>y</em><sup>′</sup></span>
 上的端点所连接的两条边皆在 <span
@@ -210,7 +210,7 @@ class="math inline"><em>y</em><sub><em>k</em> + 1</sub> = <em>y</em><sub
 x_{k+1}=x_k+\frac{1}{m}
 $$</span>
 只要有上一条扫描线的交点的坐标和直线的斜率，就可以直接计算出下一条扫描线与该直线的交点。</p>
-<h3 id="算法的执行流程">1.3 算法的执行流程</h3>
+<h2 id="算法的执行流程">1.3 算法的执行流程</h2>
 <p>为了实现算法，扫描线算法提出了两种数据结构 —— <strong>边表</strong>
 (Edge table，简称 ET) 和<strong>活动边表</strong> (Active edge
 table，简称
@@ -326,7 +326,7 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/405105092">【
 target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/405105092">【知乎】扫描线填充算法详解</a>、<a
 target="_blank" rel="noopener" href="https://www.jianshu.com/p/d9be99077c2b">【简书】扫描线算法完全解析</a></p>
 <hr />
-<h2 id="作业">02 作业</h2>
+<h1 id="作业">02 作业</h1>
 <blockquote>
 <p>多边形顶点的坐标为 <span
 class="math inline">(7,1)、(2,3)、(2,9)、(7,7)、(13,11)、(13,5)</span>
@@ -519,7 +519,7 @@ class="math inline"><em>y</em><sub>3</sub></span>，所以应当从活动边表�
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%AB%E6%8F%8F%E7%BA%BF%E7%AE%97%E6%B3%95"><span class="toc-article-text">01 扫描线算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-article-text">1.1 算法的目标</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-article-text">1.2 算法的原理</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">1.3 算法的执行流程</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%9C%E4%B8%9A"><span class="toc-article-text">02 作业</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%89%AB%E6%8F%8F%E7%BA%BF%E7%AE%97%E6%B3%95"><span class="toc-article-text">01 扫描线算法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-article-text">1.1 算法的目标</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-article-text">1.2 算法的原理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">1.3 算法的执行流程</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BD%9C%E4%B8%9A"><span class="toc-article-text">02 作业</span></a></li></ol>
 		</div>
 	
 	</div>

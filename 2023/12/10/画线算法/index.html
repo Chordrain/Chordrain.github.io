@@ -160,7 +160,7 @@ class="math inline"><em>δ</em><em>y</em></span>，那么在 x 轴上就要延�
 <span class="math inline">$\delta x=\frac{\delta
 y}{m}$</span>。这两个公式被称为<strong>增量公式</strong>。</p>
 <span id="more"></span>
-<h2 id="dda-算法">01 DDA 算法</h2>
+<h1 id="dda-算法">01 DDA 算法</h1>
 <p>计算机是使用一系列离散的像素点来近似非水平或垂直的直线和其他图案的，要画的直线在大部分向前看不可能刚刚好穿过一系列在水平或垂直方向上连续的像素点，所以画线算法的重点就在于确定所画线段要经过的像素点的横纵坐标。DDA
 算法的思想是：通过在 x 轴或 y 轴上设置一个微小的步距 <span
 class="math inline"><em>s</em><em>t</em><em>e</em><em>p</em></span>，然后通过上述的增量公式，来得到另一个轴上对应的坐标。</p>
@@ -210,7 +210,7 @@ class="math inline"> + 1</span>)，并将移动轴的坐标带入直线方�
 <li>缺点：有浮点数的计算，并伴随浮点数相加累积误差，对长线段而言容易引起像素点位置与理想位置的较大偏移；四舍五入操作消耗时间</li>
 </ul></li>
 </ul>
-<h2 id="bresenham-算法">02 Bresenham 算法</h2>
+<h1 id="bresenham-算法">02 Bresenham 算法</h1>
 <p>Bresenham
 算法的思想很简单，它直接选取与目标直线<strong>垂直距离</strong>最近的像素点，例如下图中的两点，很明显应该选择
 <span
@@ -413,7 +413,7 @@ target="_blank" rel="noopener" href="https://www.jianshu.com/p/c02ca154943b">【
 画线算法推导</a>、<a
 target="_blank" rel="noopener" href="https://blog.csdn.net/u010429424/article/details/77834046">【CSDN】DDA算法和Bresenham算法</a></p>
 <hr />
-<h2 id="作业">03 作业</h2>
+<h1 id="作业">03 作业</h1>
 <blockquote>
 <p>绘制一条直线，端点分别为 <span class="math inline">(1,1)</span> 和
 <span class="math inline">(7,5)</span>，使用 DDA 和 Bresenham
@@ -651,7 +651,7 @@ class="math inline">(7,5)</span></td>
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#dda-%E7%AE%97%E6%B3%95"><span class="toc-article-text">01 DDA 算法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#bresenham-%E7%AE%97%E6%B3%95"><span class="toc-article-text">02 Bresenham 算法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%9C%E4%B8%9A"><span class="toc-article-text">03 作业</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#dda-%E7%AE%97%E6%B3%95"><span class="toc-article-text">01 DDA 算法</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#bresenham-%E7%AE%97%E6%B3%95"><span class="toc-article-text">02 Bresenham 算法</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BD%9C%E4%B8%9A"><span class="toc-article-text">03 作业</span></a></li></ol>
 		</div>
 	
 	</div>

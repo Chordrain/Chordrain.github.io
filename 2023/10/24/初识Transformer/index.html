@@ -140,7 +140,7 @@ model，那么它究竟是怎么做到的，接下来我们就要开始研究了
 	<div class="mypage">		
 	  		
 
-	  <h2 id="seq2seq">01 Seq2seq</h2>
+	  <h1 id="seq2seq">01 Seq2seq</h1>
 <p>Transformer 是一个 sequence-to-sequence model，我们一般简写作
 seq2seq。seq2seq 的意思是指，输入是一个 sequence，输出也是一个
 sequence，并且两个 sequence 的长度不一定，这里的长度不一定的意思是指：1.
@@ -162,13 +162,13 @@ seq2seq，但是这里就不展开了。至少至此，我们已经知道了 seq
 是一个强大的
 model，那么它究竟是怎么做到的，接下来我们就要开始研究了。</p>
 <span id="more"></span>
-<h2 id="mechanism">02 Mechanism</h2>
+<h1 id="mechanism">02 Mechanism</h1>
 <p>Seq2seq 主要由两大部分组成 —— encoder 和 decoder。</p>
 <p><img src="/img/Transformer-01.png" /></p>
 <p>Encoder 负责接收和处理数据，然后将处理过的数据交给 decoder，decoder
 则根据数据决定输出结果。接下来，我们就来具体来看看 encoder 和 decoder
 的结构。</p>
-<h3 id="encoder">2.1 Encoder</h3>
+<h2 id="encoder">2.1 Encoder</h2>
 <p>简单来说，encoder
 要做的事情就是将接收的一排向量，转换成另一排向量，这一个过程可以用很多种方法来完成，例如
 RNN 和 CNN，而 transformer 采用的是
@@ -204,12 +204,12 @@ encoding 的环节，这项技术在 self-attention 的笔记中有提到。Atte
 normalization，这就是上图中淡黄色框的含义。再网上要进行 feed
 forward，其实就是把上一步得到的结果喂给全连接网络，然后对得到的结果再进行一次
 Add &amp; Norm。这就是上图的含义。</p>
-<h3 id="decoder">2.2 Decoder</h3>
+<h2 id="decoder">2.2 Decoder</h2>
 <p>Decoder 的架构其实分为两种 —— autoregressive (AT) 和
 non-autoregressive (NAT)，接下来要将的 autoprogressive
 是比较常见的架构，我们将以语音辨识为例进行讲解。</p>
-<h4 id="autoprogressive">2.2.1 Autoprogressive</h4>
-<h5 id="decoder-的工作流程">decoder 的工作流程</h5>
+<h3 id="autoprogressive">2.2.1 Autoprogressive</h3>
+<h4 id="decoder-的工作流程">decoder 的工作流程</h4>
 <p>假设我们在处理语音辨识的问题，现在，语音已经通过 encoder
 转换成了一个序列，decoder
 要接收这个序列，然后输出对应的文字。我们暂且不提 decoder 是如何接收
@@ -231,8 +231,8 @@ decoder 生成的汉字加入到 decoder 的输入中，也就是说，现在的
 就是将自己前一刻的输出当作输入，进一步得到下一时刻的输出。这里就诞生了一个问题：要是
 decoder 自己预测的内容出错了怎么办？会不会造成 error
 propagation，也就是一步错步步错？当然是有可能的，但是这个问题我们之后再谈，我们先暂且当作没这回事。</p>
-<h5 id="decoder-和-encoder-的结构对比">decoder 和 encoder
-的结构对比</h5>
+<h4 id="decoder-和-encoder-的结构对比">decoder 和 encoder
+的结构对比</h4>
 <p>现在我们来看看论文中画的 decoder 的结构，decoder
 看上去很复杂，但如果我们将其与 encoder
 的结构进行对比，似乎能发现一些相似之处。</p>
@@ -242,7 +242,7 @@ propagation，也就是一步错步步错？当然是有可能的，但是这个
 的输出最后还要经过一个线性层，再经过 softmax
 激活，来输出可能性罢了。唯一的不同可能就是 decoder 中，一开始的
 attention 是 masked multi-head attention，那这个 masked 是什么意思？</p>
-<h5 id="masked-self-attention">masked self-attention</h5>
+<h4 id="masked-self-attention">masked self-attention</h4>
 <p>在我们原来所讲的 self-attention 中，输出的 <span
 class="math inline"><em>b</em><sub>1</sub></span> 是考虑了 <span
 class="math inline"><em>a</em><sub>1</sub> ∼ <em>a</em><sub><em>n</em></sub></span>
@@ -267,7 +267,7 @@ class="math inline"><em>b</em><sub><em>n</em></sub></span>
 <p>至于为什么要用 masked，其实原因很简单。我们之前也解释了，decoder
 会拿自己的输出作为输入，输出是从左到右依次产生的，输入肯定也只能从左到右依次输入，所以就出现了这样只能读左边，而不能读右边的
 masked self-attention 机制。</p>
-<h5 id="何时终止输出">何时终止输出</h5>
+<h4 id="何时终止输出">何时终止输出</h4>
 <p>之前说过，transformer 的输出长度是机器自己决定的，也就是由 decoder
 决定的，但到目前为止，我们都还没有讨论过，decoder
 到底是如何决定输出长度的，它是怎么知道什么时候该停止输出的。就像前面举的例子，在
@@ -280,15 +280,15 @@ token，叫作 END。就像 BEGIN 是开始的标志，END 就是终止的标志
 的计算，发现输出的 one-hot vector 中，END
 的概率是最高的，那就意味着输出该结束了。通过这种方式，encoder
 就能自行决定何时终止输出。</p>
-<h4 id="non-autoregressive">2.2.2 Non-autoregressive</h4>
+<h3 id="non-autoregressive">2.2.2 Non-autoregressive</h3>
 <p>接下来我们简短地介绍一下另一种 decoder 的架构 ——
 non-autoregressive，简称 NAT。</p>
-<h5 id="at-vs-nat">AT vs NAT</h5>
+<h4 id="at-vs-nat">AT vs NAT</h4>
 <p>AT 的运作方式是，先将开始标志 BEGIN
 作为输入传入，得到一个输出，随后将自己的输出作为输入再传进来，再得到下一个输出，然后再将下一个输出继续传进来，得到下下个输出，循环往复，直到输出
 END；而 NAT 则不一样，它一开始就接收多个
 BEGIN，于是得到多个输出，也就是一个完整的句子，然后就结束了。</p>
-<h5 id="何时终止输出-1">何时终止输出</h5>
+<h4 id="何时终止输出-1">何时终止输出</h4>
 <p>那么问题就来了，既然我们一开始都不知道输出的长度，那我们要怎么知道该给
 decoder 多少个 BEGIN？</p>
 <p>解决这个问题的方法有很多，一种方法就是准备一个 classifier，将 encoder
@@ -297,7 +297,7 @@ decoder 多少个 BEGIN？</p>
 <p>另一种可能的处理方法是，不管输出的长度，直接丢给 decoder 尽可能大的
 BEGIN 数目，然后看看 decoder 的输出中，哪里出现了 END 标志，我们只取 END
 前面的内容，END 后面的输出就不管了。</p>
-<h5 id="nat-的优势">NAT 的优势</h5>
+<h4 id="nat-的优势">NAT 的优势</h4>
 <p>NAT 的优势在于，它的运算是平行的，而不像 AT
 那样，要预测下一个输出，就必须等前一个输出完成，所以 NAT 的速度应该是比
 AT
@@ -307,10 +307,9 @@ AT
 AT 的准确率，往往需要很多的秘诀才能做到，而 AT
 可能只要随便跑跑就能达到比较高的准确率。所以，如何让 NAT 赶上 AT
 的准确率，是目前一个大热门。不过这里就不细讲了，毕竟这是一个大坑，有兴趣的话可以自己去了解。</p>
-<h3 id="encoder-decoder">2.3 Encoder-Decoder</h3>
+<h2 id="encoder-decoder">2.3 Encoder-Decoder</h2>
 <p>接下来，我们就要来看看之前说先暂且遮起来的那一块了。</p>
 <p><img src="/img/Transformer-05.png" /></p>
-<h5 id="cross-attention">cross attention</h5>
 <p>图中被框起来的那一部分叫作 cross attention，它是连接 encoder 和
 decoder 的桥梁。你可以看到，从 encoder 引出了两个箭头连接到了 multi-head
 attention，除此以外还有一个箭头是从 decoder
@@ -346,7 +345,7 @@ masked self-attention，然后得到 <span
 class="math inline"><em>q</em><sup>′</sup></span>，去做相同的运算得到
 <span
 class="math inline"><em>v</em><sup>′</sup></span>，再丢进全连接网络得到下一个输出，如此往复……</p>
-<h3 id="conclusion">2.4 Conclusion</h3>
+<h2 id="conclusion">2.4 Conclusion</h2>
 <p>Transformer
 的工作流程已经讲完了，为了深入理解这些过程，而不是仅仅停留于表面的数学运算，我们还得从实例中剖析这个过程。Ecoder
 所做的工作其实是对 input 进行提炼，方法就是 self-attention；而 decoder
@@ -380,7 +379,7 @@ class="math display">love  = Decoder (<em>c</em><sub>2</sub>,<em>B</em><
 $$</span></p>
 <p>于是最后得到的翻译结果：<span class="math inline">I love
 you.</span></p>
-<h2 id="training">03 Training</h2>
+<h1 id="training">03 Training</h1>
 <p>现在我们已经把 transformer 的内部运作方式给讲完了，下一步，就是讲讲
 transformer 的训练。</p>
 <p>我们知道，机器学习的目标就是不断降低 loss。而 seq2seq
@@ -390,7 +389,7 @@ seq2seq 的 loss，可以使用和 classifier 类似的方法。在 transformer
 输出的每一个汉字都与正确答案之间有一个 cross
 entropy，模型优化的目标就是，使所有输出与正确答案之间的 cross entropy
 的总和最小。</p>
-<h3 id="copy-mechanism">3.1 Copy mechanism</h3>
+<h2 id="copy-mechanism">3.1 Copy mechanism</h2>
 <p>有些时候，输出的序列会和输入的序列有重合的部分，例如下面这个 chatbot
 的例子：</p>
 <p><img src="/img/Transformer-07.png" /></p>
@@ -401,7 +400,7 @@ network，后来还有论文 <a
 target="_blank" rel="noopener" href="https://arxiv.org/abs/1603.06393">Incorporating Copy Mechanism in
 Sequence-to-Sequence Learning</a>
 也做过这个，如果感兴趣可以自己去了解。</p>
-<h3 id="guided-attention">3.2 Guided attention</h3>
+<h2 id="guided-attention">3.2 Guided attention</h2>
 <p>机器观察输入，对输入做 attention
 的顺序是不固定的，这是机器自己学习的结果，自己学习就会导致问题。例如在
 TTS (Text to Speech) 的任务中，有些时候，机器居然会漏字。如果是一般的
@@ -417,7 +416,7 @@ attention 也一般只适用于那些有固定解法的问题。</p>
 <p>一些关于 guided attention 的关键词汇：<u>monotonic
 attention</u>、<u>location-aware
 attention</u>。如果感兴趣可以自行搜索。</p>
-<h3 id="beam-search">3.3 Beam search</h3>
+<h2 id="beam-search">3.3 Beam search</h2>
 <p>继续以语音辨识为例，假设现在的 vocabulary 中只有 A 和 B
 两个字，那么我们可以构建出一棵树，每次 decoder 都只面对 A 和 B
 两种选择。那么根据原则，在每一个节点处，decoder
@@ -542,8 +541,8 @@ search 就比较没用。如果感兴趣，可以自行了解。</p>
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#seq2seq"><span class="toc-article-text">01 Seq2seq</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#mechanism"><span class="toc-article-text">02 Mechanism</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#encoder"><span class="toc-article-text">2.1 Encoder</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#decoder"><span class="toc-article-text">2.2 Decoder</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#autoprogressive"><span class="toc-article-text">2.2.1 Autoprogressive</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#decoder-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">decoder 的工作流程</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#decoder-%E5%92%8C-encoder-%E7%9A%84%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94"><span class="toc-article-text">decoder 和 encoder
-的结构对比</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#masked-self-attention"><span class="toc-article-text">masked self-attention</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E4%BD%95%E6%97%B6%E7%BB%88%E6%AD%A2%E8%BE%93%E5%87%BA"><span class="toc-article-text">何时终止输出</span></a></li></ol></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#non-autoregressive"><span class="toc-article-text">2.2.2 Non-autoregressive</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#at-vs-nat"><span class="toc-article-text">AT vs NAT</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E4%BD%95%E6%97%B6%E7%BB%88%E6%AD%A2%E8%BE%93%E5%87%BA-1"><span class="toc-article-text">何时终止输出</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#nat-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-article-text">NAT 的优势</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#encoder-decoder"><span class="toc-article-text">2.3 Encoder-Decoder</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#cross-attention"><span class="toc-article-text">cross attention</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#conclusion"><span class="toc-article-text">2.4 Conclusion</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#training"><span class="toc-article-text">03 Training</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#copy-mechanism"><span class="toc-article-text">3.1 Copy mechanism</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#guided-attention"><span class="toc-article-text">3.2 Guided attention</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#beam-search"><span class="toc-article-text">3.3 Beam search</span></a></li></ol></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#seq2seq"><span class="toc-article-text">01 Seq2seq</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#mechanism"><span class="toc-article-text">02 Mechanism</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#encoder"><span class="toc-article-text">2.1 Encoder</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#decoder"><span class="toc-article-text">2.2 Decoder</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#autoprogressive"><span class="toc-article-text">2.2.1 Autoprogressive</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#decoder-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">decoder 的工作流程</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#decoder-%E5%92%8C-encoder-%E7%9A%84%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94"><span class="toc-article-text">decoder 和 encoder
+的结构对比</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#masked-self-attention"><span class="toc-article-text">masked self-attention</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BD%95%E6%97%B6%E7%BB%88%E6%AD%A2%E8%BE%93%E5%87%BA"><span class="toc-article-text">何时终止输出</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#non-autoregressive"><span class="toc-article-text">2.2.2 Non-autoregressive</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#at-vs-nat"><span class="toc-article-text">AT vs NAT</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BD%95%E6%97%B6%E7%BB%88%E6%AD%A2%E8%BE%93%E5%87%BA-1"><span class="toc-article-text">何时终止输出</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#nat-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-article-text">NAT 的优势</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#encoder-decoder"><span class="toc-article-text">2.3 Encoder-Decoder</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#conclusion"><span class="toc-article-text">2.4 Conclusion</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#training"><span class="toc-article-text">03 Training</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#copy-mechanism"><span class="toc-article-text">3.1 Copy mechanism</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#guided-attention"><span class="toc-article-text">3.2 Guided attention</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#beam-search"><span class="toc-article-text">3.3 Beam search</span></a></li></ol></li></ol>
 		</div>
 	
 	</div>

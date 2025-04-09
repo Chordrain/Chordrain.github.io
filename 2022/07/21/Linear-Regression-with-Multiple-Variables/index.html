@@ -125,16 +125,16 @@
 		 </div> <!-- alert -->
 	  		
 
-	  <h2 id="multiple-features">01 Multiple Features</h2>
-<h3 id="introduction">1.1 Introduction</h3>
+	  <h1 id="multiple-features">01 Multiple Features</h1>
+<h2 id="introduction">1.1 Introduction</h2>
 <p>In the previous sections, we’ve talked about linear regression with
 one variate. What if we got more variates?</p>
 <p>Multiple variates mean we will have multiple features. In the
 previous section, we only have one feature and that is the size of the
 house. Now we let’s discuss the multi-feature situation.</p>
 <span id="more"></span>
-<h3 id="multiple-featuresvariables">1.2 Multiple
-Features(variables)</h3>
+<h2 id="multiple-featuresvariables">1.2 Multiple
+Features(variables)</h2>
 <p><img
 src="/img/Linear-Regression-with-Multiple-Variables-01.png" /></p>
 <p>In the above case, we have the data of the house’s bedrooms, floors
@@ -161,8 +161,8 @@ function is no longer appropriate. Here is the rewritten one:</p>
 class="math display"><em>h</em><sub><em>θ</em></sub>(<em>x</em>) = <em>θ</em><sub>0</sub> + <em>θ</em><sub>1</sub><em>x</em><sub>1</sub> + <em>θ</em><sub>2</sub><em>x</em><sub>2</sub> +  ·  ·  ·  + <em>θ</em><sub><em>n</em></sub><em>x</em><sub><em>n</em></sub></span></p>
 <p>The above function is clearly too complicated. May we simplify
 it?</p>
-<h3 id="simplication-of-h_thetax">1.3 Simplication of <span
-class="math inline"><em>h</em><sub><em>θ</em></sub>(<em>x</em>)</span></h3>
+<h2 id="simplication-of-h_thetax">1.3 Simplication of <span
+class="math inline"><em>h</em><sub><em>θ</em></sub>(<em>x</em>)</span></h2>
 <p>For convenience of notation, we define <span
 class="math inline"><em>x</em><sub>0</sub> = 1</span>, which is the
 equivalent to an additional feature. So previously we have <span
@@ -199,8 +199,8 @@ class="math display"><em>h</em><sub><em>θ</em></sub>(<em>x</em>) = <em>θ</
 is also equal to this:</p>
 <p><span
 class="math display"><em>h</em><sub><em>θ</em></sub>(<em>x</em>) = <em>θ</em><sup><em>T</em></sup><em>X</em></span></p>
-<h2 id="feature-scaling">02 Feature Scaling</h2>
-<h3 id="introduction-1">2.1 Introduction</h3>
+<h1 id="feature-scaling">02 Feature Scaling</h1>
+<h2 id="introduction-1">2.1 Introduction</h2>
 <p>Imagine you have two features — <span
 class="math inline"><em>x</em><sub>1</sub></span> and <span
 class="math inline"><em>x</em><sub>2</sub></span>. The difference btween
@@ -226,7 +226,7 @@ following a much more complicated trajectory.</p>
 i.e. get every feature into approximately a <span
 class="math inline"> − 1 ≤ <em>x</em><sub><em>i</em></sub> ≤ <em>i</em></span>
 range.</p>
-<h3 id="mean-normalization">2.2 Mean Normalization</h3>
+<h2 id="mean-normalization">2.2 Mean Normalization</h2>
 <p>Replace <span
 class="math inline"><em>x</em><sub><em>i</em></sub></span> with <span
 class="math inline"><em>x</em><sub><em>i</em></sub> − <em>μ</em><sub><em>i</em></sub></span>，(<span
@@ -243,10 +243,10 @@ class="math inline"><em>x</em><sub>2</sub></span> to be size minus the
 average value 2 divided by 5.</p>
 <p><img
 src="/img/Linear-Regression-with-Multiple-Variables-04.png" /></p>
-<h2 id="learning-rate">03 Learning Rate</h2>
-<h3 id="debugging">3.1 Debugging</h3>
+<h1 id="learning-rate">03 Learning Rate</h1>
+<h2 id="debugging">3.1 Debugging</h2>
 <p>Making sure gradient descent is working correctly.</p>
-<h4 id="method-1">3.1.1 Method 1</h4>
+<h3 id="method-1">3.1.1 Method 1</h3>
 <p><img
 src="/img/Linear-Regression-with-Multiple-Variables-05.png" /></p>
 <p>What we usually do is to plot the cost function <span
@@ -262,7 +262,7 @@ src="/img/Linear-Regression-with-Multiple-Variables-06.png" /></p>
 <p>If the plot is increasing like above, that means you gradient descent
 is not working normally. Sometimes it means you should be using a tinier
 learning rate.</p>
-<h4 id="method-2">3.1.2 Method 2</h4>
+<h3 id="method-2">3.1.2 Method 2</h3>
 <p>It’s also possible to come up with automatic convergence test, namely
 to have an algorithm to try to tell you if gradient descent has
 converged.</p>
@@ -272,7 +272,7 @@ class="math inline"><em>J</em>(<em>θ</em>)</span> decrease by less than
 <p>Here <span class="math inline">10<sup>−3</sup></span> is a threshold.
 But this threshold is not fixed and sometimes it’s hard to choose the
 appropriate threshold. So method 1 may be more practical.</p>
-<h3 id="learning-rate-1">3.2 Learning Rate</h3>
+<h2 id="learning-rate-1">3.2 Learning Rate</h2>
 <p>In the situation we’ve meantioned above, we said that if the value of
 the cost function keep increasing, it’s often because the learning rate
 is too big. Now let me explain why.</p>
@@ -282,8 +282,8 @@ will end up getting the higher value of the cost function.</p>
 <p><img
 src="/img/Linear-Regression-with-Multiple-Variables-07.png" /></p>
 <p>If learning rate is too small, the convergence can be very slow.</p>
-<h2 id="normal-equation">04 Normal Equation</h2>
-<h3 id="introduction-2">4.1 Introduction</h3>
+<h1 id="normal-equation">04 Normal Equation</h1>
+<h2 id="introduction-2">4.1 Introduction</h2>
 <p>In the previous sections, we’ve introduced an iterative algorithm
 that takes many steps, multiple iterations of gradient descent to
 converge to the global minimum.</p>
@@ -294,7 +294,7 @@ value for <span class="math inline"><em>θ</em></span> all at one go.</p>
 <p>Mathematically, to work out the minimum of a multivariate funtion is
 to take its partial deviratives and set them equal to zero, which can be
 somewhat involved.</p>
-<h3 id="explaination">4.2 Explaination</h3>
+<h2 id="explaination">4.2 Explaination</h2>
 <p>Assume we have a dataset:</p>
 <p><img
 src="/img/Linear-Regression-with-Multiple-Variables-08.png" /></p>
@@ -387,8 +387,8 @@ $$</span></p>
 class="math display"><em>θ</em> = (<em>X</em><sup><em>T</em></sup><em>X</em>)<sup>−1</sup><em>X</em><sup><em>T</em></sup><em>y</em></span></p>
 <p>We can obtain all the values of <span
 class="math inline"><em>θ</em></span>.</p>
-<h3 id="gradient-descent-v.s.-normal-equation">4.3 Gradient Descent v.s.
-Normal Equation</h3>
+<h2 id="gradient-descent-v.s.-normal-equation">4.3 Gradient Descent v.s.
+Normal Equation</h2>
 <ul>
 <li>Gradient Descent:
 <ul>
@@ -511,8 +511,8 @@ large</li>
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#multiple-features"><span class="toc-article-text">01 Multiple Features</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#introduction"><span class="toc-article-text">1.1 Introduction</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#multiple-featuresvariables"><span class="toc-article-text">1.2 Multiple
-Features(variables)</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#simplication-of-h_thetax"><span class="toc-article-text">1.3 Simplication of hθ(x)</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#feature-scaling"><span class="toc-article-text">02 Feature Scaling</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#introduction-1"><span class="toc-article-text">2.1 Introduction</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#mean-normalization"><span class="toc-article-text">2.2 Mean Normalization</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#learning-rate"><span class="toc-article-text">03 Learning Rate</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#debugging"><span class="toc-article-text">3.1 Debugging</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#method-1"><span class="toc-article-text">3.1.1 Method 1</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#method-2"><span class="toc-article-text">3.1.2 Method 2</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#learning-rate-1"><span class="toc-article-text">3.2 Learning Rate</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#normal-equation"><span class="toc-article-text">04 Normal Equation</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#introduction-2"><span class="toc-article-text">4.1 Introduction</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#explaination"><span class="toc-article-text">4.2 Explaination</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#gradient-descent-v.s.-normal-equation"><span class="toc-article-text">4.3 Gradient Descent v.s.
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#multiple-features"><span class="toc-article-text">01 Multiple Features</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#introduction"><span class="toc-article-text">1.1 Introduction</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#multiple-featuresvariables"><span class="toc-article-text">1.2 Multiple
+Features(variables)</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#simplication-of-h_thetax"><span class="toc-article-text">1.3 Simplication of hθ(x)</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#feature-scaling"><span class="toc-article-text">02 Feature Scaling</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#introduction-1"><span class="toc-article-text">2.1 Introduction</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#mean-normalization"><span class="toc-article-text">2.2 Mean Normalization</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#learning-rate"><span class="toc-article-text">03 Learning Rate</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#debugging"><span class="toc-article-text">3.1 Debugging</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#method-1"><span class="toc-article-text">3.1.1 Method 1</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#method-2"><span class="toc-article-text">3.1.2 Method 2</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#learning-rate-1"><span class="toc-article-text">3.2 Learning Rate</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#normal-equation"><span class="toc-article-text">04 Normal Equation</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#introduction-2"><span class="toc-article-text">4.1 Introduction</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#explaination"><span class="toc-article-text">4.2 Explaination</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#gradient-descent-v.s.-normal-equation"><span class="toc-article-text">4.3 Gradient Descent v.s.
 Normal Equation</span></a></li></ol></li></ol>
 		</div>
 	

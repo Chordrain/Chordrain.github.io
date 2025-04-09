@@ -127,7 +127,7 @@ embedding
 	<div class="mypage">		
 	  		
 
-	  <h2 id="复杂输入">01 复杂输入</h2>
+	  <h1 id="复杂输入">01 复杂输入</h1>
 <p>不论是在预测问题还是在影像处理上，我们都会假设输入的向量长度是一定的，但如果是不一定的呢？</p>
 <p>比如说在翻译问题中，输入是句子，我们可以采用 one-hot encoding 或 word
 embedding
@@ -136,7 +136,7 @@ embedding
 <p>还有一些更复杂的数据结构，比如说图，例如社交网络、分子结构等，这些信息也可以看作是一组向量，所有这些情况就构成了更加复杂的输入
 (more sophisticated input)，那么我们要如何处理这些输入呢？</p>
 <span id="more"></span>
-<h2 id="输出是什么">02 输出是什么</h2>
+<h1 id="输出是什么">02 输出是什么</h1>
 <p>除了更加复杂的输入，输出也分很多种情况。</p>
 <p>对于词性分析问题，它的目标是将一句话中的每个单词的词性进行分类，这个时候，每一个向量都有一个
 label；再比如语音辨识问题，机器需要把一段语音中的很多个 frame
@@ -148,7 +148,7 @@ label；再比如语音辨识问题，机器需要把一段语音中的很多个
 <p>还有一种情况则更复杂，那就是输出不确定的情况。例如说翻译，输入的文本长度跟输出的文本长度并不存在必然联系，输出的长度应该由机器自己决定，这种情况下就变成了
 <span
 class="math inline"><em>N</em> → <em>N</em><sup>′</sup></span>。</p>
-<h2 id="fcnn的缺陷">03 FCNN的缺陷</h2>
+<h1 id="fcnn的缺陷">03 FCNN的缺陷</h1>
 <p>在讨论完了所有输入和输出的情况之后，我们来看看 FCNN
 有什么缺点。在学过 FCNN 和 CNN 之后我们知道，FCNN 是 bias
 最小的神经网络，它几乎可以拟合出任何函数，但是这表明它就是无敌的吗？未必，我们来看看下面这个例子。</p>
@@ -171,7 +171,7 @@ window
 overfitting。</p>
 <p>那么到底有没有更好一点的做法呢？当然有，这就是接下来要讲的
 self-attention。</p>
-<h2 id="自注意力机制-self-attention">04 自注意力机制 Self-Attention</h2>
+<h1 id="自注意力机制-self-attention">04 自注意力机制 Self-Attention</h1>
 <p>针对上面的问题，self-attention
 的做法是，将输入的向量转换成另一个向量，这些转换后的向量是考虑了上下文之后的向量，然后再将这些向量送给
 FCNN 就行了。</p>
@@ -198,10 +198,10 @@ class="math inline"><em>a</em><sup>1</sup> ∼ <em>a</em><sup>4</sup></span>
 <span
 class="math inline"><em>α</em></span>，那么接下来的问题就是如何计算
 <span class="math inline"><em>α</em></span>。</p>
-<h2 id="相关性指数-α">05 相关性指数 α</h2>
+<h1 id="相关性指数-α">05 相关性指数 α</h1>
 <p><span class="math inline"><em>α</em></span> 的计算方式主要有两种：dot
 product 和 additive。</p>
-<h3 id="dot-product">5.1 Dot-product</h3>
+<h2 id="dot-product">5.1 Dot-product</h2>
 <p>Dot-product 是最常用的方法。它的做法是：</p>
 <p>将两个向量输入，将两个向量分别乘上不同的矩阵 <span
 class="math inline"><em>W</em><sup><em>q</em></sup>, <em>W</em><sup><em>k</em></sup></span>，得到两个新向量
@@ -215,7 +215,7 @@ class="math display">Attention (<em>Q</em>,<em>K</em>,<em>V</em>) = softma
 class="math inline"><em>Q</em><em>K</em><sup><em>T</em></sup></span>
 这一部分是 dot-product。</p>
 </blockquote>
-<h3 id="scaled-dot-product">5.2 Scaled dot-product</h3>
+<h2 id="scaled-dot-product">5.2 Scaled dot-product</h2>
 <p>Scaled dot-product 其实就是对 dot-product
 进行了放缩，最后除了个常量。这个常量记作 <span
 class="math inline"><em>d</em><sub><em>k</em></sub></span>，其值等于矩阵的维度。这样做的原因在论文中是这样解释的：</p>
@@ -241,7 +241,7 @@ $$</span></p>
 class="math inline">$\frac{QK^T}{\sqrt{d_k}}$</span> 这一部分是 scaled
 dot-product。</p>
 </blockquote>
-<h3 id="additive">5.3 Additive</h3>
+<h2 id="additive">5.3 Additive</h2>
 <p>Additive 的做法的第一步和 dot-product
 是一样的：将两个向量输入，将两个向量分别乘上不同的矩阵 <span
 class="math inline"><em>W</em><sup><em>q</em></sup>, <em>W</em><sup><em>k</em></sup></span>，得到两个新向量
@@ -251,7 +251,7 @@ activation function，再经过一个 transform，最终得到 <span
 class="math inline"><em>α</em></span>。</p>
 <p>下面是这两种方法的图示：</p>
 <p><img src="/img/Self-attention-03.png" /></p>
-<h2 id="注意力-attention">06 注意力 Attention</h2>
+<h1 id="注意力-attention">06 注意力 Attention</h1>
 <p>在知道了如何计算 <span class="math inline"><em>α</em></span>
 之后，我们选择使用 dot-product 方法，继续来看如何求解 <span
 class="math inline"><em>b</em><sup>1</sup></span>。</p>
@@ -328,8 +328,8 @@ class="math inline"><em>W</em><sup><em>v</em></sup></span>。除此之外的所�
 <p>如果你想知道以上所有过程的代码思路 (仅仅是思路)
 或者说矩阵运算的技巧，可以参考<a
 target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Wv411h7kN?p=39">这个视频</a>。</p>
-<h2 id="多头自注意力-multi-head-self-attention">07 多头自注意力
-Multi-head Self-attention</h2>
+<h1 id="多头自注意力-multi-head-self-attention">07 多头自注意力
+Multi-head Self-attention</h1>
 <p>Self-attention 其实还有很多变体，其中一个在今天应用非常广泛的模型就是
 multi-head self-attention。</p>
 <p>Multi-head self-attention
@@ -367,8 +367,8 @@ class="math inline"><em>b</em><sup><em>i</em>, <em>j</em></sup></span>，那�
 都连接起来形成一个矩阵，然后将其乘上另一个矩阵 <span
 class="math inline"><em>W</em><sup><em>o</em></sup></span>，得到最终的
 <span class="math inline"><em>b</em><sup><em>i</em></sup></span>。</p>
-<h2 id="位置编码-positional-encoding">08 位置编码 Positional
-Encoding</h2>
+<h1 id="位置编码-positional-encoding">08 位置编码 Positional
+Encoding</h1>
 <p>不知道你看到这里有没有发现 self-attention 的一个缺陷？Self-attention
 似乎只在考虑
 attention，也就是向量与向量之间的关联，却漏掉了一个很重要的信息 ——
@@ -390,7 +390,7 @@ class="math inline"><em>e</em></span>
 的，至于可不可以用其他函数，答案当然是可以，positional encoding
 目前还是一个尚待研究的问题，所以你用什么都是没问题的；当然，<span
 class="math inline"><em>e</em></span> 也可以是通过 data 学习出来的。</p>
-<h2 id="self-attention-v.s.-cnn">09 Self-attention v.s. CNN</h2>
+<h1 id="self-attention-v.s.-cnn">09 Self-attention v.s. CNN</h1>
 <p>Self-attention
 同样是可以用于处理图像的。我们知道图像信息也是向量，使用 self-attention
 我们就可以去考虑每个 pixel
@@ -416,7 +416,7 @@ overfitting；弹性小的网络在面对更大的数据量的时候则很难再
 的准确率是能超过 self-attention 的，但当数据量到达 100M 级别的时候，CNN
 就被 self-attention 超过了。所以 CNN 和 self-attention
 到底谁更好是依你的数据量来定的。</p>
-<h2 id="图中的自注意力机制">10 图中的自注意力机制</h2>
+<h1 id="图中的自注意力机制">10 图中的自注意力机制</h1>
 <p>Self-attention 也是可以用在 graph 上的，例如下面这张图：</p>
 <p><img src="/img/Self-attention-04.png" /></p>
 <p>当我们需要去给节点 1 做 label
@@ -424,7 +424,7 @@ overfitting；弹性小的网络在面对更大的数据量的时候则很难再
 对其与邻居节点之间的关联性进行考量，而对于那些不与节点 1
 相连的节点则代表我们已经人为地帮机器排除了彼此的联系，所以就不需要机器再去考虑了。这其实就是
 GNN 的一种。</p>
-<h2 id="注意力和自注意力">11 注意力和自注意力</h2>
+<h1 id="注意力和自注意力">11 注意力和自注意力</h1>
 <p>我们上面介绍的是 self-attention，注意：self-attention (自注意力机制)
 和 attention (注意力机制)
 是不一样的！我们可以用一个例子来说明注意力机制是什么。以淘宝搜索商品为例，淘宝要做的是，将我们输入的关键词与其数据库内的商品相关联，其本质其实和
@@ -540,9 +540,9 @@ source。</p>
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%8D%E6%9D%82%E8%BE%93%E5%85%A5"><span class="toc-article-text">01 复杂输入</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%BE%93%E5%87%BA%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-article-text">02 输出是什么</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#fcnn%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="toc-article-text">03 FCNN的缺陷</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6-self-attention"><span class="toc-article-text">04 自注意力机制 Self-Attention</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%9B%B8%E5%85%B3%E6%80%A7%E6%8C%87%E6%95%B0-%CE%B1"><span class="toc-article-text">05 相关性指数 α</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#dot-product"><span class="toc-article-text">5.1 Dot-product</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#scaled-dot-product"><span class="toc-article-text">5.2 Scaled dot-product</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#additive"><span class="toc-article-text">5.3 Additive</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B-attention"><span class="toc-article-text">06 注意力 Attention</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%9A%E5%A4%B4%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B-multi-head-self-attention"><span class="toc-article-text">07 多头自注意力
-Multi-head Self-attention</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81-positional-encoding"><span class="toc-article-text">08 位置编码 Positional
-Encoding</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#self-attention-v.s.-cnn"><span class="toc-article-text">09 Self-attention v.s. CNN</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9B%BE%E4%B8%AD%E7%9A%84%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="toc-article-text">10 图中的自注意力机制</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%92%8C%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="toc-article-text">11 注意力和自注意力</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%A4%8D%E6%9D%82%E8%BE%93%E5%85%A5"><span class="toc-article-text">01 复杂输入</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E8%BE%93%E5%87%BA%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-article-text">02 输出是什么</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#fcnn%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="toc-article-text">03 FCNN的缺陷</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6-self-attention"><span class="toc-article-text">04 自注意力机制 Self-Attention</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%9B%B8%E5%85%B3%E6%80%A7%E6%8C%87%E6%95%B0-%CE%B1"><span class="toc-article-text">05 相关性指数 α</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#dot-product"><span class="toc-article-text">5.1 Dot-product</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#scaled-dot-product"><span class="toc-article-text">5.2 Scaled dot-product</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#additive"><span class="toc-article-text">5.3 Additive</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B-attention"><span class="toc-article-text">06 注意力 Attention</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%A4%9A%E5%A4%B4%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B-multi-head-self-attention"><span class="toc-article-text">07 多头自注意力
+Multi-head Self-attention</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81-positional-encoding"><span class="toc-article-text">08 位置编码 Positional
+Encoding</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#self-attention-v.s.-cnn"><span class="toc-article-text">09 Self-attention v.s. CNN</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%9B%BE%E4%B8%AD%E7%9A%84%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="toc-article-text">10 图中的自注意力机制</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%92%8C%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="toc-article-text">11 注意力和自注意力</span></a></li></ol>
 		</div>
 	
 	</div>

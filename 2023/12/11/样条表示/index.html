@@ -130,8 +130,8 @@
 
 	  <p>样条是通过一组指定点集而生成平滑曲线的柔性带。通俗来讲，之前学的画线算法解决的是在图形学里画直线的问题，样条表示解决的是在图形学里画曲线的问题。</p>
 <p>在计算机图形学中，<strong>样条曲线</strong>指多项式曲线段连接而成的曲线，在每段的边界处满足特定的连续性条件。<strong>样条曲面</strong>可以使用两组样条曲线进行描述。</p>
-<h2 id="概述">01 概述</h2>
-<h3 id="曲线曲面的表示方法">1.1 曲线曲面的表示方法</h3>
+<h1 id="概述">01 概述</h1>
+<h2 id="曲线曲面的表示方法">1.1 曲线曲面的表示方法</h2>
 <p>曲线曲面的表示有三种：显式、隐式和参数表示。</p>
 <p>显式表示就是我们熟知的 <span
 class="math inline"><em>y</em> = <em>f</em>(<em>x</em>)</span>
@@ -166,9 +166,9 @@ class="math display"><em>p</em> = <em>p</em>(<em>t</em>)  <em>t</em> �
 class="math inline"><em>u</em></span> 和 <span
 class="math inline"><em>v</em></span> 的矢量函数： <span
 class="math display"><em>p</em>(<em>u</em>,<em>v</em>) = <em>p</em>(<em>x</em>(<em>u</em>,<em>v</em>), <em>y</em>(<em>u</em>,<em>v</em>), <em>z</em>(<em>u</em>,<em>v</em>))  (<em>u</em>,<em>v</em>) ∈ [0,1] × [0,1]</span></p>
-<h3 id="曲线曲面的绘制方法">1.2 曲线曲面的绘制方法</h3>
+<h2 id="曲线曲面的绘制方法">1.2 曲线曲面的绘制方法</h2>
 <p>在计算数学中，<strong>逼近</strong>通常指用一些性质较好的函数近似表示一些性质不好的函数。在计算机图形学中，逼近继承了这方面的含义。<strong>插值</strong>和<strong>拟合</strong>是两种图形学中常用的曲线曲面的绘制方法，它们体现的思想都可以视为逼近。</p>
-<h4 id="插值">1.2.1 插值</h4>
+<h3 id="插值">1.2.1 插值</h3>
 <p>自由曲线和自由曲面一般通过少数分散的点生成，这些点叫做“型值点”、“样本点”或“控制点”。</p>
 <p>给定一组有序的数据点 <span
 class="math inline"><em>P</em><sub><em>i</em></sub> (<em>i</em>=0,1,2,...,<em>n</em>)</span>，要求构造一条曲线，顺序通过这些数据点，这一过程称为对这些数据点进行<strong>插值</strong>，所构造的曲线称为<strong>插值曲线</strong>。插值的过程如下所示：</p>
@@ -181,13 +181,13 @@ class="math inline"><em>f</em>(<em>x</em>) = <em>a</em><em>x</em> + <em>
 <span
 class="math inline"><em>f</em>(<em>x</em>) = <em>a</em><em>x</em><sup>2</sup> + <em>b</em><em>x</em> + <em>c</em></span>
 的抛物线函数，则称为<strong>抛物线插值</strong>。</p>
-<h4 id="拟合">1.2.2 拟合</h4>
+<h3 id="拟合">1.2.2 拟合</h3>
 <p>在实际实验中，这些控制点也难免会有误差，也就是说控制点的位置也不一定准确，所以没必要使曲线一定要穿过每一个控制点。</p>
 <p>构造一条曲线，使之在某种意义下最接近给定的数据点（但未必通过这些点），所构造的曲线为<strong>拟合曲线</strong>，这一过程也就称为<strong>拟合</strong>。其过程如下所示：</p>
 <p><img src="/img/计算机图形学-23.gif" /></p>
 <p>可以发现，由这四个控制点所绘制出的曲线并没有完全穿过所有控制点，而是只穿过了起始点和终止点。</p>
 <p>一般，我们将连接有一定次序控制点的直线序列称为<strong>控制多边形</strong>或<strong>特征多边形</strong>。</p>
-<h2 id="hermite-曲线">02 Hermite 曲线</h2>
+<h1 id="hermite-曲线">02 Hermite 曲线</h1>
 <p>Hermite
 曲线是一种<strong>插值</strong>曲线，通过给定的<strong>控制点</strong>和<strong>切线</strong>来定义曲线的形状。</p>
 <p>参数曲线有代数形式和几何形式。接下来以三次参数曲线为例，讨论参数曲线的代数和几何形式。参数曲线的代数形式如下：
@@ -251,8 +251,8 @@ class="math inline"><em>P</em><sub>0</sub>、<em>P</em><sub>1</sub>、<em>P</em>
 是几何系数，<span
 class="math inline"><em>F</em><sub>0</sub>、<em>F</em><sub>1</sub>、<em>G</em><sub>0</sub>、<em>G</em><sub>1</sub></span>
 称为调和函数（或混合函数）。上式就是三次 Hermite 曲线的几何形式。</p>
-<h2 id="bezier-曲线">03 Bezier 曲线</h2>
-<h3 id="定义">3.1 定义</h3>
+<h1 id="bezier-曲线">03 Bezier 曲线</h1>
+<h2 id="定义">3.1 定义</h2>
 <p>针对 Bezier 曲线，给定空间 <span class="math inline">n+1</span>
 个点的位置矢量 <span
 class="math inline">P<sub>i</sub> (i=0,1,2,...,n)</span>，则 Bezier
@@ -273,7 +273,7 @@ $$</span></p>
 恰好是二项式 <span
 class="math inline">[<em>t</em>+(1−<em>t</em>)]<sup><em>n</em></sup></span>
 的展开式！</p>
-<h3 id="一次-bezier-曲线">3.2 一次 Bezier 曲线</h3>
+<h2 id="一次-bezier-曲线">3.2 一次 Bezier 曲线</h2>
 <p>当 <span class="math inline">n=1</span> 的时候，只有两个控制点 <span
 class="math inline">P<sub>0</sub></span> 和 <span
 class="math inline">P<sub>1</sub></span>，Bezier 多项式是一次多项式：
@@ -292,7 +292,7 @@ class="math display"><em>p</em>(<em>t</em>) = (1−<em>t</em>)<em>P</em><sub
 这刚刚好是连接起点 <span
 class="math inline"><em>P</em><sub>0</sub></span> 和终点 <span
 class="math inline"><em>P</em><sub>1</sub></span> 的直线段。</p>
-<h3 id="二次-bezier-曲线">3.3 二次 Bezier 曲线</h3>
+<h2 id="二次-bezier-曲线">3.3 二次 Bezier 曲线</h2>
 <p>当 <span class="math inline">n=2</span> 时，有 <span
 class="math inline">3</span> 个控制点 <span
 class="math inline">P<sub>0</sub></span>、<span
@@ -336,7 +336,7 @@ P_2
 \right]
 \quad t\in[0,1]
 $$</span></p>
-<h3 id="三次-bezier-曲线">3.4 三次 Bezier 曲线</h3>
+<h2 id="三次-bezier-曲线">3.4 三次 Bezier 曲线</h2>
 <p>当 <span class="math inline">n=3</span> 时，有 <span
 class="math inline">4</span> 个控制点 <span
 class="math inline">P<sub>0</sub></span>、<span
@@ -498,7 +498,7 @@ class="math inline"><em>G</em><sub><em>b</em><em>e</em></sub></span> 是
 	
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-article-text">01 概述</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9B%B2%E7%BA%BF%E6%9B%B2%E9%9D%A2%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="toc-article-text">1.1 曲线曲面的表示方法</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9B%B2%E7%BA%BF%E6%9B%B2%E9%9D%A2%E7%9A%84%E7%BB%98%E5%88%B6%E6%96%B9%E6%B3%95"><span class="toc-article-text">1.2 曲线曲面的绘制方法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%8F%92%E5%80%BC"><span class="toc-article-text">1.2.1 插值</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%8B%9F%E5%90%88"><span class="toc-article-text">1.2.2 拟合</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#hermite-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">02 Hermite 曲线</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">03 Bezier 曲线</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-article-text">3.1 定义</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%80%E6%AC%A1-bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">3.2 一次 Bezier 曲线</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%8C%E6%AC%A1-bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">3.3 二次 Bezier 曲线</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%89%E6%AC%A1-bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">3.4 三次 Bezier 曲线</span></a></li></ol></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-article-text">01 概述</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9B%B2%E7%BA%BF%E6%9B%B2%E9%9D%A2%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="toc-article-text">1.1 曲线曲面的表示方法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9B%B2%E7%BA%BF%E6%9B%B2%E9%9D%A2%E7%9A%84%E7%BB%98%E5%88%B6%E6%96%B9%E6%B3%95"><span class="toc-article-text">1.2 曲线曲面的绘制方法</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%8F%92%E5%80%BC"><span class="toc-article-text">1.2.1 插值</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%8B%9F%E5%90%88"><span class="toc-article-text">1.2.2 拟合</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#hermite-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">02 Hermite 曲线</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">03 Bezier 曲线</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-article-text">3.1 定义</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80%E6%AC%A1-bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">3.2 一次 Bezier 曲线</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%8C%E6%AC%A1-bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">3.3 二次 Bezier 曲线</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E6%AC%A1-bezier-%E6%9B%B2%E7%BA%BF"><span class="toc-article-text">3.4 三次 Bezier 曲线</span></a></li></ol></li></ol>
 		</div>
 	
 	</div>
