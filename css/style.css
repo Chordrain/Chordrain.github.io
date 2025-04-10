@@ -174,7 +174,7 @@ code {
   width: 40px;
   height: 40px;
   background-repeat: no-repeat;
-  background-image: url("/logo.png");
+  background-image: url("/source/images/logo.jpg");
   background-size: 40px 40px;
 }
 #container {
@@ -911,7 +911,8 @@ div.article-meta-button a:hover {
 .article-inner .article-meta a {
   color: #fff;
 }
-.article-category .fa-angle-right {
+.article-category .fa-angle-right,
+.article-top .fa-angle-right {
   margin: 0 5px;
 }
 .article-tag .tag-link:before {
@@ -2268,6 +2269,7 @@ ol.toc {
   padding: 15px 20px;
   font-size: 14px;
   font-family: "MapleMono", "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+  border-radius: 5px;
   line-height: 22.400000000000002px;
 }
 .highlight table {
@@ -2292,64 +2294,70 @@ ol.toc {
   height: 1.6em;
 }
 .highlight {
-  color: #d1d9e1;
-  background: #474949;
+  color: #000;
+  background: #fff;
 }
 .highlight .code .comment,
 .highlight .code .quote {
-  color: #969896;
-  font-style: italic;
+  color: #006a00;
 }
 .highlight .code .keyword,
 .highlight .code .selector-tag,
-.highlight .code .literal,
-.highlight .code .type,
-.highlight .code .addition {
-  color: #c9c;
+.highlight .code .literal {
+  color: #aa0d91;
 }
-.highlight .code .number,
-.highlight .code .selector-attr,
-.highlight .code .selector-pseudo {
-  color: #f99157;
-}
-.highlight .code .string,
-.highlight .code .doctag,
-.highlight .code .regexp {
-  color: #8abeb7;
-}
-.highlight .code .title,
-.highlight .code .name,
-.highlight .code .section,
-.highlight .code .built_in {
-  color: #b5bd68;
+.highlight .code .name {
+  color: #008;
 }
 .highlight .code .variable,
-.highlight .code .template-variable,
-.highlight .code .selector-id,
-.highlight .code .class .title {
-  color: #fc6;
+.highlight .code .template-variable {
+  color: #660;
 }
-.highlight .code .section,
-.highlight .code .name,
-.highlight .code .strong {
-  font-weight: bold;
+.highlight .code .string {
+  color: #c41a16;
 }
+.highlight .code .regexp,
+.highlight .code .link {
+  color: #080;
+}
+.highlight .code .title,
+.highlight .code .tag,
 .highlight .code .symbol,
 .highlight .code .bullet,
-.highlight .code .subst,
-.highlight .code .meta,
-.highlight .code .link {
-  color: #f99157;
+.highlight .code .number,
+.highlight .code .meta {
+  color: #1c00cf;
 }
-.highlight .code .deletion {
-  color: #dc322f;
+.highlight .code .section,
+.highlight .code .class .title,
+.highlight .code .type,
+.highlight .code .attr,
+.highlight .code .built_in,
+.highlight .code .builtin-name,
+.highlight .code .params {
+  color: #5c2699;
+}
+.highlight .code .attribute,
+.highlight .code .subst {
+  color: #000;
 }
 .highlight .code .formula {
-  background: #eee8d5;
+  background-color: #eee;
+  font-style: italic;
 }
-.highlight .code .attr,
-.highlight .code .attribute {
-  color: #81a2be;
+.highlight .code .addition {
+  background-color: #baeeba;
+}
+.highlight .code .deletion {
+  background-color: #ffc8bd;
+}
+.highlight .code .selector-id,
+.highlight .code .selector-class {
+  color: #9b703f;
+}
+.highlight .code .doctag,
+.highlight .code .strong {
+  font-weight: bold;
 }
 .highlight .code .emphasis {
   font-style: italic;
