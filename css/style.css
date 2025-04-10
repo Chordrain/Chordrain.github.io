@@ -174,7 +174,7 @@ code {
   width: 40px;
   height: 40px;
   background-repeat: no-repeat;
-  background-image: url("/source/images/logo.jpg");
+  background-image: url("/images/logo.jpg");
   background-size: 40px 40px;
 }
 #container {
