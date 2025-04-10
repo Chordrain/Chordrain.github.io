@@ -142,7 +142,7 @@ code {
   background-color: #f8f8f8;
 }
 .outer {
-  max-width: 1900px;
+  max-width: 2432px;
   margin: 0 auto;
   padding: 0 15px;
 }
@@ -187,16 +187,16 @@ code {
   #main {
     display: inline;
     float: left;
-    width: 73.42105263157895%;
-    margin: 0 0.789473684210526%;
+    width: 59.70394736842105%;
+    margin: 0 0.616776315789474%;
   }
 }
 @media screen and (min-width: 800px) and (max-width: 1199px) {
   #main {
     display: inline;
     float: left;
-    width: 63.421052631578945%;
-    margin: 0 0.789473684210526%;
+    width: 69.07894736842105%;
+    margin: 0 0.616776315789474%;
   }
 }
 @media screen and (min-width: 560px) and (max-width: 799px) {
@@ -649,8 +649,8 @@ code {
   max-width: 287px;
   display: inline;
   float: left;
-  width: 23.42105263157895%;
-  margin: 0 0.789473684210526%;
+  width: 18.297697368421055%;
+  margin: 0 0.616776315789474%;
   display: none;
 }
 @media screen and (min-width: 1200px) {
@@ -1776,16 +1776,16 @@ ol.toc {
   #sidebar {
     display: inline;
     float: left;
-    width: 23.42105263157895%;
-    margin: 0 0.789473684210526%;
+    width: 18.297697368421055%;
+    margin: 0 0.616776315789474%;
   }
 }
 @media screen and (min-width: 800px) and (max-width: 1199px) {
   #sidebar {
     display: inline;
     float: left;
-    width: 33.421052631578945%;
-    margin: 0 0.789473684210526%;
+    width: 26.11019736842105%;
+    margin: 0 0.616776315789474%;
   }
 }
 .widget {
