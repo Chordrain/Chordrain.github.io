@@ -1,7 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import type { Post } from "~/lib/posts";
-import { entryPath } from "~/lib/posts";
+import { entryPath, entrySlug } from "~/lib/posts";
 import { formatDate, t } from "~/lib/i18n";
 import type { Locale } from "~/config";
 
@@ -13,6 +13,7 @@ interface Props {
 
 const { post, locale, dense = false } = Astro.props;
 const href = entryPath(post);
+const slug = entrySlug(post);
 const categories = (post.data.categories as string[]) ?? [];
 const tags = (post.data.tags as string[]) ?? [];
 const readingTime = (post.data as any).readingTime as number | undefined;
@@ -22,6 +23,10 @@ const readingTime = (post.data as any).readingTime as number | undefined;
     <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--color-muted-foreground)] mb-2">
       <span class="inline-flex items-center gap-1"><Icon name="calendar" size={14} />{formatDate(post.data.date, locale)}</span>
       {readingTime && <span class="inline-flex items-center gap-1"><Icon name="clock" size={14} />{readingTime} {t("post.readingTime", locale)}</span>}
+      <span class="inline-flex items-center gap-1" data-like-count-display data-slug={slug}>
+        <Icon name="heart" size={14} />
+        <span class="tabular-nums">—</span>
+      </span>
       {categories.map((c) => (
         <span class="inline-flex items-center gap-1 text-[var(--color-primary)]">
           <Icon name="folder" size={14} />{c}

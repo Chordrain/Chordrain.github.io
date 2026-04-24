@@ -39,7 +39,7 @@ const slug = entrySlug(post);
       {post.data.description && (
         <p class="text-[var(--color-muted-foreground)] text-lg leading-relaxed mb-4">{post.data.description}</p>
       )}
-      <PostMeta post={post} locale={locale} />
+      <PostMeta post={post} locale={locale} slug={slug} />
     </header>
 
     <div class="prose">

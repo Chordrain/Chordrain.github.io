@@ -5,8 +5,8 @@ import { entryPath } from "~/lib/posts";
 import { formatDate, t, localePath } from "~/lib/i18n";
 import type { Locale } from "~/config";
 
-interface Props { post: Post; locale: Locale; }
-const { post, locale } = Astro.props;
+interface Props { post: Post; locale: Locale; slug?: string; }
+const { post, locale, slug } = Astro.props;
 const categories = (post.data.categories as string[]) ?? [];
 const tags = (post.data.tags as string[]) ?? [];
 const readingTime = (post.data as any).readingTime as number | undefined;
@@ -31,6 +31,12 @@ const wordCount = (post.data as any).wordCount as number | undefined;
   {wordCount && (
     <span class="inline-flex items-center gap-1.5">
       {wordCount} {t("post.wordCount", locale)}
+    </span>
+  )}
+  {slug && (
+    <span class="inline-flex items-center gap-1.5" data-like-count-display data-slug={slug}>
+      <Icon name="heart" size={15} />
+      <span class="tabular-nums">—</span>
     </span>
   )}
 </div>

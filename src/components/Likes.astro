@@ -1,6 +1,6 @@
 ---
 import Icon from "./Icon.astro";
-import { SITE, type Locale } from "~/config";
+import { type Locale } from "~/config";
 import { t } from "~/lib/i18n";
 
 interface Props { slug: string; locale: Locale; }
@@ -10,45 +10,24 @@ const { slug, locale } = Astro.props;
   <button
     type="button"
     data-like-btn
-    class="group inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-card)] px-5 py-2.5 text-sm font-medium text-[var(--color-foreground)] hover:border-[color-mix(in_srgb,var(--color-primary)_40%,var(--color-border))] hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+    class="group inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-card)] px-5 py-2.5 text-sm font-medium text-[var(--color-foreground)] hover:border-[color-mix(in_srgb,var(--color-primary)_40%,var(--color-border))] hover:shadow-md transition-all"
     aria-label={t("likes.label", locale)}
-    disabled
   >
     <span class="inline-flex transition-transform group-hover:scale-110" data-like-icon>
       <Icon name="heart" size={18} />
     </span>
     <span data-like-count class="tabular-nums">—</span>
   </button>
-  <div data-like-status class="text-xs text-[var(--color-muted-foreground)]">
-    <span data-like-loading>…</span>
-    <span data-like-anon class="hidden">
-      <a href="#" data-login class="text-[var(--color-primary)] hover:underline">{t("likes.loginWithGitHub", locale)}</a>
-    </span>
-    <span data-like-user class="hidden">
-      <span data-like-username class="text-[var(--color-foreground)] font-medium"></span>
-      ·
-      <a href="#" data-logout class="hover:underline">{t("likes.logout", locale)}</a>
-    </span>
-  </div>
 </div>
 
-<script define:vars={{ slug, labels: {
-  liked: t("likes.liked", locale),
-  like: t("likes.label", locale),
-  loginWith: t("likes.loginWithGitHub", locale),
-  logout: t("likes.logout", locale),
-} }}>
+<script define:vars={{ slug }}>
   (function () {
-    const root = document.querySelector('[data-like-widget][data-slug="' + slug + '"]');
+    const root = document.querySelector(
+      '[data-like-widget][data-slug="' + CSS.escape(slug) + '"]'
+    );
     if (!root) return;
     const btn = root.querySelector('[data-like-btn]');
     const countEl = root.querySelector('[data-like-count]');
-    const loadingEl = root.querySelector('[data-like-loading]');
-    const anonEl = root.querySelector('[data-like-anon]');
-    const userEl = root.querySelector('[data-like-user]');
-    const usernameEl = root.querySelector('[data-like-username]');
-    const loginEl = root.querySelector('[data-login]');
-    const logoutEl = root.querySelector('[data-logout]');
     const iconEl = root.querySelector('[data-like-icon]');
 
     const heartOutline =
@@ -56,7 +35,7 @@ const { slug, locale } = Astro.props;
     const heartFill =
       '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z"/></svg>';
 
-    let state = { count: 0, liked: false, user: null };
+    let state = { count: 0, liked: false };
 
     function render() {
       countEl.textContent = String(state.count);
@@ -64,40 +43,29 @@ const { slug, locale } = Astro.props;
       btn.classList.toggle('text-[var(--color-primary)]', state.liked);
       btn.classList.toggle('border-[color-mix(in_srgb,var(--color-primary)_40%,var(--color-border))]', state.liked);
       btn.setAttribute('aria-pressed', String(state.liked));
-      loadingEl.classList.add('hidden');
-      if (state.user) {
-        anonEl.classList.add('hidden');
-        userEl.classList.remove('hidden');
-        usernameEl.textContent = '@' + state.user.login;
-        btn.disabled = false;
-      } else {
-        userEl.classList.add('hidden');
-        anonEl.classList.remove('hidden');
-        btn.disabled = true;
-      }
     }
 
     async function refresh() {
       try {
-        const r = await fetch('/api/likes/' + encodeURIComponent(slug), { credentials: 'include' });
+        const r = await fetch('/api/likes/' + encodeURIComponent(slug), {
+          credentials: 'include',
+        });
         if (!r.ok) throw new Error('bad status');
         const j = await r.json();
         state.count = j.count ?? 0;
         state.liked = !!j.liked;
-        state.user = j.user ?? null;
-      } catch (e) {
+      } catch {
         state.count = 0;
         state.liked = false;
-        state.user = null;
       }
       render();
     }
 
     async function toggle() {
-      if (!state.user) return;
       const prev = { ...state };
       state.liked = !state.liked;
       state.count += state.liked ? 1 : -1;
+      if (state.count < 0) state.count = 0;
       render();
       try {
         const r = await fetch('/api/likes/' + encodeURIComponent(slug), {
@@ -111,6 +79,10 @@ const { slug, locale } = Astro.props;
         state.count = j.count ?? state.count;
         state.liked = !!j.liked;
         render();
+        // Broadcast so PostCards / meta badges on the same page stay in sync.
+        document.dispatchEvent(new CustomEvent('like-updated', {
+          detail: { slug, count: state.count },
+        }));
       } catch {
         state = prev;
         render();
@@ -118,19 +90,6 @@ const { slug, locale } = Astro.props;
     }
 
     btn.addEventListener('click', toggle);
-    loginEl?.addEventListener('click', (e) => {
-      e.preventDefault();
-      const returnTo = location.pathname + location.search + location.hash;
-      location.href = '/api/auth/github/login?return_to=' + encodeURIComponent(returnTo);
-    });
-    logoutEl?.addEventListener('click', async (e) => {
-      e.preventDefault();
-      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-      state.user = null;
-      state.liked = false;
-      render();
-    });
-
     refresh();
   })();
 </script>
