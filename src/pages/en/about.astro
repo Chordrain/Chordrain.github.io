@@ -1,14 +1,15 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import AuthorCard from "~/components/AuthorCard.astro";
-import { getEntry, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 
-const entry = await getEntry("pages", "about.en");
-const Content = entry ? (await render(entry)).Content : null;
 const locale = "en" as const;
+const pages = await getCollection("pages");
+const entry = pages.find((p) => p.id === "about-en") ?? null;
+const Content = entry ? (await render(entry)).Content : null;
 ---
 <BaseLayout title="About" locale={locale}>
-  <AuthorCard />
+  <AuthorCard locale={locale} />
   {Content && (
     <article class="prose mt-8">
       <Content />

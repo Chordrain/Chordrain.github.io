@@ -12,8 +12,8 @@ const locale = "zh-cn" as const;
 const posts = await getPublishedPosts(locale);
 const recent = posts.slice(0, SITE.recentPostsCount);
 ---
-<BaseLayout title={SITE.title} description={SITE.description} locale={locale}>
-  <AuthorCard />
+<BaseLayout title={SITE.title[locale]} description={SITE.description} locale={locale}>
+  <AuthorCard locale={locale} />
 
   <section class="mb-12">
     <div class="flex items-baseline justify-between mb-5">

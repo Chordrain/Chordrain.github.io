@@ -27,9 +27,9 @@ const switchHref = langSwitchHref ?? fallbackSwitchHref();
 <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--color-background)_75%,transparent)] bg-[var(--color-background)] border-b border-[var(--color-border)]">
   <div class="container-page h-16 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
     <a href={localePath("/", locale)} class="flex items-center gap-3 group min-w-0 justify-self-start">
-      <img src={SITE.author.avatar} alt={SITE.title} class="h-8 w-8 shrink-0 rounded-full ring-1 ring-[var(--color-border)] object-cover" />
+      <img src={SITE.author.avatar} alt={SITE.title[locale]} class="h-8 w-8 shrink-0 rounded-full ring-1 ring-[var(--color-border)] object-cover" />
       <span class="font-semibold tracking-tight text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors truncate">
-        {SITE.title}
+        {SITE.title[locale]}
       </span>
     </a>
 

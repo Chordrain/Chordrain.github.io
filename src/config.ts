@@ -1,19 +1,21 @@
 export const SITE = {
-  title: "Caeastro 小特",
+  title: { 'zh-cn': '小特·白色空间', en: 'Caeastro\'s white space' },
   shortName: 'Caeastro',
   description: "Welcome to Caeastro's white space.",
   defaultLocale: 'zh-cn' as const,
   supportedLocales: ['zh-cn', 'en'] as const,
   author: {
-    name: 'Caeastro',
-    title: '梦游中……',
-    description:
-      '这里是我的知识库。部分笔记可能只有英文或中文版本，需切换语言才能看到。',
+    name: {'zh-cn': '小特', en: 'Caeastro'},
+    title: { 'zh-cn': '梦游中……', en: 'Wandering...' },
+    description: {
+      'zh-cn': '这里是小特的白色空间，记录一些学习、工作&生活中的笔记。',
+      en: 'This is Caeastro\'s white space, recording some notes about learning, work & life.',
+    },
     avatar: '/avatar.JPG',
     social: [
-      { name: 'GitHub', url: 'https://github.com/chordrain', icon: 'github' },
-      { name: 'X', url: 'https://twitter.com/elonmusk', icon: 'x' },
-      { name: 'Email', url: 'mailto:51285902022@stu.ecnu.edu.cn', icon: 'email' },
+      { name: 'GitHub', url: '', icon: 'github' },
+      { name: 'X', url: '', icon: 'x' },
+      { name: 'Email', url: '', icon: 'email' },
     ],
   },
   /** Home page shows this many recent posts. */

@@ -8,7 +8,7 @@ const year = new Date().getFullYear();
 ---
 <footer class="mt-16 border-t border-[var(--color-border)] py-10 text-sm text-[var(--color-muted-foreground)]">
   <div class="container-page flex flex-col sm:flex-row items-center justify-between gap-4">
-    <p>© {year} {SITE.author.name}. {t("footer.poweredBy", locale)}.</p>
+    <p>© {year} {SITE.author.name[locale]}. {t("footer.poweredBy", locale)}.</p>
     <div class="flex items-center gap-4">
       {SITE.author.social.map((s) => (
         <a href={s.url} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-foreground)] transition-colors">{s.name}</a>

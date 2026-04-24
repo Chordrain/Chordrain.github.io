@@ -51,6 +51,8 @@ const dict: Dict = {
   'theme.light': { 'zh-cn': '浅色', en: 'Light' },
   'theme.dark': { 'zh-cn': '深色', en: 'Dark' },
 
+  'social.hidden': { 'zh-cn': '我才不告诉你 :)', en: "won't tell ya :)" },
+
   'unavailable.title': {
     'zh-cn': '没有对应的中文版本',
     en: 'No Chinese counterpart',

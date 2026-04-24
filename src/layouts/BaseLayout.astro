@@ -29,7 +29,8 @@ const {
   langSwitchHref,
 } = Astro.props;
 
-const pageTitle = title === SITE.title ? title : `${title} · ${SITE.title}`;
+const siteTitle = SITE.title[locale];
+const pageTitle = title === siteTitle ? siteTitle : `${title} · ${siteTitle}`;
 const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const ogImage = new URL(image, Astro.site ?? Astro.url).toString();
 ---

@@ -6,7 +6,7 @@ import { entryPath, getPublishedPosts } from '~/lib/posts';
 export async function GET(context: APIContext) {
   const posts = await getPublishedPosts('zh-cn');
   return rss({
-    title: SITE.title,
+    title: SITE.title['zh-cn'],
     description: SITE.description,
     site: context.site ?? 'https://caeastro.pages.dev',
     items: posts.map((p) => ({
