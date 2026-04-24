@@ -1,0 +1,92 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Icon from "~/components/Icon.astro";
+import { t, localePath } from "~/lib/i18n";
+
+const locale = "en" as const;
+---
+<BaseLayout title={t("unavailable.titleEn", locale)} locale={locale}>
+  <meta slot="head" name="robots" content="noindex,nofollow" />
+
+  <section class="max-w-2xl mx-auto text-center py-6">
+    <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] text-[var(--color-primary)] mb-6">
+      <Icon name="globe" size={28} />
+    </div>
+
+    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--color-foreground)]" data-unavail-title>
+      {t("unavailable.titleEn", locale)}
+    </h1>
+
+    <p class="mt-4 text-[var(--color-muted-foreground)] leading-relaxed" data-unavail-lead>
+      {t("unavailable.leadPostEn", locale)}
+    </p>
+
+    <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">
+      <code
+        class="px-2 py-1 rounded-md bg-[var(--color-muted)] text-[var(--color-foreground)] break-all"
+        data-unavail-name
+      ></code>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <a
+        data-unavail-alt
+        href={localePath("/", locale)}
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:opacity-90 transition-opacity text-sm font-medium"
+      >
+        <Icon name="arrow-right" size={16} />
+        {t("unavailable.altCta", locale)}
+      </a>
+      <a
+        href={localePath("/", locale)}
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-[var(--color-border)] text-[var(--color-foreground)] hover:bg-[var(--color-muted)] transition-colors text-sm font-medium"
+      >
+        {t("unavailable.homeCta", locale)}
+      </a>
+    </div>
+
+    <p class="mt-10 text-xs text-[var(--color-muted-foreground)]">
+      {t("unavailable.hint", locale)}
+    </p>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ strings: {
+  title: t("unavailable.titleEn", locale),
+  leadPost: t("unavailable.leadPostEn", locale),
+  leadTag: t("unavailable.leadTag", locale),
+  leadCategory: t("unavailable.leadCategory", locale),
+} }}>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const what = params.get("what") || "post";
+    const name = params.get("name") || "";
+    const alt = params.get("alt") || "/";
+
+    const titleEl = document.querySelector("[data-unavail-title]");
+    const leadEl = document.querySelector("[data-unavail-lead]");
+    const nameEl = document.querySelector("[data-unavail-name]");
+    const altEl = document.querySelector("[data-unavail-alt]");
+
+    const leadByKind = {
+      post: strings.leadPost,
+      tag: strings.leadTag,
+      category: strings.leadCategory,
+    };
+
+    if (titleEl) titleEl.textContent = strings.title;
+    if (leadEl) leadEl.textContent = leadByKind[what] || strings.leadPost;
+    if (nameEl) nameEl.textContent = name;
+    if (altEl && alt) altEl.setAttribute("href", alt);
+
+    // Reroute the Header's language-switch button: from this landing page,
+    // "switch back" should take the reader to the original page they came
+    // from (the `alt` URL), not to another "unavailable" page in the other
+    // locale — which would be both misleading and a dead end.
+    if (alt) {
+      document
+        .querySelectorAll("[data-lang-switch]")
+        .forEach((el) => el.setAttribute("href", alt));
+    }
+  })();
+</script>

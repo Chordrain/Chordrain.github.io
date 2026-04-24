@@ -1,0 +1,103 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import PostMeta from "~/components/PostMeta.astro";
+import PostCard from "~/components/PostCard.astro";
+import TOC from "~/components/TOC.astro";
+import Likes from "~/components/Likes.astro";
+import Comments from "~/components/Comments.astro";
+import Icon from "~/components/Icon.astro";
+
+import type { Post } from "~/lib/posts";
+import { entryPath, entrySlug, entryLocale } from "~/lib/posts";
+import { t } from "~/lib/i18n";
+
+interface Props {
+  post: Post;
+  headings: { depth: number; slug: string; text: string }[];
+  related: Post[];
+  prev?: Post;
+  next?: Post;
+  langSwitchHref?: string;
+}
+const { post, headings, related, prev, next, langSwitchHref } = Astro.props;
+const locale = entryLocale(post);
+const slug = entrySlug(post);
+---
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description ?? post.data.title}
+  locale={locale}
+  ogType="article"
+  image={post.data.cover}
+  langSwitchHref={langSwitchHref}
+>
+  <article>
+    <header class="mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--color-foreground)] leading-tight mb-4">
+        {post.data.title}
+      </h1>
+      {post.data.description && (
+        <p class="text-[var(--color-muted-foreground)] text-lg leading-relaxed mb-4">{post.data.description}</p>
+      )}
+      <PostMeta post={post} locale={locale} />
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    <div class="mt-10 rounded-xl border border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-muted)_50%,transparent)] px-5 py-4 text-sm text-[var(--color-muted-foreground)]">
+      {t("post.license", locale)}
+    </div>
+
+    <Likes slug={slug} locale={locale} />
+
+    {(prev || next) && (
+      <nav class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {prev ? (
+          <a href={entryPath(prev)} class="group rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-4 hover:border-[color-mix(in_srgb,var(--color-primary)_35%,var(--color-border))] transition-colors">
+            <p class="text-xs text-[var(--color-muted-foreground)] mb-1">← {t("post.prev", locale)}</p>
+            <p class="font-medium text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] line-clamp-2">{prev.data.title}</p>
+          </a>
+        ) : <span />}
+        {next ? (
+          <a href={entryPath(next)} class="group rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-4 hover:border-[color-mix(in_srgb,var(--color-primary)_35%,var(--color-border))] transition-colors sm:text-right">
+            <p class="text-xs text-[var(--color-muted-foreground)] mb-1">{t("post.next", locale)} →</p>
+            <p class="font-medium text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] line-clamp-2">{next.data.title}</p>
+          </a>
+        ) : <span />}
+      </nav>
+    )}
+
+    {related.length > 0 && (
+      <section class="mt-14">
+        <h2 class="text-lg font-semibold mb-4 text-[var(--color-foreground)] inline-flex items-center gap-2">
+          <Icon name="archive" size={18} />{t("post.related", locale)}
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {related.map((p) => <PostCard post={p} locale={locale} dense />)}
+        </div>
+      </section>
+    )}
+
+    <Comments locale={locale} />
+  </article>
+
+  <aside class="toc-fixed">
+    <TOC headings={headings} title={t("post.toc", locale)} />
+  </aside>
+</BaseLayout>
+
+<script>
+  const bar = document.createElement('div');
+  bar.className = 'reading-progress';
+  document.body.appendChild(bar);
+  function onScroll() {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    bar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

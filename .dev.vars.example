@@ -1,0 +1,14 @@
+# Copy to `.dev.vars` (git-ignored). Wrangler picks these up automatically
+# when you run `./scripts/preview.sh`.
+#
+# Production secrets live in the Cloudflare Pages dashboard
+# (Settings → Environment variables → Encrypted).
+
+GITHUB_CLIENT_ID=your-github-oauth-app-client-id
+GITHUB_CLIENT_SECRET=your-github-oauth-app-client-secret
+
+# Any long, random string. Generate with:  openssl rand -hex 48
+SESSION_SECRET=replace-me-with-a-long-random-string
+
+# Optional – leave empty for localhost / pages.dev.
+COOKIE_DOMAIN=

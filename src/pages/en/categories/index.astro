@@ -1,0 +1,22 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Icon from "~/components/Icon.astro";
+import { getPublishedPosts, collectTaxonomy } from "~/lib/posts";
+import { t, localePath } from "~/lib/i18n";
+
+const locale = "en" as const;
+const posts = await getPublishedPosts(locale);
+const cats = collectTaxonomy(posts, "categories");
+---
+<BaseLayout title={t("categories.title", locale)} locale={locale}>
+  <h1 class="text-3xl font-bold tracking-tight mb-8">{t("categories.title", locale)}</h1>
+  <div class="flex flex-wrap gap-3">
+    {cats.map((c) => (
+      <a href={localePath(`/categories/${c.name}`, locale)} class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--color-border)] bg-[var(--color-card)] hover:border-[color-mix(in_srgb,var(--color-primary)_35%,var(--color-border))] transition-colors">
+        <Icon name="folder" size={14} />
+        <span class="font-medium">{c.name}</span>
+        <span class="text-xs text-[var(--color-muted-foreground)]">({c.count})</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

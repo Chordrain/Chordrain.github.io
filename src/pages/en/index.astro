@@ -1,0 +1,31 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import AuthorCard from "~/components/AuthorCard.astro";
+import PostCard from "~/components/PostCard.astro";
+import Icon from "~/components/Icon.astro";
+
+import { SITE } from "~/config";
+import { getPublishedPosts } from "~/lib/posts";
+import { t, localePath } from "~/lib/i18n";
+
+const locale = "en" as const;
+const posts = await getPublishedPosts(locale);
+const recent = posts.slice(0, SITE.recentPostsCount);
+---
+<BaseLayout title={SITE.title} description={SITE.description} locale={locale}>
+  <AuthorCard />
+
+  <section class="mb-12">
+    <div class="flex items-baseline justify-between mb-5">
+      <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--color-foreground)] inline-flex items-center gap-2">
+        <Icon name="archive" size={20} />{t("home.recent", locale)}
+      </h2>
+      <a href={localePath("/posts", locale)} class="text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-primary)] transition-colors">
+        {t("home.viewAll", locale)}
+      </a>
+    </div>
+    <div class="grid grid-cols-1 gap-4">
+      {recent.map((post) => <PostCard post={post} locale={locale} />)}
+    </div>
+  </section>
+</BaseLayout>

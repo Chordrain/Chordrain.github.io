@@ -1,0 +1,33 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import PostCard from "~/components/PostCard.astro";
+import { getPublishedPosts, collectTaxonomy } from "~/lib/posts";
+import type { Post } from "~/lib/posts";
+import { buildSwitchHref } from "~/lib/langswitch";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts("en");
+  const cats = collectTaxonomy(posts, "categories");
+  return cats.map((c) => ({
+    params: { category: c.name },
+    props: { category: c.name, posts: c.posts },
+  }));
+}
+
+const { category, posts } = Astro.props as { category: string; posts: Post[] };
+const locale = "en" as const;
+const sortedPosts = [...posts].sort((a, b) =>
+  a.data.title.localeCompare(b.data.title, "en-US")
+);
+const langSwitchHref = await buildSwitchHref({ kind: "category", name: category }, "en", "zh-cn");
+---
+<BaseLayout title={`Category: ${category}`} locale={locale} langSwitchHref={langSwitchHref}>
+  <header class="mb-8">
+    <p class="text-sm text-[var(--color-muted-foreground)]">Category</p>
+    <h1 class="text-3xl font-bold tracking-tight">{category}</h1>
+    <p class="mt-1 text-sm text-[var(--color-muted-foreground)]">{posts.length} posts</p>
+  </header>
+  <div class="grid grid-cols-1 gap-4">
+    {sortedPosts.map((p) => <PostCard post={p} locale={locale} />)}
+  </div>
+</BaseLayout>

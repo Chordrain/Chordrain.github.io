@@ -1,0 +1,36 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import PostCard from "~/components/PostCard.astro";
+import { getPublishedPosts, collectTaxonomy } from "~/lib/posts";
+import type { Post } from "~/lib/posts";
+import { buildSwitchHref } from "~/lib/langswitch";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts("zh-cn");
+  const cats = collectTaxonomy(posts, "categories");
+  return cats.map((c) => ({
+    params: { category: c.name },
+    props: { category: c.name, posts: c.posts },
+  }));
+}
+
+const { category, posts } = Astro.props as { category: string; posts: Post[] };
+const locale = "zh-cn" as const;
+// Category pages show posts by title, ascending dictionary order. For this
+// blog that also lines up lecture notes by their [SERIES 0xNN] prefix, which
+// is exactly the reading order the author intends.
+const sortedPosts = [...posts].sort((a, b) =>
+  a.data.title.localeCompare(b.data.title, "zh-CN")
+);
+const langSwitchHref = await buildSwitchHref({ kind: "category", name: category }, "zh-cn", "en");
+---
+<BaseLayout title={`分类：${category}`} locale={locale} langSwitchHref={langSwitchHref}>
+  <header class="mb-8">
+    <p class="text-sm text-[var(--color-muted-foreground)]">分类</p>
+    <h1 class="text-3xl font-bold tracking-tight">{category}</h1>
+    <p class="mt-1 text-sm text-[var(--color-muted-foreground)]">共 {posts.length} 篇</p>
+  </header>
+  <div class="grid grid-cols-1 gap-4">
+    {sortedPosts.map((p) => <PostCard post={p} locale={locale} />)}
+  </div>
+</BaseLayout>

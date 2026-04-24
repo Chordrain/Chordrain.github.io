@@ -1,0 +1,59 @@
+---
+import { SITE, type Locale } from "~/config";
+import { t } from "~/lib/i18n";
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const g = SITE.giscus;
+const giscusLang = locale === "zh-cn" ? "zh-CN" : "en";
+---
+{g.enabled && g.repoId !== "REPLACE_ME" && (
+  <section class="mt-12 border-t border-[var(--color-border)] pt-8">
+    <h2 class="text-xl font-semibold mb-6 text-[var(--color-foreground)]">{t("comments.title", locale)}</h2>
+    <div id="giscus-container"></div>
+
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo={g.repo}
+      data-repo-id={g.repoId}
+      data-category={g.category}
+      data-category-id={g.categoryId}
+      data-mapping={g.mapping}
+      data-strict={g.strict}
+      data-reactions-enabled={g.reactionsEnabled}
+      data-emit-metadata={g.emitMetadata}
+      data-input-position={g.inputPosition}
+      data-theme={g.theme}
+      data-lang={giscusLang}
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    />
+
+    <script>
+      function reapplyGiscusTheme() {
+        const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+        if (!iframe) return;
+        const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+        iframe.contentWindow?.postMessage(
+          { giscus: { setConfig: { theme } } },
+          "https://giscus.app"
+        );
+      }
+      new MutationObserver(reapplyGiscusTheme).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    </script>
+  </section>
+)}
+{(!g.enabled || g.repoId === "REPLACE_ME") && (
+  <section class="mt-12 border-t border-[var(--color-border)] pt-8">
+    <div class="rounded-xl border border-dashed border-[var(--color-border)] bg-[var(--color-card)] p-6 text-sm text-[var(--color-muted-foreground)]">
+      {locale === "zh-cn"
+        ? "评论功能尚未配置。请在 src/config.ts 中填写 giscus.repoId / categoryId 后重新部署。"
+        : "Comments are not configured yet. Fill in giscus.repoId / categoryId in src/config.ts to enable."}
+    </div>
+  </section>
+)}

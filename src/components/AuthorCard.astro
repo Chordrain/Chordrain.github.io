@@ -1,0 +1,34 @@
+---
+import Icon from "./Icon.astro";
+import { SITE } from "~/config";
+
+const a = SITE.author;
+---
+<section class="mb-12">
+  <div class="bg-[var(--color-card)] text-[var(--color-card-foreground)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-sm">
+    <div class="flex flex-col items-center gap-6 text-center md:flex-row md:items-start md:text-left">
+      <img src={a.avatar} alt={a.name} class="h-24 w-24 rounded-full object-cover shadow-md ring-4 ring-[color-mix(in_srgb,var(--color-primary)_20%,transparent)]" />
+      <div class="min-w-0 flex-1">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--color-foreground)] mb-1.5">
+          {a.name}
+        </h1>
+        <p class="text-[var(--color-muted-foreground)] text-base mb-3">{a.title}</p>
+        <p class="text-[var(--color-foreground)] leading-relaxed mb-4">{a.description}</p>
+        <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+          {a.social.map((s) => (
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg bg-[var(--color-muted)] text-[var(--color-muted-foreground)] hover:text-[var(--color-primary)] hover:bg-[color-mix(in_srgb,var(--color-primary)_10%,transparent)] px-3 py-1.5 text-sm font-medium transition-all hover:-translate-y-0.5"
+              title={s.name}
+            >
+              <Icon name={s.icon} size={16} />
+              <span>{s.name}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

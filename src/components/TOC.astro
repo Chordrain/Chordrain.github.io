@@ -1,0 +1,76 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props { headings: Heading[]; title?: string; }
+const { headings, title = "目录" } = Astro.props;
+const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+---
+{filtered.length > 0 && (
+  <nav class="toc text-sm" aria-label="Table of contents">
+    <p class="text-xs uppercase tracking-wider font-semibold text-[var(--color-muted-foreground)] mb-2">{title}</p>
+    <ul class="space-y-0.5" data-toc>
+      {filtered.map((h) => (
+        <li>
+          <a
+            href={`#${h.slug}`}
+            class={`toc-link toc-level-${h.depth}`}
+            data-toc-target={h.slug}
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  function initToc() {
+    const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc-target]');
+    if (!links.length) return;
+    const byId = new Map<string, HTMLAnchorElement>();
+    links.forEach((a) => byId.set(a.dataset.tocTarget!, a));
+
+    // Smooth scroll without polluting browser history: preventDefault +
+    // scrollIntoView + history.replaceState. This way, the back button
+    // returns to the previous page rather than to a heading anchor.
+    links.forEach((a) => {
+      a.addEventListener('click', (e) => {
+        const slug = a.dataset.tocTarget;
+        if (!slug) return;
+        const target = document.getElementById(slug);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try {
+          history.replaceState(null, '', '#' + slug);
+        } catch {
+          /* noop */
+        }
+      });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const link = byId.get(entry.target.id);
+          if (!link) continue;
+          if (entry.isIntersecting) {
+            document.querySelectorAll('.toc-link.active').forEach((n) => n.classList.remove('active'));
+            link.classList.add('active');
+          }
+        }
+      },
+      { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
+    );
+    document.querySelectorAll('article h2, article h3, article h4').forEach((el) => {
+      if (el.id) observer.observe(el);
+    });
+  }
+  initToc();
+  document.addEventListener('astro:after-swap', initToc);
+</script>

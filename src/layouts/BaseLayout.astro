@@ -1,0 +1,82 @@
+---
+import "~/styles/global.css";
+import Header from "~/components/Header.astro";
+import Footer from "~/components/Footer.astro";
+import { SITE, type Locale } from "~/config";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale?: Locale;
+  image?: string;
+  ogType?: "website" | "article";
+  canonicalPath?: string;
+  /**
+   * Explicit href for the language-switch button. Dynamic pages (posts,
+   * tags, categories) compute the cross-locale counterpart and pass it in
+   * so that clicking the globe icon never lands on a 404.
+   */
+  langSwitchHref?: string;
+}
+
+const {
+  title,
+  description = SITE.description,
+  locale = SITE.defaultLocale,
+  image = SITE.author.avatar,
+  ogType = "website",
+  canonicalPath,
+  langSwitchHref,
+} = Astro.props;
+
+const pageTitle = title === SITE.title ? title : `${title} · ${SITE.title}`;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? Astro.url).toString();
+const ogImage = new URL(image, Astro.site ?? Astro.url).toString();
+---
+
+<!doctype html>
+<html lang={locale === "zh-cn" ? "zh-CN" : "en"}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/avatar.JPG" />
+    <link rel="apple-touch-icon" href="/avatar.JPG" />
+
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale === "zh-cn" ? "zh_CN" : "en_US"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = stored ? stored === "dark" : prefersDark;
+          if (dark) document.documentElement.classList.add("dark");
+        } catch (_) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <Header locale={locale} langSwitchHref={langSwitchHref} />
+    <main class="container-page py-10 sm:py-14">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+
+    <script>
+      import "~/lib/client-theme";
+    </script>
+  </body>
+</html>

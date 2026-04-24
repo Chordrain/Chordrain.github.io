@@ -1,0 +1,50 @@
+---
+import Icon from "./Icon.astro";
+import type { Post } from "~/lib/posts";
+import { entryPath } from "~/lib/posts";
+import { formatDate, t, localePath } from "~/lib/i18n";
+import type { Locale } from "~/config";
+
+interface Props { post: Post; locale: Locale; }
+const { post, locale } = Astro.props;
+const categories = (post.data.categories as string[]) ?? [];
+const tags = (post.data.tags as string[]) ?? [];
+const readingTime = (post.data as any).readingTime as number | undefined;
+const wordCount = (post.data as any).wordCount as number | undefined;
+---
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[var(--color-muted-foreground)]">
+  <span class="inline-flex items-center gap-1.5">
+    <Icon name="calendar" size={15} />
+    {formatDate(post.data.date, locale)}
+  </span>
+  {post.data.updated && (
+    <span class="inline-flex items-center gap-1.5">
+      {t("post.updatedAt", locale)}: {formatDate(post.data.updated, locale)}
+    </span>
+  )}
+  {readingTime && (
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="clock" size={15} />
+      {readingTime} {t("post.readingTime", locale)}
+    </span>
+  )}
+  {wordCount && (
+    <span class="inline-flex items-center gap-1.5">
+      {wordCount} {t("post.wordCount", locale)}
+    </span>
+  )}
+</div>
+{(categories.length || tags.length) && (
+  <div class="mt-3 flex flex-wrap items-center gap-2">
+    {categories.map((c) => (
+      <a href={localePath(`/categories/${c}`, locale)} class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] text-[var(--color-primary)] hover:bg-[color-mix(in_srgb,var(--color-primary)_20%,transparent)] transition-colors">
+        <Icon name="folder" size={12} />{c}
+      </a>
+    ))}
+    {tags.map((tag) => (
+      <a href={localePath(`/tags/${tag}`, locale)} class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-[var(--color-muted)] text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] transition-colors">
+        <Icon name="tag" size={12} />{tag}
+      </a>
+    ))}
+  </div>
+)}

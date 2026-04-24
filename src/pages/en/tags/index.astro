@@ -1,0 +1,32 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Icon from "~/components/Icon.astro";
+import { getPublishedPosts, collectTaxonomy } from "~/lib/posts";
+import { t, localePath } from "~/lib/i18n";
+
+const locale = "en" as const;
+const posts = await getPublishedPosts(locale);
+const tags = collectTaxonomy(posts, "tags");
+const counts = tags.map((t) => t.count);
+const maxCount = counts.length ? Math.max(...counts) : 1;
+const minCount = counts.length ? Math.min(...counts) : 1;
+const MIN_SIZE = 0.875;
+const MAX_SIZE = 1.25;
+const sizeFor = (n: number) => {
+  if (maxCount === minCount) return MIN_SIZE;
+  const ratio = (n - minCount) / (maxCount - minCount);
+  return MIN_SIZE + ratio * (MAX_SIZE - MIN_SIZE);
+};
+---
+<BaseLayout title={t("tags.title", locale)} locale={locale}>
+  <h1 class="text-3xl font-bold tracking-tight mb-8">{t("tags.title", locale)}</h1>
+  <div class="flex flex-wrap gap-3 items-baseline">
+    {tags.map((tag) => (
+      <a href={localePath(`/tags/${tag.name}`, locale)} class="inline-flex items-center gap-1 text-[var(--color-muted-foreground)] hover:text-[var(--color-primary)] transition-colors" style={`font-size: ${sizeFor(tag.count)}rem`}>
+        <Icon name="tag" size={12} />
+        <span class="font-medium">{tag.name}</span>
+        <span class="text-xs">·{tag.count}</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

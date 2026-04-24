@@ -1,0 +1,30 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import PostCard from "~/components/PostCard.astro";
+import { getPublishedPosts, collectTaxonomy } from "~/lib/posts";
+import type { Post } from "~/lib/posts";
+import { buildSwitchHref } from "~/lib/langswitch";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts("zh-cn");
+  const tags = collectTaxonomy(posts, "tags");
+  return tags.map((t) => ({
+    params: { tag: t.name },
+    props: { tag: t.name, posts: t.posts },
+  }));
+}
+
+const { tag, posts } = Astro.props as { tag: string; posts: Post[] };
+const locale = "zh-cn" as const;
+const langSwitchHref = await buildSwitchHref({ kind: "tag", name: tag }, "zh-cn", "en");
+---
+<BaseLayout title={`标签：${tag}`} locale={locale} langSwitchHref={langSwitchHref}>
+  <header class="mb-8">
+    <p class="text-sm text-[var(--color-muted-foreground)]">标签</p>
+    <h1 class="text-3xl font-bold tracking-tight">#{tag}</h1>
+    <p class="mt-1 text-sm text-[var(--color-muted-foreground)]">共 {posts.length} 篇</p>
+  </header>
+  <div class="grid grid-cols-1 gap-4">
+    {posts.map((p) => <PostCard post={p} locale={locale} />)}
+  </div>
+</BaseLayout>

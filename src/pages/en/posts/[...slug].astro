@@ -1,0 +1,32 @@
+---
+import PostLayout from "~/layouts/PostLayout.astro";
+import { render } from "astro:content";
+import {
+  getPublishedPosts,
+  entryLocale,
+  entrySlug,
+  relatedPosts,
+  adjacentPosts,
+  type Post,
+} from "~/lib/posts";
+import { buildSwitchHref } from "~/lib/langswitch";
+
+export async function getStaticPaths() {
+  const all = await getPublishedPosts();
+  return all
+    .filter((p) => entryLocale(p) === "en")
+    .map((p) => ({
+      params: { slug: entrySlug(p) },
+      props: { post: p, all },
+    }));
+}
+
+const { post, all } = Astro.props as { post: Post; all: Post[] };
+const { Content, headings } = await render(post);
+const related = relatedPosts(post, all);
+const { prev, next } = adjacentPosts(post, all);
+const langSwitchHref = await buildSwitchHref({ kind: "post", post }, "en", "zh-cn");
+---
+<PostLayout post={post} headings={headings} related={related} prev={prev} next={next} langSwitchHref={langSwitchHref}>
+  <Content />
+</PostLayout>

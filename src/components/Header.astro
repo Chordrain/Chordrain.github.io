@@ -1,0 +1,110 @@
+---
+import Icon from "./Icon.astro";
+import { SITE, NAV, type Locale } from "~/config";
+import { localePath, otherLocale } from "~/lib/i18n";
+
+interface Props {
+  locale: Locale;
+  langSwitchHref?: string;
+}
+const { locale, langSwitchHref } = Astro.props;
+const otherLoc = otherLocale(locale);
+const currentPath = Astro.url.pathname;
+
+// Fall back to the naive strip/prepend only for pages that haven't opted into
+// the richer translation-aware link. Static pages (index/archives/about etc.)
+// have 1:1 counterparts in both locales so the naive transform is correct.
+function fallbackSwitchHref() {
+  let p = currentPath;
+  if (locale === "en") {
+    p = p.replace(/^\/en(?=\/|$)/, "") || "/";
+  }
+  return localePath(p, otherLoc);
+}
+const switchHref = langSwitchHref ?? fallbackSwitchHref();
+---
+
+<header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--color-background)_75%,transparent)] bg-[var(--color-background)] border-b border-[var(--color-border)]">
+  <div class="container-page h-16 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+    <a href={localePath("/", locale)} class="flex items-center gap-3 group min-w-0 justify-self-start">
+      <img src={SITE.author.avatar} alt={SITE.title} class="h-8 w-8 shrink-0 rounded-full ring-1 ring-[var(--color-border)] object-cover" />
+      <span class="font-semibold tracking-tight text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors truncate">
+        {SITE.title}
+      </span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-1 justify-self-center">
+      {NAV.map((item) => {
+        const href = localePath(item.href, locale);
+        const active = currentPath === href || (item.href !== "/" && currentPath.startsWith(href));
+        return (
+          <a
+            href={href}
+            class={`px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
+              active
+                ? "text-[var(--color-primary)] bg-[color-mix(in_srgb,var(--color-primary)_10%,transparent)]"
+                : "text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-muted)]"
+            }`}
+          >
+            {item.label[locale]}
+          </a>
+        );
+      })}
+    </nav>
+
+    <div class="flex items-center gap-1 justify-self-end">
+      <a
+        data-lang-switch
+        href={switchHref}
+        class="hidden sm:inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-muted)] transition-colors"
+        title={otherLoc === "en" ? "English" : "简体中文"}
+        aria-label="Switch language"
+      >
+        <Icon name="globe" size={18} />
+      </a>
+      <button
+        data-theme-toggle
+        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-muted)] transition-colors"
+        aria-label="Toggle theme"
+        type="button"
+      >
+        <span class="dark:hidden"><Icon name="moon" size={18} /></span>
+        <span class="hidden dark:inline"><Icon name="sun" size={18} /></span>
+      </button>
+      <button
+        data-menu-toggle
+        class="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-muted)] transition-colors"
+        aria-label="Menu"
+        type="button"
+      >
+        <Icon name="menu" size={20} />
+      </button>
+    </div>
+  </div>
+
+  <div data-mobile-menu class="md:hidden hidden border-t border-[var(--color-border)]">
+    <nav class="container-page py-3 flex flex-col gap-1">
+      {NAV.map((item) => (
+        <a
+          href={localePath(item.href, locale)}
+          class="px-3 py-2 rounded-md text-sm text-[var(--color-foreground)] hover:bg-[var(--color-muted)]"
+        >
+          {item.label[locale]}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<script>
+  function bindHeader() {
+    const btn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  }
+  bindHeader();
+  document.addEventListener('astro:after-swap', bindHeader);
+</script>

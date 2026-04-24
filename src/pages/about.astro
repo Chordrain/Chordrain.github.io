@@ -1,0 +1,17 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import AuthorCard from "~/components/AuthorCard.astro";
+import { getEntry, render } from "astro:content";
+
+const entry = await getEntry("pages", "about.zh-cn");
+const Content = entry ? (await render(entry)).Content : null;
+const locale = "zh-cn" as const;
+---
+<BaseLayout title="关于" locale={locale}>
+  <AuthorCard />
+  {Content && (
+    <article class="prose mt-8">
+      <Content />
+    </article>
+  )}
+</BaseLayout>

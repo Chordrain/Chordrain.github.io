@@ -1,0 +1,18 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import PostCard from "~/components/PostCard.astro";
+import { getPublishedPosts } from "~/lib/posts";
+import { t } from "~/lib/i18n";
+
+const locale = "zh-cn" as const;
+const posts = await getPublishedPosts(locale);
+---
+<BaseLayout title={t("posts.title", locale)} locale={locale}>
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-[var(--color-foreground)]">{t("posts.title", locale)}</h1>
+    <p class="mt-1 text-sm text-[var(--color-muted-foreground)]">共 {posts.length} 篇</p>
+  </header>
+  <div class="grid grid-cols-1 gap-4">
+    {posts.map((p) => <PostCard post={p} locale={locale} />)}
+  </div>
+</BaseLayout>
