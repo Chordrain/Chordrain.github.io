@@ -44,6 +44,7 @@ const dict: Dict = {
   'pagination.next': { 'zh-cn': '下一页', en: 'Next' },
 
   'footer.poweredBy': { 'zh-cn': '由 Astro 驱动', en: 'Powered by Astro' },
+  'footer.theme': { 'zh-cn': '主题参考自', en: 'Theme inspired by' },
 
   'search.placeholder': { 'zh-cn': '搜索文章…', en: 'Search posts…' },
   'search.noResults': { 'zh-cn': '没有找到文章。', en: 'No posts found.' },
