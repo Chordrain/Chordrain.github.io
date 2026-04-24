@@ -2,7 +2,7 @@
 # (likes + GitHub OAuth). Production bindings/secrets are configured via the
 # Cloudflare dashboard — see README for the full step-by-step guide.
 
-name = "caeastro-astro-blog"
+name = "caeastro-blog"
 compatibility_date = "2024-11-01"
 pages_build_output_dir = "./dist"
 
@@ -11,8 +11,6 @@ pages_build_output_dir = "./dist"
 GITHUB_CLIENT_ID = "dev-client-id"
 COOKIE_DOMAIN = ""
 
-# Local KV namespace – Wrangler emulates KV via SQLite when an id is absent.
-# In production, replace `id` with your real KV namespace id.
-[[kv_namespaces]]
-binding = "LIKES_KV"
-id = "LOCAL_LIKES_KV"
+# KV namespace binding is configured in the Cloudflare Pages dashboard
+# (Settings → Functions → KV namespace bindings → LIKES_KV).
+# For local development, run: npx wrangler pages dev ./dist --kv LIKES_KV
