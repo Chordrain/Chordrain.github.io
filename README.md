@@ -411,8 +411,6 @@ https://caeastro-blog.pages.dev/api/auth/github/callback
 
 确认你的文本没有被代码块或 HTML 包裹。插件只处理 markdown 正文的 text 节点。如果你在旧博客里手写的是 `<font style="background: #FEEDD5;">…</font>`，也会被 CSS 统一着色，颜色受主题色值约束——是按主题的亮底色设计的，深色模式会自动换成深底 + 浅字。
 
-
-
 **公式渲染出错 / 不渲染？**
 
 1. 确认 `memo.txt` 里那几条规则：
@@ -422,15 +420,11 @@ https://caeastro-blog.pages.dev/api/auth/github/callback
 2. 启动时看终端，`rehype-katex` 报错会打印行号。
 3. 打开浏览器控制台，KaTeX 渲染失败的公式会有红色高亮。
 
-
-
 **点赞按钮一直显示"登录以点赞"？**
 
 1. 如果是本地，你必须用 `./scripts/preview.sh`（8788 端口）而不是 `./scripts/dev.sh`（4321 端口）——Pages Functions 只在 Wrangler 里能跑。
 2. 检查 `.dev.vars` 是否填了 `GITHUB_CLIENT_ID`、`SESSION_SECRET`。
 3. OAuth App 的回调 URL 必须和当前访问的 origin 完全一致。
-
-
 
 **怎么一次性"清掉所有点赞"？**
 
@@ -443,31 +437,21 @@ npx wrangler kv key list --namespace-id <id> | jq -r '.[].name' \
   | xargs -n1 npx wrangler kv key delete --namespace-id <id>
 ```
 
-
-
 **部署后没看见评论？**
 
 检查 `src/config.ts` 里的 `giscus.repoId` / `categoryId` 是否还留着 `REPLACE_ME`。如果是，组件会显示一条"尚未配置"的提示。换成真值并重新部署即可。
-
-
 
 **想加一张新图片 / 删一张旧图片？**
 
 直接操作 `public/images/...`。Astro 对 `public/` 的资源不做处理，原路径原样提供——也就是说你 markdown 里写的 `/images/xxx/yyy.png` 就是最终 URL。
 
-
-
 **如何改站点标题 / 作者信息 / 社交链接？**
 
 改 `src/config.ts` 的 `SITE.author` / `SITE.title` 等字段即可。不会影响已发布文章的 URL。
 
-
-
 **我习惯** `hugo --cleanDestinationDir build`**，现在怎么做？**
 
 `./scripts/build.sh` 会每次都重新 migrate + build 到干净的 `./dist`。`dist/` 在 `.gitignore` 里，和旧博客一样不会被提交。不会出现旧博客 `localhost` 残留的问题。
-
-
 
 ---
 
