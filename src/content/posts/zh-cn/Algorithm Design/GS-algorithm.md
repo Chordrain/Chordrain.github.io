@@ -1,11 +1,11 @@
 ---
 title: "[ALDE 0x02] GS 算法"
 date: 2023-12-23
-draft: true
+draft: false
 math: true
 categories:
   - 算法设计与分析
-tags: []
+tags:
 note: 本系列笔记是为算法设计与分析课程的复习而写的，涉及知识点并不完备，也仅为应付考试。
 ---
 

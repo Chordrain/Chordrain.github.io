@@ -1,7 +1,7 @@
 ---
 title: "[ALDE 0x06] 网络流"
 date: 2023-12-23
-draft: true
+draft: false
 math: true
 categories:
   - 算法设计与分析
@@ -64,13 +64,13 @@ Ford-Fulkerson 算法通过引入残余图（residual graph）来获得撤回流
 Ford-Fulkerson 算法的执行流程：
 
 1. 初始化 $s-t$ 流 $f$，令 $f(e)=0,\forall e \in E$，初始化残余图 $G_{f}$。
-2. 从 $G_{f}$ 中选出一条 $s-t$ 路径 $P$，要求该路径上所有的边 $e$ 都要有 $c_{f}(e) \gt 0$，即满足 $\underset{e \in P}{\min} \\{ c_{f}(e) \\}\gt 0$，称这种路径为**增广路径**。
+2. 从 $G_{f}$ 中选出一条 $s-t$ 路径 $P$，要求该路径上所有的边 $e$ 都要有 $c_{f}(e) \gt 0$，即满足 $\underset{e \in P}{\min} \\{ c_{f}(e) \\}\gt 0$，我们称这种路径为**增广路径**。
 3. 向增广路径 $P$ 发送能发送的最大流量（这一步称为“增广”），即对于任意 $e \in P$：
-    1. 若 $e$ 是一条正向边，令 $f(e)=f(e)+\underset{e \in P}{\min}\\{ c_{f}(e) \\}$，并更新 $G_{f}$。
-    2. 若 $e$ 是一条反向边，令 $f(e)=f(e)-\underset{e \in P}{\min}\\{ c_{f}(e) \\}$，并更新 $G_{f}$。
+    1. 若 $e$ 是一条正向边，令 $f(e)=f(e)+\underset{e \in P}{\min} \ c_{f}(e)$，并更新 $G_{f}$。
+    2. 若 $e$ 是一条反向边，令 $f(e)=f(e)-\underset{e \in P}{\min} \ c_{f}(e)$，并更新 $G_{f}$。
 4. 回到步骤 2，直到再无法找到任何一条增广路径为止，此时得到的 $f$ 就是最大 $s-t$ 流。
 
-上述流程中出现的 $\underset{e \in P}{\min}\\{ c_{f}(e) \\}$，我们一般称之为**瓶颈**，记为 $\Delta$。
+上述流程中出现的 $\underset{e \in P}{\min} \ c_{f}(e)$，我们一般称之为**瓶颈**，记为 $\Delta$。
 
 Ford-Fulkerson 算法主要由寻找增广路径和增广操作两部分组成，增广操作是常数级别的，因此算法的复杂度主要集中在寻找增广路径，所以 Ford-Fulkerson 算法的时间复杂度可以表示为 $增广次数 \times 寻找一条增广路径的代价$。使用 DFS 或 BFS 寻找一条增广路径的代价是 $O(E)$，那增广次数呢？
 
@@ -97,25 +97,25 @@ Ford-Fulkerson 算法解决了最大流问题，同时也解决了最小割问�
 
 > 给定一个二分图：
 > $$
-G=(L\cup R,E)
-$$
+> G=(L\cup R,E)
+> $$
 > 其中 $L$ 和 $R$ 是两个不相交的顶点集合，且
 > $$
-E \subseteq L\times R.
-$$
+> E \subseteq L\times R.
+> $$
 > 一个匹配是边集
 > $$
-M \subseteq E
-$$
+> M \subseteq E
+> $$
 > 满足任意两条边在 $M$ 中不共享端点，即：
 > $$
-\forall (u,v),(u',v')\in M,\quad u\neq u'\ \text{且}\ v\neq v'.
-$$
+> \forall (u,v),(u',v')\in M,\quad u\neq u'\ \text{且}\ v\neq v'.
+> $$
 > 最大二分匹配问题是指：在所有匹配 $M$ 中，寻找一个匹配 $M^{* }$，使得
 > $$
-|M^{* }|=\max\{|M| \mid M \subseteq E,\ M \text{ 是匹配}\}.
-$$
-我们将使用解决最大流问题的思路解决最大二分匹配问题。
+> |M^{* }|=\max\{|M| \mid M \subseteq E,\ M \text{ 是匹配}\}.
+> $$
+> 我们将使用解决最大流问题的思路解决最大二分匹配问题。
 
 首先，引入两个虚拟的源点 $s$ 和汇点 $t$，并对于任意 $u \in L$，新增边 $s \to u$；对于任意 $v \in R$，新增边 $v \to t$。我们令所有边的容量为 1。这样，我们就得到了一张网络流图 $G^{\prime}$。
 

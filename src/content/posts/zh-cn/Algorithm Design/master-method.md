@@ -1,7 +1,7 @@
 ---
 title: "[ALDE 0x05] 主方法"
 date: 2023-12-23
-draft: true
+draft: false
 math: true
 categories:
   - 算法设计与分析
